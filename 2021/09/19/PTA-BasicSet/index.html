@@ -28,7 +28,7 @@
 <meta property="og:description" content="FunctionLink: PTA 6-1 简单输出整数 (10 分)本题要求实现一个函数，对给定的正整数N，打印从1到N的全部正整数。 1234void PrintN ( int N )&amp;#123;  for(int i &#x3D; 1; i&lt;&#x3D;N; i++)    printf(&quot;%d\n&quot;,i); &amp;#125;  思路：题目很简单但是试了好多次才通过，原因是把main函数和">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2021-09-19T14:25:50.695Z">
-<meta property="article:modified_time" content="2021-09-19T14:42:04.755Z">
+<meta property="article:modified_time" content="2021-09-19T14:56:52.935Z">
 <meta property="article:author" content="Huang jinhong">
 <meta name="twitter:card" content="summary">
 
@@ -184,7 +184,7 @@
               <span class="post-meta-item-text">发表于</span>
               
 
-              <time title="创建时间：2021-09-19 22:25:50 / 修改时间：22:42:04" itemprop="dateCreated datePublished" datetime="2021-09-19T22:25:50+08:00">2021-09-19</time>
+              <time title="创建时间：2021-09-19 22:25:50 / 修改时间：22:56:52" itemprop="dateCreated datePublished" datetime="2021-09-19T22:25:50+08:00">2021-09-19</time>
             </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -211,39 +211,19 @@
 <h2 id="6-1-简单输出整数-10-分"><a href="#6-1-简单输出整数-10-分" class="headerlink" title="6-1 简单输出整数 (10 分)"></a>6-1 简单输出整数 (10 分)</h2><p>本题要求实现一个函数，对给定的正整数N，打印从1到N的全部正整数。</p>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">PrintN</span> <span class="params">( <span class="keyword">int</span> N )</span></span>&#123;</span><br><span class="line">  <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">1</span>; i&lt;=N; i++)</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;%d\n&quot;</span>,i); </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-<p>思路：<br>题目很简单但是试了好多次才通过，原因是把main函数和PrintN一起提交了，<br>事实上<strong>只用提交自己编写的PrintN函数</strong>就可以了，不用提交main函数。  </p>
+<p>思路：<br>题目很简单但是试了好多次才通过，原因是把main函数和PrintN一起提交了，<br>事实上<strong>只用提交自己编写的PrintN函数</strong>就可以了，不用提交main函数。<br></br></br></br></p>
 <h2 id="6-2-多项式求值-15-分"><a href="#6-2-多项式求值-15-分" class="headerlink" title="6-2 多项式求值 (15 分)"></a>6-2 多项式求值 (15 分)</h2><p>本题要求实现一个函数，计算阶数为n，系数为a[0] … a[n]的多项式在x点的值。</p>
-<pre><code class="c">double f( int n, double a[], double x )&#123;
-  double sum;
-  double x0 = 1; //x0必为 1
-  for (int i=0; i &lt;= n; i++)&#123;
-        if (i == 0);//i = 0即是x0 = 1，无操作
-      else x0 *= x; //随着循环逐个叠加x的次幂
-      sum += a[i] * x0;//求和
-    &#125;
-  return sum;
-&#125;
-</code></pre>
-<p>思路：<br>一开始的思路用了2个for循环，提交后提示复杂度O(n^2)不行。于是，github里查起答案：<strong>x0可以在1个循环里逐个叠加</strong>  </p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">double</span> <span class="title">f</span><span class="params">( <span class="keyword">int</span> n, <span class="keyword">double</span> a[], <span class="keyword">double</span> x )</span></span>&#123;</span><br><span class="line">  <span class="keyword">double</span> sum;</span><br><span class="line">  <span class="keyword">double</span> x0 = <span class="number">1</span>; <span class="comment">//x0必为 1</span></span><br><span class="line">  <span class="keyword">for</span> (<span class="keyword">int</span> i=<span class="number">0</span>; i &lt;= n; i++)&#123;</span><br><span class="line">    	<span class="keyword">if</span> (i == <span class="number">0</span>);<span class="comment">//i = 0即是x0 = 1，无操作</span></span><br><span class="line">      <span class="keyword">else</span> x0 *= x; <span class="comment">//随着循环逐个叠加x的次幂</span></span><br><span class="line">      sum += a[i] * x0;<span class="comment">//求和</span></span><br><span class="line">    &#125;</span><br><span class="line">  <span class="keyword">return</span> sum;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>思路：<br>一开始的思路用了2个for循环，提交后提示复杂度O(n^2)不行。于是，github里查起答案：<strong>x0可以在1个循环里逐个叠加</strong><br></br></br></br></p>
 <h2 id="6-3-简单求和-10-分"><a href="#6-3-简单求和-10-分" class="headerlink" title="6-3 简单求和 (10 分)"></a>6-3 简单求和 (10 分)</h2><p>本题要求实现一个函数，求给定的N个整数的和。</p>
-<pre><code class="c">int Sum ( int List[], int N )&#123;
-  int sum = 0;
-  for(int j = 0; j&lt;N; j++)
-    sum += List[j];
-  return sum;
-&#125;
-</code></pre>
-<p>思路：<br>很简单的一道题，但是还是提交了几次。原因是：<strong>sum、j必须的赋初值0</strong>。PTA里，系统不会自动赋值0。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">Sum</span> <span class="params">( <span class="keyword">int</span> List[], <span class="keyword">int</span> N )</span></span>&#123;</span><br><span class="line">  <span class="keyword">int</span> sum = <span class="number">0</span>;</span><br><span class="line">  <span class="keyword">for</span>(<span class="keyword">int</span> j = <span class="number">0</span>; j&lt;N; j++)</span><br><span class="line">    sum += List[j];</span><br><span class="line">  <span class="keyword">return</span> sum;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>思路：<br>很简单的一道题，但是还是提交了几次。原因是：<strong>sum、j必须的赋初值0</strong>。PTA里，系统不会自动赋值0。<br></br></br></br></p>
 <h2 id="6-4-求自定类型元素的平均-10-分"><a href="#6-4-求自定类型元素的平均-10-分" class="headerlink" title="6-4 求自定类型元素的平均 (10 分)"></a>6-4 求自定类型元素的平均 (10 分)</h2><p>本题要求实现一个函数，求N个集合元素S[]的平均值，其中集合元素的类型为自定义的ElementType。</p>
-<pre><code class="c">ElementType Average( ElementType S[], int N )&#123;
-  ElementType sum = 0;
-  for(int i = 0; i &lt; N; i++)&#123;
-    sum += S[i];
-  &#125;
-  return sum/(ElementType)N; //N原来是int型，要强制转换为ElementType
-&#125;
-</code></pre>
-<p>思路：<br>被除的N要强制转换为ElementType，让结果输出为浮点数</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">ElementType <span class="title">Average</span><span class="params">( ElementType S[], <span class="keyword">int</span> N )</span></span>&#123;</span><br><span class="line">  ElementType sum = <span class="number">0</span>;</span><br><span class="line">  <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; N; i++)&#123;</span><br><span class="line">    sum += S[i];</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> sum/(ElementType)N; <span class="comment">//N原来是int型，要强制转换为ElementType</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>思路：<br>被除的N要强制转换为ElementType，让结果输出为浮点数<br></br></br></br></p>
 <h2 id="6-5-求自定类型元素的最大值-10-分"><a href="#6-5-求自定类型元素的最大值-10-分" class="headerlink" title="6-5 求自定类型元素的最大值 (10 分)"></a>6-5 求自定类型元素的最大值 (10 分)</h2><p>本题要求实现一个函数，求N个集合元素S[]的平均值，其中集合元素的类型为自定义的ElementType。</p>
 <pre><code class="c">ElementType Max( ElementType S[], int N )&#123;
   ElementType max = S[0];
@@ -253,7 +233,7 @@
   return max;
 &#125;
 </code></pre>
-<p>思路：<br>要额外考虑到max负数的情况，故max初值不能赋值0，要赋值S[0]</p>
+<p>思路<br>要额外考虑到max负数的情况，故max初值不能赋值0，要赋值S[0]</p>
 
     </div>
 
@@ -269,8 +249,8 @@
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/2021/09/19/CSAPP-DataLab/" rel="prev" title="CSAPP-DataLab">
-      <i class="fa fa-chevron-left"></i> CSAPP-DataLab
+    <a href="/2021/09/19/CSAPP-DataLab/" rel="prev" title="DataLab">
+      <i class="fa fa-chevron-left"></i> DataLab
     </a></div>
       <div class="post-nav-item"></div>
     </div>
