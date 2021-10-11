@@ -27,12 +27,12 @@
 <meta property="og:site_name" content="Memory Dot">
 <meta property="og:description" content="Function6-1 单链表逆转 (20 分)本题要求实现一个函数，将给定的单链表逆转。">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://i.loli.net/2021/10/07/8dcuip1RSZn6DGA.png">
+<meta property="og:image" content="https://s3.bmp.ovh/imgs/2021/10/f132f5080373cfd1.png">
 <meta property="article:published_time" content="2021-10-05T14:14:27.779Z">
-<meta property="article:modified_time" content="2021-10-07T07:31:43.579Z">
+<meta property="article:modified_time" content="2021-10-11T10:24:54.620Z">
 <meta property="article:author" content="Huang Jinhong">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://i.loli.net/2021/10/07/8dcuip1RSZn6DGA.png">
+<meta name="twitter:image" content="https://s3.bmp.ovh/imgs/2021/10/f132f5080373cfd1.png">
 
 <link rel="canonical" href="http://example.com/2021/10/05/PTA-DateStructureSet/">
 
@@ -192,7 +192,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-10-07 15:31:43" itemprop="dateModified" datetime="2021-10-07T15:31:43+08:00">2021-10-07</time>
+                <time title="修改时间：2021-10-11 18:24:54" itemprop="dateModified" datetime="2021-10-11T18:24:54+08:00">2021-10-11</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -247,7 +247,7 @@
 <span id="more"></span>
 
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//汉语实现版</span></span><br><span class="line"><span class="function">List <span class="title">Reverse</span><span class="params">( List L )</span></span>&#123;<span class="comment">//利用临时结点t另外新建一个链表实现逆转</span></span><br><span class="line">  List P = <span class="literal">NULL</span>, t; <span class="comment">//初始化，临时结点t，空结点P</span></span><br><span class="line">  <span class="keyword">while</span>(L)&#123; <span class="comment">//当链表不空时</span></span><br><span class="line">    t = L; <span class="comment">//第一项赋给t；第二项赋给t；第三项赋给t...</span></span><br><span class="line">    L = L-&gt;Next; <span class="comment">//移动到第二项；移动到第三项；移动到第四项... 用t遍历L</span></span><br><span class="line">    t-&gt;Next = P; <span class="comment">//结点t的Next设为P = NULL；结点t的Next设为P = 第一项；结点t的Next设为P = 第二项...结点t的Next设为P = 次最终项</span></span><br><span class="line">    P = t; <span class="comment">//结点t赋给P即第一项赋给P；结点t赋给P即第二项赋给P；结点t赋给P即第三项赋给P...结点t赋给P即最终项赋给P</span></span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> P;<span class="comment">//返回最终项为头部的逆转链表</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//言简意赅版</span></span><br><span class="line"><span class="function">List <span class="title">Reverse</span><span class="params">( List L )</span></span>&#123;<span class="comment">//利用临时结点t另外新建一个链表实现逆转</span></span><br><span class="line">  List P = <span class="literal">NULL</span>, t; <span class="comment">//初始化，临时结点t，空结点P</span></span><br><span class="line">  <span class="keyword">while</span>(L)&#123; <span class="comment">//当链表不空时</span></span><br><span class="line">    t = L; </span><br><span class="line">    L = L-&gt;Next; <span class="comment">//用t遍历L</span></span><br><span class="line">    t-&gt;Next = P; <span class="comment">//实现倒着连接</span></span><br><span class="line">    P = t; <span class="comment">//结点t赋给结点P</span></span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> P;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>思路如图所示：<br><img src="https://i.loli.net/2021/10/07/8dcuip1RSZn6DGA.png"></p>
+<p>思路如图所示：<br><img src="https://s3.bmp.ovh/imgs/2021/10/f132f5080373cfd1.png"></p>
 <h1 id="Programming"><a href="#Programming" class="headerlink" title="Programming"></a>Programming</h1><h2 id="7-1-最大子列和问题-20-分"><a href="#7-1-最大子列和问题-20-分" class="headerlink" title="7-1 最大子列和问题 (20 分)"></a><strong>7-1 最大子列和问题 (20 分)</strong></h2><p>给定<em>K</em>个整数组成的序列{ <em>N</em>1, <em>N</em>2, …, <em>NK</em> }，“连续子列”被定义为{ <em>Ni</em>, <em>Ni</em>+1, …, <em>Nj</em> }，其中 1≤<em>i</em>≤<em>j</em>≤<em>K</em>。“最大子列和”则被定义为所有连续子列元素的和中最大者。例如给定序列{ -2, 11, -4, 13, -5, -2 }，其连续子列{ 11, -4, 13 }有最大的和20。现要求你编写程序，计算给定整数序列的最大子列和。<br>本题旨在测试各种不同的算法在各种数据情况下的表现。各组测试数据特点如下：</p>
 <ul>
 <li>数据1：与样例等价，测试基本正确性；</li>
