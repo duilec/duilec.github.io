@@ -29,7 +29,7 @@
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://s3.bmp.ovh/imgs/2021/10/69fe563e827271f9.png">
 <meta property="article:published_time" content="2021-09-28T09:09:47.000Z">
-<meta property="article:modified_time" content="2021-10-11T12:23:50.426Z">
+<meta property="article:modified_time" content="2021-10-13T07:40:35.814Z">
 <meta property="article:author" content="Huang Jinhong">
 <meta property="article:tag" content="c">
 <meta property="article:tag" content="csapp_lab">
@@ -195,7 +195,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-10-11 20:23:50" itemprop="dateModified" datetime="2021-10-11T20:23:50+08:00">2021-10-11</time>
+                <time title="修改时间：2021-10-13 15:40:35" itemprop="dateModified" datetime="2021-10-13T15:40:35+08:00">2021-10-13</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -882,8 +882,7 @@
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">0x0000000000401204</span> &lt;+<span class="number">0</span>&gt;:	sub    $<span class="number">0x8</span>,%rsp</span><br><span class="line"><span class="number">0x0000000000401208</span> &lt;+<span class="number">4</span>&gt;:	test   %rdi,%rdi <span class="meta">#rdi == 0时，返回-1</span></span><br><span class="line"><span class="number">0x000000000040120b</span> &lt;+<span class="number">7</span>&gt;:	je     <span class="number">0x401238</span> &lt;fun7+<span class="number">52</span>&gt;</span><br><span class="line"><span class="number">0x000000000040120d</span> &lt;+<span class="number">9</span>&gt;:	mov    (%rdi),%edx</span><br><span class="line"><span class="number">0x000000000040120f</span> &lt;+<span class="number">11</span>&gt;:	cmp    %esi,%edx #(%rdi) &lt;= %esi</span><br><span class="line"><span class="number">0x0000000000401211</span> &lt;+<span class="number">13</span>&gt;:	jle    <span class="number">0x401220</span> &lt;fun7+<span class="number">28</span>&gt;</span><br><span class="line"><span class="number">0x0000000000401213</span> &lt;+<span class="number">15</span>&gt;:	mov    <span class="number">0x8</span>(%rdi),%rdi <span class="meta">#rdi += 0x8</span></span><br><span class="line"><span class="number">0x0000000000401217</span> &lt;+<span class="number">19</span>&gt;:	callq  <span class="number">0x401204</span> &lt;fun7&gt;</span><br><span class="line"><span class="number">0x000000000040121c</span> &lt;+<span class="number">24</span>&gt;:	add    %eax,%eax</span><br><span class="line"><span class="number">0x000000000040121e</span> &lt;+<span class="number">26</span>&gt;:	jmp    <span class="number">0x40123d</span> &lt;fun7+<span class="number">57</span>&gt;</span><br><span class="line"><span class="number">0x0000000000401220</span> &lt;+<span class="number">28</span>&gt;:	mov    $<span class="number">0x0</span>,%eax</span><br><span class="line"><span class="number">0x0000000000401225</span> &lt;+<span class="number">33</span>&gt;:	cmp    %esi,%edx</span><br><span class="line"><span class="number">0x0000000000401227</span> &lt;+<span class="number">35</span>&gt;:	je     <span class="number">0x40123d</span> &lt;fun7+<span class="number">57</span>&gt; #%esi == %edx</span><br><span class="line"><span class="number">0x0000000000401229</span> &lt;+<span class="number">37</span>&gt;:	mov    <span class="number">0x10</span>(%rdi),%rdi <span class="meta">#rdi += 0x10 </span></span><br><span class="line"><span class="number">0x000000000040122d</span> &lt;+<span class="number">41</span>&gt;:	callq  <span class="number">0x401204</span> &lt;fun7&gt;</span><br><span class="line"><span class="number">0x0000000000401232</span> &lt;+<span class="number">46</span>&gt;:	lea    <span class="number">0x1</span>(%rax,%rax,<span class="number">1</span>),%eax</span><br><span class="line"><span class="number">0x0000000000401236</span> &lt;+<span class="number">50</span>&gt;:	jmp    <span class="number">0x40123d</span> &lt;fun7+<span class="number">57</span>&gt;</span><br><span class="line"><span class="number">0x0000000000401238</span> &lt;+<span class="number">52</span>&gt;:	mov    $<span class="number">0xffffffff</span>,%eax</span><br><span class="line"><span class="number">0x000000000040123d</span> &lt;+<span class="number">57</span>&gt;:	add    $<span class="number">0x8</span>,%rsp</span><br><span class="line"><span class="number">0x0000000000401241</span> &lt;+<span class="number">61</span>&gt;:	retq   </span><br></pre></td></tr></table></figure>
 <p><strong>分析：</strong></p>
 <p>这是一棵二叉树，思路如图所示：</p>
-<img src="https://s3.bmp.ovh/imgs/2021/10/69fe563e827271f9.png" style="zoom:200%;" />
-
+<p><img src="https://s3.bmp.ovh/imgs/2021/10/69fe563e827271f9.png"></p>
 <p>方法一：<strong>实现eax = 2</strong>。（ps：<strong>递归调用顺序与返回顺序相反</strong>）</p>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">eax = <span class="number">0</span> --&gt; eax = <span class="number">2</span>*eax+<span class="number">1</span> --&gt; eax = <span class="number">2</span>*eax</span><br><span class="line"><span class="number">0</span>	--&gt; <span class="number">1</span>             --&gt; <span class="number">2</span></span><br><span class="line">故返回顺序为：</span><br><span class="line">D	--&gt; C             --&gt; B</span><br><span class="line">因而递归调用顺序为：（与返回顺序相反）</span><br><span class="line">B	--&gt; B             --&gt; D</span><br></pre></td></tr></table></figure>
 
@@ -913,14 +912,12 @@
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">└─ <span class="number">36</span></span><br><span class="line">   ├─ <span class="number">8</span></span><br><span class="line">   │  ├─ <span class="number">6</span></span><br><span class="line">   │  │  ├─ left: <span class="number">1</span></span><br><span class="line">   │  │  └─ right: <span class="number">7</span></span><br><span class="line">   │  └─ <span class="number">22</span></span><br><span class="line">   │     ├─ left: <span class="number">20</span></span><br><span class="line">   │     └─ right: <span class="number">35</span></span><br><span class="line">   └─ <span class="number">50</span></span><br><span class="line">      ├─ <span class="number">45</span></span><br><span class="line">      │  ├─ left: <span class="number">40</span></span><br><span class="line">      │  └─ right: <span class="number">47</span></span><br><span class="line">      └─ <span class="number">107</span></span><br><span class="line">         ├─ left: <span class="number">99</span></span><br><span class="line">         └─ right: <span class="number">1001</span></span><br></pre></td></tr></table></figure>
 
 <h2 id="结语"><a href="#结语" class="headerlink" title="结语"></a>结语</h2><ul>
-<li><p>But you know, Alan, sometimes it’s the very people who no one imagines anything of who do the things no one can imagine. —<em>The Imitation Game</em></p>
-</li>
-<li><p>从9.27到10.11，总共有一万两千多个字符，总算完结了。期间有几天是没有写的。总共应该是8天，最后两关都用了2天。当然不是一整天，5、6个小时应该是有的。完全靠自己写的是phase_4，奈何没啥基础。前几个都在适应gdb是怎么调试的，后几个难度比较大，phase_5是没联系到ASCII，后两个是链表、二叉树都不熟悉。也参考了不少其它大佬的解答。</p>
-</li>
-<li><p>自己的汇编阅读能力是提升了不少，后面看都是比较自然，但是联系到数据结构就比较不了解，还是得继续提高姿势水平。</p>
-</li>
-<li><p>如有谬误，敬请指正。</p>
-</li>
+<li>But you know, Alan, sometimes it’s the very people who no one imagines anything of who do the things no one can imagine. —<em>The Imitation Game</em></li>
+<li>从9.27到10.11，总共有一万两千多个字符，总算完结了。期间有几天是没有写的。总共应该是8天，最后两关都用了2天。当然不是一整天，5、6个小时应该是有的。完全靠自己写的是phase_4，奈何没啥基础。前几个都在适应gdb是怎么调试的，后几个难度比较大，phase_5是没联系到ASCII，后两个是链表、二叉树都不熟悉。也参考了不少其它大佬的解答。</li>
+<li>自己的汇编阅读能力是提升了不少，后面看都是比较自然，但是联系到数据结构就比较不了解，还是得继续提高姿势水平。</li>
+<li>如有谬误，敬请指正。</li>
+<li><a target="_blank" rel="noopener" href="https://duilec.github.io/">Memory Dot</a>，我的个人博客，欢迎来玩。</li>
+<li></li>
 </ul>
 
     </div>
