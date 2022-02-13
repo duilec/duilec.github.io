@@ -157,144 +157,6 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2022/02/08/CSAPP-ref/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="Huang Jinhong">
-      <meta itemprop="description" content="“我们来到这世上是为的是看太阳”">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Memory Dot">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2022/02/08/CSAPP-ref/" class="post-title-link" itemprop="url">MallocLab</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2022-02-08 09:32:54" itemprop="dateCreated datePublished" datetime="2022-02-08T09:32:54+08:00">2022-02-08</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2022-02-13 10:48:48" itemprop="dateModified" datetime="2022-02-13T10:48:48+08:00">2022-02-13</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/csapp-lab/" itemprop="url" rel="index"><span itemprop="name">csapp lab</span></a>
-                </span>
-            </span>
-
-          
-            <span id="/2022/02/08/CSAPP-ref/" class="post-meta-item leancloud_visitors" data-flag-title="MallocLab" title="阅读次数">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-eye"></i>
-              </span>
-              <span class="post-meta-item-text">阅读次数：</span>
-              <span class="leancloud-visitors-count"></span>
-            </span>
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="far fa-comment"></i>
-      </span>
-      <span class="post-meta-item-text">Valine：</span>
-    
-    <a title="valine" href="/2022/02/08/CSAPP-ref/#valine-comments" itemprop="discussionUrl">
-      <span class="post-comments-count valine-comment-count" data-xid="/2022/02/08/CSAPP-ref/" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <blockquote>
-<p>local variable will disappears when a function return.</p>
-</blockquote>
-<blockquote>
-<p>basic idea(implicit list) ==&gt; insert, remove(explicit list) ==&gt; segregated list(seglist)</p>
-</blockquote>
-<blockquote>
-<p>…is to you know first do fairly simple things and then look and see where the slowdowns and inefficiencies are and the just sort of hit those one after the other and optimize only for the things that are necessary.</p>
-<p>space VS time</p>
-</blockquote>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">/usr/bin/ld: i386:x86<span class="number">-64</span> architecture of input file `mdriver.o<span class="number">&#x27;</span> is incompatible with i386 output</span><br><span class="line">/usr/bin/ld: i386:x86<span class="number">-64</span> architecture of input file `mm.o<span class="number">&#x27;</span> is incompatible with i386 output</span><br></pre></td></tr></table></figure>
-
-<p><code>make</code> then <code>make clean</code>  form <strong>stackoverflow</strong> know how to use <code>MakeFile</code></p>
-<p>traces from <a target="_blank" rel="noopener" href="https://github.com/Ethan-Yan27/CSAPP-Labs">up</a> </p>
-<blockquote>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">unix &gt; man <span class="built_in">malloc</span></span><br><span class="line">......</span><br><span class="line">       <span class="function">The <span class="title">realloc</span><span class="params">()</span> function changes the size of the memory block pointed to</span></span><br><span class="line"><span class="function">       by ptr to size bytes.  The contents will be  unchanged  in  the  range</span></span><br><span class="line"><span class="function">       from  the  start  of  the  region up to the minimum of the old <span class="keyword">and</span> <span class="keyword">new</span></span></span><br><span class="line"><span class="function">       sizes.  If the <span class="keyword">new</span> size is larger than the old size, the added  memory</span></span><br><span class="line"><span class="function">       will  <span class="keyword">not</span> be initialized.  If ptr is <span class="literal">NULL</span>, then the call is equivalent</span></span><br><span class="line"><span class="function">       to <span class="title">malloc</span><span class="params">(size)</span>, <span class="keyword">for</span> all values of size</span>; <span class="keyword">if</span> size is equal to zero, <span class="keyword">and</span></span><br><span class="line">       ptr is <span class="keyword">not</span> <span class="literal">NULL</span>, <span class="function">then the call is equivalent to <span class="title">free</span><span class="params">(ptr)</span>.  Unless ptr</span></span><br><span class="line"><span class="function">       is <span class="literal">NULL</span>, it must have been returned by an earlier  call  to  <span class="title">malloc</span><span class="params">()</span>,</span></span><br><span class="line"><span class="function">       <span class="title">calloc</span><span class="params">()</span>, <span class="keyword">or</span> <span class="title">realloc</span><span class="params">()</span>.  If the area pointed to was moved, a <span class="title">free</span><span class="params">(ptr)</span></span></span><br><span class="line"><span class="function">       is done.</span></span><br></pre></td></tr></table></figure>
-</blockquote>
-<p><strong>reallocation</strong></p>
-<p>don’t worried <code>warning</code>: )</p>
-<p>not use <code>-libcaspp</code> just use <code>make and make clean</code></p>
-<p>change <strong>trace of traces</strong> <em>to local</em></p>
-<p><code>efree_listp</code> not need use <code>mem_sbrk</code>, because we not need <code>efree_listp</code> to make <code>Prologue &amp; Epilogue</code></p>
-<p>REMEMBER: <code>int* + 1 == int* + 4bytes</code> , <code>char* + 1 == char* + 1byte</code></p>
-<blockquote>
-<p>P 592：<code>malloc</code> 返回一个指针，它<strong>指向有效载荷的开始处</strong><br>p 599：块指针<code>bp</code>指向<strong>第一个有效载荷字节</strong></p>
-</blockquote>
-<p>why?  reason:</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">heap_listp += (<span class="number">2</span>*WSIZE);					 <span class="comment">/* Optimization: pointer to Prologue footer */</span>	</span><br><span class="line"></span><br><span class="line"><span class="comment">/* </span></span><br><span class="line"><span class="comment"> * find_fit - Find a fit for a block with asize bytes </span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">void</span> *<span class="title">find_fit</span><span class="params">(<span class="keyword">size_t</span> asize)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="comment">/* First-fit search */</span></span><br><span class="line">    <span class="keyword">void</span> *bp;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> (bp = heap_listp; GET_SIZE(HDRP(bp)) &gt; <span class="number">0</span>; bp = NEXT_BLKP(bp)) &#123;</span><br><span class="line">        <span class="keyword">if</span> (!GET_ALLOC(HDRP(bp)) &amp;&amp; (asize &lt;= GET_SIZE(HDRP(bp)))) &#123;</span><br><span class="line">            <span class="keyword">return</span> bp;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">NULL</span>; <span class="comment">/* No fit */</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p><code>PUT</code>: put a value to address<br><code>SET</code>: set value to another value </p>
-<p><code>gdb</code>: change: </p>
-<p><code>b</code>reak pointer<br> <code>s</code>tep (go into function) (come back by <code>finish</code>)<br><code>n</code>ext  (not go into function)<br><code>info</code>  <code>b</code>reak pointer or other<br><code>c</code>ontinue (jump this time)<br> <code>watch</code> <code>parameter</code><br><code>d</code>elete<br><code>bt</code> buffer express<br><code>layout src</code> respectively express source code and debug<br><code>r</code>un run at break pointer<br><code>q</code>uit<br><code>k</code>ill<br>type <code>Enter</code> from keyboard to repeat last operation</p>
-<p>要区别remove的case 1 ~ 4 情况 和 coalesce 的case 1 ~ 4 情况<br>前者是把block从explicit free list中移除，<strong>这个block要么是将要被分配的block</strong>，<strong>要么将要被合并(coalesce)的free block</strong>，case 1 ~ 4 情况指的<strong>是block的<code>succ</code>，<code>pred</code>的有无</strong>；<br>后者是把邻近的free block合并，case 1 ~ 4 情况指的<strong>是block邻近free block的有无</strong></p>
-<p>implicit free list + next_fit<br>+rover, change: mm_init, coalesce, find_fit</p>
-<p>ERROR: mem_sbrk failed. Ran out of memory…</p>
-<blockquote>
-<p>每条链上的块按大小由小到大排列，这样我们用“first hit”策略搜索链表的时候就能获得“best hit”的性能，例如第一条链，A是B的successor，B是A的predecessor，A的大小小于等于B；不同链以块大小区分，依次为{1}{2}{3<del>4}{5</del>8}…{1025~2048}…</p>
-</blockquote>
-<p>remove == delete</p>
-<blockquote>
-<p>c.需要用到gdb调试，修改Makefile文件，对于编译命令加入<code>-g</code>字段，并且删除<code>-02</code>优化字段，防止调试时出现怪异问题（i.e 调试时程序不是一行一行顺序 ，而是跳跃的）</p>
-</blockquote>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ERROR [trace <span class="number">9</span>, line <span class="number">10</span>]: mm_realloc did <span class="keyword">not</span> preserve the data from old block</span><br></pre></td></tr></table></figure>
-
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://example.com/2022/02/08/CSAPP-MallocLab/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1449,11 +1311,112 @@
   
   
 
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/02/15/CSAPP-TshLab/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Huang Jinhong">
+      <meta itemprop="description" content="“我们来到这世上是为的是看太阳”">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Memory Dot">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/02/15/CSAPP-TshLab/" class="post-title-link" itemprop="url">TshLab</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2021-02-15 11:02:23" itemprop="dateCreated datePublished" datetime="2021-02-15T11:02:23+08:00">2021-02-15</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2022-01-26 09:45:14" itemprop="dateModified" datetime="2022-01-26T09:45:14+08:00">2022-01-26</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/csapp-lab/" itemprop="url" rel="index"><span itemprop="name">csapp lab</span></a>
+                </span>
+            </span>
+
+          
+            <span id="/2021/02/15/CSAPP-TshLab/" class="post-meta-item leancloud_visitors" data-flag-title="TshLab" title="阅读次数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span class="leancloud-visitors-count"></span>
+            </span>
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine：</span>
+    
+    <a title="valine" href="/2021/02/15/CSAPP-TshLab/#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/2021/02/15/CSAPP-TshLab/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="TshLab"><a href="#TshLab" class="headerlink" title="TshLab"></a>TshLab</h1><p>开始日期：<em>22.1.20</em></p>
+<p>操作系统：<strong>linux</strong></p>
+<p>调试工具：<strong>linux terminal</strong></p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2021/02/15/CSAPP-TshLab/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
 
   
-  <nav class="pagination">
-    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="extend next" rel="next" href="/page/2/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
-  </nav>
 
 
 
@@ -1518,7 +1481,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">11</span>
+          <span class="site-state-item-count">10</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
