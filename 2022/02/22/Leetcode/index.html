@@ -28,7 +28,7 @@
 <meta property="og:description" content="Data structureArray1. 两数之和date: 22.2.22">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2022-02-22T14:07:16.040Z">
-<meta property="article:modified_time" content="2022-02-27T12:32:45.280Z">
+<meta property="article:modified_time" content="2022-02-28T10:38:02.697Z">
 <meta property="article:author" content="Huang Jinhong">
 <meta name="twitter:card" content="summary">
 
@@ -190,7 +190,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2022-02-27 20:32:45" itemprop="dateModified" datetime="2022-02-27T20:32:45+08:00">2022-02-27</time>
+                <time title="修改时间：2022-02-28 18:38:02" itemprop="dateModified" datetime="2022-02-28T18:38:02+08:00">2022-02-28</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -383,6 +383,57 @@
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">searchInsert</span><span class="params">(vector&lt;<span class="keyword">int</span>&gt;&amp; nums, <span class="keyword">int</span> target)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> left = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">int</span> right = nums.<span class="built_in">size</span>();</span><br><span class="line">        <span class="keyword">int</span> mid;</span><br><span class="line">        <span class="keyword">while</span> (left &lt; right) &#123;</span><br><span class="line">            mid = left + (right - left) / <span class="number">2</span>; <span class="comment">/* only &quot;(right + left) / 2&quot; can&#x27;t beyond border*/</span></span><br><span class="line">            <span class="keyword">if</span> (nums[mid] &lt; target)</span><br><span class="line">                left = mid + <span class="number">1</span>; <span class="comment">/* beyond border =&gt; &quot;left &gt;= right&quot; */</span></span><br><span class="line">            <span class="keyword">else</span></span><br><span class="line">                right = mid;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> left;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
 
 
+
+<h3 id="53-最大子数组和"><a href="#53-最大子数组和" class="headerlink" title="53. 最大子数组和"></a><a target="_blank" rel="noopener" href="https://leetcode-cn.com/problems/maximum-subarray/">53. 最大子数组和</a></h3><p>给你一个整数数组 nums ，请你找出一个具有最大和的连续子数组（子数组最少包含一个元素），返回其最大和。</p>
+<p>子数组 是数组中的一个连续部分。</p>
+<p>示例 1：</p>
+<p><code>输入：nums = [-2,1,-3,4,-1,2,1,-5,4]</code><br><code>输出：6</code><br><code>解释：连续子数组 [4,-1,2,1] 的和最大，为 6 。</code><br>示例 2：</p>
+<p><code>输入：nums = [1]</code><br><code>输出：1</code><br>示例 3：</p>
+<p><code>输入：nums = [5,4,-1,7,8]</code><br><code>输出：23</code></p>
+<p>提示：</p>
+<p><code>1 &lt;= nums.length &lt;= 105</code><br><code>-104 &lt;= nums[i] &lt;= 104</code></p>
+<p>进阶：如果你已经实现复杂度为 O(n) 的解法，尝试使用更为精妙的 分治法 求解。</p>
+<p><strong>AC code1</strong></p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">maxSubArray</span><span class="params">(vector&lt;<span class="keyword">int</span>&gt;&amp; nums)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> ans = nums[<span class="number">0</span>];</span><br><span class="line">        <span class="keyword">int</span> sum = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> num: nums)&#123;</span><br><span class="line">            <span class="keyword">if</span> (sum &gt; <span class="number">0</span>)</span><br><span class="line">                sum += num;</span><br><span class="line">            <span class="keyword">else</span></span><br><span class="line">                sum = num;</span><br><span class="line">        ans = <span class="built_in">max</span>(ans, sum);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> ans;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>运用动态规化（<strong>DP</strong>），以<strong>每个节点为结束</strong>一个个地<strong>求和</strong>（这里的节点应该理解为索引）</li>
+<li>knowledge：<ul>
+<li>在c++中，<code>max()</code>在头文件<code>&lt;algorithm&gt;</code>里</li>
+</ul>
+</li>
+<li>参考链接：<a target="_blank" rel="noopener" href="https://leetcode-cn.com/problems/maximum-subarray/solution/xiang-xi-jie-du-dong-tai-gui-hua-de-shi-xian-yi-li/">详细解读动态规划的实现, 易理解</a></li>
+</ul>
+<p><strong>AC code2</strong></p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">Status</span>&#123;</span></span><br><span class="line">        <span class="keyword">int</span> lSum, rSum, mSum, iSum;</span><br><span class="line">    &#125;;</span><br><span class="line"></span><br><span class="line">    <span class="function">Status <span class="title">pushUp</span> <span class="params">(Status l, Status r)</span></span>&#123;</span><br><span class="line">        <span class="keyword">int</span> iSum = l.iSum + r.iSum;</span><br><span class="line">        <span class="keyword">int</span> lSum = <span class="built_in">max</span>(l.lSum, l.iSum + r.lSum);</span><br><span class="line">        <span class="keyword">int</span> rSum = <span class="built_in">max</span>(r.rSum, r.iSum + l.rSum);</span><br><span class="line">        <span class="keyword">int</span> mSum = <span class="built_in">max</span>(<span class="built_in">max</span>(l.mSum, r.mSum), l.rSum + r.lSum);</span><br><span class="line">        <span class="keyword">return</span> (Status)&#123;lSum, rSum, mSum, iSum&#125;;</span><br><span class="line">    &#125;;</span><br><span class="line"></span><br><span class="line">    <span class="function">Status <span class="title">get</span><span class="params">(vector&lt;<span class="keyword">int</span>&gt; &amp;nums, <span class="keyword">int</span> l, <span class="keyword">int</span> r)</span></span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (l == r)</span><br><span class="line">            <span class="keyword">return</span> (Status)&#123;nums[l], nums[l], nums[l], nums[l]&#125;;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">int</span> m = (l + r) &gt;&gt; <span class="number">1</span>; <span class="comment">/* middle index */</span></span><br><span class="line">        Status lSub = <span class="built_in">get</span>(nums, l, m);</span><br><span class="line">        Status rSub = <span class="built_in">get</span>(nums, m + <span class="number">1</span>, r);</span><br><span class="line">        <span class="keyword">return</span> <span class="built_in">pushUp</span>(lSub, rSub);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">maxSubArray</span> <span class="params">(vector&lt;<span class="keyword">int</span>&gt;&amp; nums)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="built_in">get</span>(nums, <span class="number">0</span>, nums.<span class="built_in">size</span>() - <span class="number">1</span>).mSum;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>抄的时候，把<code>l</code>和<code>1</code>弄混了，leetcode的主题有点搞人</li>
+<li>分治+递归的方式，这里主要分了四段，每段的处理方式都得讨论：<ul>
+<li>iSum，该区间的和（in）<ul>
+<li><code>iSum = l.iSum + r.iSum;</code></li>
+</ul>
+</li>
+<li>lSum，该区间以左端为起点，<strong>中点（m）为结束</strong>的最大值<ul>
+<li><code>lSum = max(l.lSum, l.iSum + r.lSum);</code></li>
+<li>第二种是考虑<strong>向右越界（超过m）</strong>的情况</li>
+</ul>
+</li>
+<li>rSum，该区间以<strong>中点+1（m+1）为起点</strong>，右端为结束的最大值<ul>
+<li><code>rSum = max(r.rSum, r.iSum + l.rSum);</code></li>
+<li>第二种是考虑<strong>向左越界（超过m+1）</strong>的情况</li>
+</ul>
+</li>
+<li>mSum，该区间的最大值<ul>
+<li><code>mSum = max(max(l.mSum, r.mSum), l.rSum + r.lSum);</code></li>
+<li>三种情况，第三种是考虑越界的情况</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>参考链接：<a target="_blank" rel="noopener" href="https://leetcode-cn.com/problems/maximum-subarray/solution/zui-da-zi-xu-he-by-leetcode-solution/">最大子序和</a></li>
+</ul>
+
     </div>
 
     
@@ -401,8 +452,8 @@
       <i class="fa fa-chevron-left"></i> MallocLab
     </a></div>
       <div class="post-nav-item">
-    <a href="/2022/02/24/os/" rel="next" title="">
-       <i class="fa fa-chevron-right"></i>
+    <a href="/2022/02/28/CSAPP-ProxyLab/" rel="next" title="ProxyLab">
+      ProxyLab <i class="fa fa-chevron-right"></i>
     </a></div>
     </div>
       </footer>
@@ -463,7 +514,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Data-structure"><span class="nav-number">1.</span> <span class="nav-text">Data structure</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Array"><span class="nav-number">1.1.</span> <span class="nav-text">Array</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-%E4%B8%A4%E6%95%B0%E4%B9%8B%E5%92%8C"><span class="nav-number">1.1.1.</span> <span class="nav-text">1. 两数之和</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#26-%E5%88%A0%E9%99%A4%E6%9C%89%E5%BA%8F%E6%95%B0%E7%BB%84%E4%B8%AD%E7%9A%84%E9%87%8D%E5%A4%8D%E9%A1%B9"><span class="nav-number">1.1.2.</span> <span class="nav-text">26. 删除有序数组中的重复项</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#27-%E7%A7%BB%E9%99%A4%E5%85%83%E7%B4%A0"><span class="nav-number">1.1.3.</span> <span class="nav-text">27. 移除元素</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#35-%E6%90%9C%E7%B4%A2%E6%8F%92%E5%85%A5%E4%BD%8D%E7%BD%AE"><span class="nav-number">1.1.4.</span> <span class="nav-text">35. 搜索插入位置</span></a></li></ol></li></ol></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Data-structure"><span class="nav-number">1.</span> <span class="nav-text">Data structure</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Array"><span class="nav-number">1.1.</span> <span class="nav-text">Array</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-%E4%B8%A4%E6%95%B0%E4%B9%8B%E5%92%8C"><span class="nav-number">1.1.1.</span> <span class="nav-text">1. 两数之和</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#26-%E5%88%A0%E9%99%A4%E6%9C%89%E5%BA%8F%E6%95%B0%E7%BB%84%E4%B8%AD%E7%9A%84%E9%87%8D%E5%A4%8D%E9%A1%B9"><span class="nav-number">1.1.2.</span> <span class="nav-text">26. 删除有序数组中的重复项</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#27-%E7%A7%BB%E9%99%A4%E5%85%83%E7%B4%A0"><span class="nav-number">1.1.3.</span> <span class="nav-text">27. 移除元素</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#35-%E6%90%9C%E7%B4%A2%E6%8F%92%E5%85%A5%E4%BD%8D%E7%BD%AE"><span class="nav-number">1.1.4.</span> <span class="nav-text">35. 搜索插入位置</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#53-%E6%9C%80%E5%A4%A7%E5%AD%90%E6%95%B0%E7%BB%84%E5%92%8C"><span class="nav-number">1.1.5.</span> <span class="nav-text">53. 最大子数组和</span></a></li></ol></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -477,20 +528,20 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">12</span>
+          <span class="site-state-item-count">13</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-count">5</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-count">7</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
