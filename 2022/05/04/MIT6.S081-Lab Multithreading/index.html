@@ -1,0 +1,656 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"example.com","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="开始日期：22.5.3 操作系统：Ubuntu20.0.4 Link：Lab Multithreading">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Lab Multithreading">
+<meta property="og:url" content="http://example.com/2022/05/04/MIT6.S081-Lab%20Multithreading/index.html">
+<meta property="og:site_name" content="Memory Dot">
+<meta property="og:description" content="开始日期：22.5.3 操作系统：Ubuntu20.0.4 Link：Lab Multithreading">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2022-05-04T11:08:13.000Z">
+<meta property="article:modified_time" content="2022-05-04T12:55:20.338Z">
+<meta property="article:author" content="Huang Jinhong">
+<meta property="article:tag" content="c">
+<meta property="article:tag" content="OS">
+<meta property="article:tag" content="xv6">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://example.com/2022/05/04/MIT6.S081-Lab%20Multithreading/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>Lab Multithreading | Memory Dot</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Memory Dot</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/05/04/MIT6.S081-Lab%20Multithreading/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Huang Jinhong">
+      <meta itemprop="description" content="“我们来到这世上是为的是看太阳”">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Memory Dot">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Lab Multithreading
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2022-05-04 19:08:13 / 修改时间：20:55:20" itemprop="dateCreated datePublished" datetime="2022-05-04T19:08:13+08:00">2022-05-04</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/MIT6-S081-Lab/" itemprop="url" rel="index"><span itemprop="name">MIT6.S081-Lab</span></a>
+                </span>
+            </span>
+
+          
+            <span id="/2022/05/04/MIT6.S081-Lab%20Multithreading/" class="post-meta-item leancloud_visitors" data-flag-title="Lab Multithreading" title="阅读次数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span class="leancloud-visitors-count"></span>
+            </span>
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine：</span>
+    
+    <a title="valine" href="/2022/05/04/MIT6.S081-Lab%20Multithreading/#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/2022/05/04/MIT6.S081-Lab%20Multithreading/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>开始日期：<em>22.5.3</em></p>
+<p>操作系统：<strong>Ubuntu20.0.4</strong></p>
+<p>Link：<a target="_blank" rel="noopener" href="https://pdos.csail.mit.edu/6.S081/2021/labs/thread.html">Lab Multithreading</a></p>
+<span id="more"></span> 
+
+<h1 id="Lab-Multithreading"><a href="#Lab-Multithreading" class="headerlink" title="Lab Multithreading"></a>Lab Multithreading</h1><h2 id="写在前面"><a href="#写在前面" class="headerlink" title="写在前面"></a>写在前面</h2><p>多线程这一部分以课程为主会好很多，教材的解释太繁琐了。</p>
+<p><strong>参考链接：</strong><a target="_blank" rel="noopener" href="http://xv6.dgs.zone/labs/answers/lab7.html">Lab Multithreading</a></p>
+<h2 id="Uthread-switching-between-threads"><a href="#Uthread-switching-between-threads" class="headerlink" title="Uthread: switching between threads"></a>Uthread: switching between threads</h2><p>实现用户态的线程切换，同内核态的线程切换比较，步骤减少了许多，不用多考虑陷阱帧（trapframe）的切换问题。只需要考虑<strong>栈指针、返回地址以及被调用者寄存器（callee register）</strong>。</p>
+<p>整个过程：第一次调用<code>thread_schedule();</code>之后，会离开<code>thread[0]</code>（也即是进程<code>main</code>），之后就一直在三个线程<code>thread[1] ~ thread[3]</code>之间一直互相切换，直到<code>exit(0)</code>。</p>
+<p><code>Makefile</code>插入<code>_uthread</code></p>
+<figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">UPROGS=\</span><br><span class="line">	$U/_cat\</span><br><span class="line">	$U/_echo\</span><br><span class="line">	...</span><br><span class="line">	$U/_uthread\ <span class="comment"># insert _uthread</span></span><br></pre></td></tr></table></figure>
+
+<p>线程切换时需要<strong>保存/恢复被调用者寄存器</strong>，参照<code>swthc.S</code>即可</p>
+<ul>
+<li>注意<code>context</code>的定义必须在<code>thread</code>之前，否则会报错<code>incomplete type is not allowed</code></li>
+</ul>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/* we must defind it before defining thread */</span></span><br><span class="line"><span class="comment">/* otherwise, we will meet &quot;incomplete type is not allowed&quot; */</span></span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">context</span> &#123;</span></span><br><span class="line">  uint64 ra;</span><br><span class="line">  uint64 sp;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// callee-saved</span></span><br><span class="line">  uint64 s0;</span><br><span class="line">  uint64 s1;</span><br><span class="line">  uint64 s2;</span><br><span class="line">  uint64 s3;</span><br><span class="line">  uint64 s4;</span><br><span class="line">  uint64 s5;</span><br><span class="line">  uint64 s6;</span><br><span class="line">  uint64 s7;</span><br><span class="line">  uint64 s8;</span><br><span class="line">  uint64 s9;</span><br><span class="line">  uint64 s10;</span><br><span class="line">  uint64 s11;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">thread</span> &#123;</span></span><br><span class="line">  <span class="keyword">char</span>       <span class="built_in">stack</span>[STACK_SIZE]; <span class="comment">/* the thread&#x27;s stack */</span></span><br><span class="line">  <span class="keyword">int</span>        state;             <span class="comment">/* FREE, RUNNING, RUNNABLE */</span></span><br><span class="line">  <span class="class"><span class="keyword">struct</span> <span class="title">context</span> <span class="title">context</span>;</span>       <span class="comment">/* Saved registers for user context switches. */</span></span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line">	/* uthread_switch.S */</span><br><span class="line">	.text</span><br><span class="line"></span><br><span class="line">	/*</span><br><span class="line">         * save the old thread&#x27;s registers,</span><br><span class="line">         * restore the new thread&#x27;s registers.</span><br><span class="line">         */</span><br><span class="line"></span><br><span class="line">	.globl thread_switch</span><br><span class="line">thread_switch:</span><br><span class="line">	/* YOUR CODE HERE */</span><br><span class="line">	sd ra, 0(a0)</span><br><span class="line">	sd sp, 8(a0)</span><br><span class="line">	sd s0, 16(a0)</span><br><span class="line">	sd s1, 24(a0)</span><br><span class="line">	sd s2, 32(a0)</span><br><span class="line">	sd s3, 40(a0)</span><br><span class="line">	sd s4, 48(a0)</span><br><span class="line">	sd s5, 56(a0)</span><br><span class="line">	sd s6, 64(a0)</span><br><span class="line">	sd s7, 72(a0)</span><br><span class="line">	sd s8, 80(a0)</span><br><span class="line">	sd s9, 88(a0)</span><br><span class="line">	sd s10, 96(a0)</span><br><span class="line">	sd s11, 104(a0)</span><br><span class="line"></span><br><span class="line">	ld ra, 0(a1)</span><br><span class="line">	ld sp, 8(a1)</span><br><span class="line">	ld s0, 16(a1)</span><br><span class="line">	ld s1, 24(a1)</span><br><span class="line">	ld s2, 32(a1)</span><br><span class="line">	ld s3, 40(a1)</span><br><span class="line">	ld s4, 48(a1)</span><br><span class="line">	ld s5, 56(a1)</span><br><span class="line">	ld s6, 64(a1)</span><br><span class="line">	ld s7, 72(a1)</span><br><span class="line">	ld s8, 80(a1)</span><br><span class="line">	ld s9, 88(a1)</span><br><span class="line">	ld s10, 96(a1)</span><br><span class="line">	ld s11, 104(a1)</span><br><span class="line">	</span><br><span class="line">	ret    /* return to ra */</span><br></pre></td></tr></table></figure>
+
+<p>参考<code>kernel/proc.c/allocproc()</code>，使线程恢复被调用者寄存器之后，能够直接跳到函数头部，同时，栈恢复为对应线程的栈。</p>
+<ul>
+<li><code>uthread.c</code>中可以看到：*it needs a stack so that the first thread_switch() can save thread 0’s state.*，说明<code>stack</code>是用来存放<code>state</code>的，但笔者<strong>没有搞清楚</strong>是怎么存放的。</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> </span></span><br><span class="line"><span class="function"><span class="title">thread_create</span><span class="params">(<span class="keyword">void</span> (*func)())</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">  <span class="class"><span class="keyword">struct</span> <span class="title">thread</span> *<span class="title">t</span>;</span></span><br><span class="line"></span><br><span class="line">  <span class="keyword">for</span> (t = all_thread; t &lt; all_thread + MAX_THREAD; t++) &#123;</span><br><span class="line">    <span class="keyword">if</span> (t-&gt;state == FREE) <span class="keyword">break</span>;</span><br><span class="line">  &#125;</span><br><span class="line">  t-&gt;state = RUNNABLE;</span><br><span class="line">  <span class="comment">// YOUR CODE HERE</span></span><br><span class="line">  <span class="comment">// from kernel/proc.c/allocproc(), we know we need get thread&#x27;s address of ret and thread&#x27;s stack pointer</span></span><br><span class="line">  t-&gt;context.ra = (uint64)func;</span><br><span class="line">  t-&gt;context.sp = (uint64)(t-&gt;<span class="built_in">stack</span> + STACK_SIZE);</span><br><span class="line">  <span class="comment">// I know we need stack to store state, but how to use it to store &#x27;state&#x27;?</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>从当前线程的<code>callee register</code>切换到下一个线程的<code>callee register</code></p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> </span></span><br><span class="line"><span class="function"><span class="title">thread_schedule</span><span class="params">(<span class="keyword">void</span>)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">...</span><br><span class="line">  <span class="keyword">if</span> (current_thread != next_thread) &#123;         <span class="comment">/* switch threads?  */</span></span><br><span class="line">    next_thread-&gt;state = RUNNING;</span><br><span class="line">    t = current_thread;</span><br><span class="line">    current_thread = next_thread;</span><br><span class="line">    <span class="comment">/* YOUR CODE HERE</span></span><br><span class="line"><span class="comment">     * Invoke thread_switch to switch from t to next_thread:</span></span><br><span class="line"><span class="comment">     * thread_switch(??, ??);</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="comment">// calling the first &#x27;thread_schedule()&#x27; from main</span></span><br><span class="line">    <span class="comment">// when first &#x27;thread_switch()&#x27; reture, we will go to the address of thread_a(equal calling thread_a)</span></span><br><span class="line">    <span class="comment">// then go to thread_b-&gt;_c-&gt;_a-&gt;_b-&gt;...-&gt;exit(0)</span></span><br><span class="line">    thread_switch((uint64)&amp;t-&gt;context, (uint64)&amp;next_thread-&gt;context);</span><br><span class="line">  &#125;<span class="keyword">else</span></span><br><span class="line">    next_thread = <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<p>接下来的实验都是在ubuntu上做的了，实验文件也都在文件夹<code>notxv6</code>中，需要用到linux的不少接口，不过，都大同小异。</p>
+<h2 id="Using-threads"><a href="#Using-threads" class="headerlink" title="Using threads"></a>Using threads</h2><p>在<code>ph.c</code>前部声明一个全局锁</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">...</span><br><span class="line"><span class="keyword">int</span> keys[NKEYS];</span><br><span class="line"><span class="keyword">int</span> nthread = <span class="number">1</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">pthread_mutex_t</span> lock;            <span class="comment">// declare a lock</span></span><br><span class="line">...</span><br></pre></td></tr></table></figure>
+
+<p>在<code>main()</code>中把锁给初始化</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span></span></span><br><span class="line"><span class="function"><span class="title">main</span><span class="params">(<span class="keyword">int</span> argc, <span class="keyword">char</span> *argv[])</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">  <span class="keyword">pthread_t</span> *tha;</span><br><span class="line">  <span class="keyword">void</span> *value;</span><br><span class="line">  <span class="keyword">double</span> t1, t0;</span><br><span class="line">  pthread_mutex_init(&amp;lock, <span class="literal">NULL</span>); <span class="comment">// initialize the lock</span></span><br><span class="line">  ...</span><br></pre></td></tr></table></figure>
+
+<p>修改<code>put()</code></p>
+<ul>
+<li>第一对锁（先上锁再解锁）是防止双线程产生竞争（同时修改<code>key</code>和<code>value</code>）</li>
+<li>第二对锁（<strong>先解锁再上锁</strong>）是用来加速<code>put()</code>的，因为使用第二对锁的这段代码不需要修改<code>key</code>或者<code>value</code>，只是访问了<code>key</code>，而不是修改</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">static</span> </span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">put</span><span class="params">(<span class="keyword">int</span> key, <span class="keyword">int</span> value)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">  pthread_mutex_lock(&amp;lock);       <span class="comment">// first_mutex: acquire lock</span></span><br><span class="line">  <span class="keyword">int</span> i = key % NBUCKET;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// is the key already present?</span></span><br><span class="line">  <span class="comment">// we don&#x27;t need modify key or value in this &#x27;for() loop&#x27; </span></span><br><span class="line">  pthread_mutex_unlock(&amp;lock);       <span class="comment">// second_mutex: release lock</span></span><br><span class="line">  <span class="class"><span class="keyword">struct</span> <span class="title">entry</span> *<span class="title">e</span> =</span> <span class="number">0</span>;</span><br><span class="line">  <span class="keyword">for</span> (e = table[i]; e != <span class="number">0</span>; e = e-&gt;next) &#123;</span><br><span class="line">    <span class="keyword">if</span> (e-&gt;key == key)</span><br><span class="line">      <span class="keyword">break</span>;</span><br><span class="line">  &#125;</span><br><span class="line">  pthread_mutex_lock(&amp;lock);       <span class="comment">// second_mutex: acquire lock</span></span><br><span class="line">  <span class="keyword">if</span>(e)&#123;</span><br><span class="line">    <span class="comment">// update the existing key.</span></span><br><span class="line">    e-&gt;value = value;</span><br><span class="line">  &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    <span class="comment">// the new is new.</span></span><br><span class="line">    insert(key, value, &amp;table[i], table[i]);</span><br><span class="line">  &#125;</span><br><span class="line">  pthread_mutex_unlock(&amp;lock);       <span class="comment">// first_mutex: release lock</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="Barrier"><a href="#Barrier" class="headerlink" title="Barrier"></a>Barrier</h2><p>整体思路是：每一轮都有同样数目的线程来到，我们会阻塞所有线程，直到这一轮的最后一个线程进来，这时，我们将这一轮除最后一个线程外的所有线程唤醒，然后进入下一轮。</p>
+<ul>
+<li><p>进入下一轮之前记得将<code>bstate.nthread = 0</code>，使得下一轮能够重新计数</p>
+</li>
+<li><p>执行<code>pthread_cond_wait()</code>之后也需要解锁，否则会产生<strong>死锁</strong></p>
+<blockquote>
+<p>go to sleep on cond, releasing lock mutex, acquiring upon wake up</p>
+<p>进入睡眠之后，在<code>pthread_cond_wait()</code>中线程会释放锁，当线程被唤醒后会立刻获得锁，<strong>如果进入下一轮前没释放掉当前这一轮的锁，在下一轮就会一直请求锁，产生死锁</strong></p>
+</blockquote>
+</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">void</span> </span></span><br><span class="line"><span class="function"><span class="title">barrier</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">  <span class="comment">// YOUR CODE HERE</span></span><br><span class="line">  <span class="comment">//</span></span><br><span class="line">  <span class="comment">// Block until all threads have called barrier() and</span></span><br><span class="line">  <span class="comment">// then increment bstate.round.</span></span><br><span class="line">  <span class="comment">//</span></span><br><span class="line">  pthread_mutex_lock(&amp;bstate.barrier_mutex);  <span class="comment">// acquire lock</span></span><br><span class="line"></span><br><span class="line">  <span class="comment">/* next thread */</span></span><br><span class="line">  bstate.nthread++;</span><br><span class="line">  </span><br><span class="line">  <span class="comment">/* next round */</span></span><br><span class="line">  <span class="comment">/* the last thread coming, we go to next round and wake up all threads */</span></span><br><span class="line">  <span class="comment">/* we must set &#x27;bstate.nthread = 0&#x27; to call barrier() for all threads again */</span></span><br><span class="line">  <span class="keyword">if</span> (bstate.nthread == nthread)&#123;</span><br><span class="line">    bstate.nthread = <span class="number">0</span>;</span><br><span class="line">    bstate.round++;</span><br><span class="line">    pthread_cond_broadcast(&amp;bstate.barrier_cond); <span class="comment">// wake up every thread sleeping on cond</span></span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">/* block all thread by pthread_cond_broadcast()*/</span></span><br><span class="line">  <span class="keyword">else</span>&#123;</span><br><span class="line">     <span class="comment">// when we not use &#x27;else&#x27;, &#x27;pthread_cond_wait()&#x27; will be executed after &#x27;pthread_cond_broadcast()&#x27;</span></span><br><span class="line">    pthread_cond_wait(&amp;bstate.barrier_cond, &amp;bstate.barrier_mutex);  <span class="comment">// go to sleep on cond, releasing lock mutex, acquiring upon wake up</span></span><br><span class="line">  &#125;  </span><br><span class="line"></span><br><span class="line">  pthread_mutex_unlock(&amp;bstate.barrier_mutex);  <span class="comment">// release lock</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<p><strong><code>./grade-lab-thread</code></strong></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">duile@LAPTOP-II21PK0U:xv6-labs-2021$ ./grade-lab-thread</span><br><span class="line">make: <span class="string">&#x27;kernel/kernel&#x27;</span> is up to date.</span><br><span class="line">== Test uthread == uthread: OK (2.1s)</span><br><span class="line">== Test answers-thread.txt == answers-thread.txt: OK</span><br><span class="line">== Test ph_safe == gcc -o ph -g -O2 -DSOL_THREAD -DLAB_THREAD notxv6/ph.c -pthread</span><br><span class="line">ph_safe: OK (10.4s)</span><br><span class="line">== Test ph_fast == make: <span class="string">&#x27;ph&#x27;</span> is up to date.</span><br><span class="line">ph_fast: OK (25.5s)</span><br><span class="line">== Test barrier == gcc -o barrier -g -O2 -DSOL_THREAD -DLAB_THREAD notxv6/barrier.c -pthread</span><br><span class="line">barrier: OK (3.2s)</span><br><span class="line">== Test time ==</span><br><span class="line">time: OK</span><br><span class="line">Score: 60/60</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><ul>
+<li>完成日期：<em>2022.5.4</em></li>
+<li>第一个实验想到了要跳转到<code>func()</code>，但忘记了是给<code>context.ra</code>使用函数地址<code>func</code>，在切换完<code>context</code>之后，以<code>ret</code>的方式跳转到<code>func()</code></li>
+<li>第三个实验没考虑到<code>else</code>的使用，如果没有<code>else</code>，<code>if</code>之后仍会执行<code>pthread_cond_wait()</code>，导致最后一个线程睡眠。</li>
+<li>这是做实验以来最快完成的一次，代码量很少</li>
+<li>最近听音乐都是用<em>随机模式</em>，下意识以为的一首歌竟然不是，很有意思</li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/c/" rel="tag"># c</a>
+              <a href="/tags/OS/" rel="tag"># OS</a>
+              <a href="/tags/xv6/" rel="tag"># xv6</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2022/04/20/MIT6.S081-Lab%20COW/" rel="prev" title="Lab COW">
+      <i class="fa fa-chevron-left"></i> Lab COW
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+    <div class="comments" id="valine-comments"></div>
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Lab-Multithreading"><span class="nav-number">1.</span> <span class="nav-text">Lab Multithreading</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%86%99%E5%9C%A8%E5%89%8D%E9%9D%A2"><span class="nav-number">1.1.</span> <span class="nav-text">写在前面</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Uthread-switching-between-threads"><span class="nav-number">1.2.</span> <span class="nav-text">Uthread: switching between threads</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Using-threads"><span class="nav-number">1.3.</span> <span class="nav-text">Using threads</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Barrier"><span class="nav-number">1.4.</span> <span class="nav-text">Barrier</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%80%BB%E7%BB%93"><span class="nav-number">1.5.</span> <span class="nav-text">总结</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Huang Jinhong</p>
+  <div class="site-description" itemprop="description">“我们来到这世上是为的是看太阳”</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">18</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">7</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/duilec" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;duilec" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://www.cnblogs.com/duile" title="博客园 → https:&#x2F;&#x2F;www.cnblogs.com&#x2F;duile" rel="noopener" target="_blank"><i class="fab fa-cnblog fa-fw"></i>博客园</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Huang Jinhong</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> 强力驱动
+  </div>
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+<script>
+  (function() {
+    function leancloudSelector(url) {
+      url = encodeURI(url);
+      return document.getElementById(url).querySelector('.leancloud-visitors-count');
+    }
+
+    function addCount(Counter) {
+      var visitors = document.querySelector('.leancloud_visitors');
+      var url = decodeURI(visitors.id);
+      var title = visitors.dataset.flagTitle;
+
+      Counter('get', '/classes/Counter?where=' + encodeURIComponent(JSON.stringify({ url })))
+        .then(response => response.json())
+        .then(({ results }) => {
+          if (results.length > 0) {
+            var counter = results[0];
+            leancloudSelector(url).innerText = counter.time + 1;
+            Counter('put', '/classes/Counter/' + counter.objectId, { time: { '__op': 'Increment', 'amount': 1 } })
+              .catch(error => {
+                console.error('Failed to save visitor count', error);
+              });
+          } else {
+              leancloudSelector(url).innerText = 'Counter not initialized! More info at console err msg.';
+              console.error('ATTENTION! LeanCloud counter has security bug, see how to solve it here: https://github.com/theme-next/hexo-leancloud-counter-security. \n However, you can still use LeanCloud without security, by setting `security` option to `false`.');
+            
+          }
+        })
+        .catch(error => {
+          console.error('LeanCloud Counter Error', error);
+        });
+    }
+
+    function showTime(Counter) {
+      var visitors = document.querySelectorAll('.leancloud_visitors');
+      var entries = [...visitors].map(element => {
+        return decodeURI(element.id);
+      });
+
+      Counter('get', '/classes/Counter?where=' + encodeURIComponent(JSON.stringify({ url: { '$in': entries } })))
+        .then(response => response.json())
+        .then(({ results }) => {
+          for (let url of entries) {
+            let target = results.find(item => item.url === url);
+            leancloudSelector(url).innerText = target ? target.time : 0;
+          }
+        })
+        .catch(error => {
+          console.error('LeanCloud Counter Error', error);
+        });
+    }
+
+    let { app_id, app_key, server_url } = {"enable":true,"app_id":"fflLscOo9DyB8Fx8ubGOzkl5-MdYXbMMI","app_key":"RrGHmVsgcizeqfrfsKcX4Sko","server_url":null,"security":true};
+    function fetchData(api_server) {
+      var Counter = (method, url, data) => {
+        return fetch(`${api_server}/1.1${url}`, {
+          method,
+          headers: {
+            'X-LC-Id'     : app_id,
+            'X-LC-Key'    : app_key,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(data)
+        });
+      };
+      if (CONFIG.page.isPost) {
+        if (CONFIG.hostname !== location.hostname) return;
+        addCount(Counter);
+      } else if (document.querySelectorAll('.post-title-link').length >= 1) {
+        showTime(Counter);
+      }
+    }
+
+    let api_server = app_id.slice(-9) !== '-MdYXbMMI' ? server_url : `https://${app_id.slice(0, 8).toLowerCase()}.api.lncldglobal.com`;
+
+    if (api_server) {
+      fetchData(api_server);
+    } else {
+      fetch('https://app-router.leancloud.cn/2/route?appId=' + app_id)
+        .then(response => response.json())
+        .then(({ api_server }) => {
+          fetchData('https://' + api_server);
+        });
+    }
+  })();
+</script>
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+
+<script>
+NexT.utils.loadComments(document.querySelector('#valine-comments'), () => {
+  NexT.utils.getScript('//unpkg.com/valine/dist/Valine.min.js', () => {
+    var GUEST = ['nick', 'mail', 'link'];
+    var guest = 'nick,mail,link';
+    guest = guest.split(',').filter(item => {
+      return GUEST.includes(item);
+    });
+    new Valine({
+      el         : '#valine-comments',
+      verify     : false,
+      notify     : false,
+      appId      : 'fflLscOo9DyB8Fx8ubGOzkl5-MdYXbMMI',
+      appKey     : 'RrGHmVsgcizeqfrfsKcX4Sko',
+      placeholder: "发表评论",
+      avatar     : 'mm',
+      meta       : guest,
+      pageSize   : '10' || 10,
+      visitor    : false,
+      lang       : '' || 'zh-cn',
+      path       : location.pathname,
+      recordIP   : false,
+      serverURLs : ''
+    });
+  }, window.Valine);
+});
+</script>
+
+</body>
+</html>
