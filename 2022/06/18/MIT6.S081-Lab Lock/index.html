@@ -28,7 +28,7 @@
 <meta property="og:description" content="开始日期：22.6.16 操作系统：Ubuntu20.0.4 Link：Lab Lock">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2022-06-18T07:29:15.000Z">
-<meta property="article:modified_time" content="2022-06-18T13:37:46.464Z">
+<meta property="article:modified_time" content="2022-06-18T15:46:34.378Z">
 <meta property="article:author" content="Huang Jinhong">
 <meta property="article:tag" content="c">
 <meta property="article:tag" content="OS">
@@ -187,7 +187,7 @@
               <span class="post-meta-item-text">发表于</span>
               
 
-              <time title="创建时间：2022-06-18 15:29:15 / 修改时间：21:37:46" itemprop="dateCreated datePublished" datetime="2022-06-18T15:29:15+08:00">2022-06-18</time>
+              <time title="创建时间：2022-06-18 15:29:15 / 修改时间：23:46:34" itemprop="dateCreated datePublished" datetime="2022-06-18T15:29:15+08:00">2022-06-18</time>
             </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -271,7 +271,7 @@
 <li><code>ref_is_zero_nums == 1</code>，说明只有一个buf的<code>refcnt == 0</code>，直接把它分配出去</li>
 <li>其它情况，即<code>ref_is_zero_nums &gt;= 2</code>，说明至少有两个buf的<code>refcnt == 0</code>，我们要找出它们当中的最大时间戳（<code>lru_time_stamp</code>）对应的哈希桶编号（<code>lru_bucket</code>）和缓存区编号（<code>lru_buf</code>）</li>
 </ul>
-<p><code>brelse()</code>、<code>bpin()</code>、 <code>bunpin()</code>的使用都不需要使用<code>sleeplock: cache</code></p>
+<p><code>brelse()</code>、<code>bpin()</code>、 <code>bunpin()</code>都不需要使用<code>sleeplock: cache</code></p>
 <ul>
 <li><code>brelse()</code>是因为不再使用<code>bcache.head</code>了，所以不需要使用<code>sleeplock: cache</code></li>
 <li><code>bpin()</code>、 <code>bunpin()</code>不使用是因为访问一个buf的结构时不需要任何用锁<ul>
@@ -288,7 +288,7 @@
 
 
 
-<h3 id="result"><a href="#result" class="headerlink" title="result"></a>result</h3><p>笔者还改了下<code>timeout</code> 为 <code>500</code></p>
+<h3 id="result"><a href="#result" class="headerlink" title="result"></a>result</h3><p>笔者还改了下<code>timeout=300</code> 改为 <code>timeout=500</code></p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">== Test running kalloctest ==</span><br><span class="line">$ make qemu-gdb</span><br><span class="line">(107.5s)</span><br><span class="line">== Test   kalloctest: test1 ==</span><br><span class="line">  kalloctest: test1: OK</span><br><span class="line">== Test   kalloctest: test2 ==</span><br><span class="line">  kalloctest: test2: OK</span><br><span class="line">== Test kalloctest: sbrkmuch ==</span><br><span class="line">$ make qemu-gdb</span><br><span class="line">kalloctest: sbrkmuch: OK (15.7s)</span><br><span class="line">== Test running bcachetest ==</span><br><span class="line">$ make qemu-gdb</span><br><span class="line">(22.0s)</span><br><span class="line">== Test   bcachetest: test0 ==</span><br><span class="line">  bcachetest: test0: OK</span><br><span class="line">== Test   bcachetest: test1 ==</span><br><span class="line">  bcachetest: test1: OK</span><br><span class="line">== Test usertests ==</span><br><span class="line">$ make qemu-gdb</span><br><span class="line">usertests: OK (289.6s)</span><br><span class="line">== Test time ==</span><br><span class="line">time: OK</span><br><span class="line">Score: 70/70</span><br></pre></td></tr></table></figure>
 
 
