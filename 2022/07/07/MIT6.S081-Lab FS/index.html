@@ -1,0 +1,648 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"example.com","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="开始日期：22.07.05 操作系统：Ubuntu20.0.4 Link：Lab file system">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Lab FS">
+<meta property="og:url" content="http://example.com/2022/07/07/MIT6.S081-Lab%20FS/index.html">
+<meta property="og:site_name" content="Memory Dot">
+<meta property="og:description" content="开始日期：22.07.05 操作系统：Ubuntu20.0.4 Link：Lab file system">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2022-07-06T16:11:17.000Z">
+<meta property="article:modified_time" content="2022-07-07T12:36:12.406Z">
+<meta property="article:author" content="Huang Jinhong">
+<meta property="article:tag" content="c">
+<meta property="article:tag" content="OS">
+<meta property="article:tag" content="xv6">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://example.com/2022/07/07/MIT6.S081-Lab%20FS/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>Lab FS | Memory Dot</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Memory Dot</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/07/07/MIT6.S081-Lab%20FS/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Huang Jinhong">
+      <meta itemprop="description" content="“我们来到这世上是为的是看太阳”">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Memory Dot">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Lab FS
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2022-07-07 00:11:17 / 修改时间：20:36:12" itemprop="dateCreated datePublished" datetime="2022-07-07T00:11:17+08:00">2022-07-07</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/MIT6-S081-Lab/" itemprop="url" rel="index"><span itemprop="name">MIT6.S081-Lab</span></a>
+                </span>
+            </span>
+
+          
+            <span id="/2022/07/07/MIT6.S081-Lab%20FS/" class="post-meta-item leancloud_visitors" data-flag-title="Lab FS" title="阅读次数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span class="leancloud-visitors-count"></span>
+            </span>
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine：</span>
+    
+    <a title="valine" href="/2022/07/07/MIT6.S081-Lab%20FS/#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/2022/07/07/MIT6.S081-Lab%20FS/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>开始日期：<em>22.07.05</em></p>
+<p>操作系统：<strong>Ubuntu20.0.4</strong></p>
+<p>Link：<a target="_blank" rel="noopener" href="https://pdos.csail.mit.edu/6.S081/2021/labs/fs.html">Lab file system</a></p>
+<span id="more"></span> 
+
+<h1 id="Lab-Lock"><a href="#Lab-Lock" class="headerlink" title="Lab Lock"></a>Lab Lock</h1><h2 id="写在前面"><a href="#写在前面" class="headerlink" title="写在前面"></a>写在前面</h2><p><strong>此部分不涉及实现细节，可以放心阅读</strong></p>
+<p>bigfile主要采用了二级链表实现</p>
+<p>symlink需要清楚<code>iput()</code>，<code>open()</code>，<code>create()</code>，<code>unlink()</code>和<code>namei()</code>等函数是如何交互的，它们又是怎么让inode在cache中释放存储的。</p>
+<h3 id="踩坑"><a href="#踩坑" class="headerlink" title="踩坑"></a>踩坑</h3><ul>
+<li>symlinktest中使用<strong>存储路径名字</strong>的方式失败<br>笔者一开始采用的是symlink存储路径名字（字符指针），但在测试执行<code>if(write(fd1, buf, sizeof(buf)) != 4)</code>之后，<strong>路径名字会直接丢失，无法引用</strong>，导致失败。具体原因没有分析出来。</li>
+<li><code>iput</code><br><code>iput</code>的作用是将<code>ip-&gt;ref</code>减一，如果<code>ip-&gt;ref == 1</code>就直接将其从cache中释放掉</li>
+<li><code>fs.c</code>的注释<br>做symlinktest前，请务必通读<code>fs.c</code>的大段注释（大约在<code>105 line</code>）</li>
+<li><strong>writebig: panic freeing free block</strong><br>如果完成了symlinktest，在执行usertests之前，得先执行一次bigfile。<br>否则会导致出错，因为wirtebif要写和MAXFILE一样大的文件，而只有执行bigfile之后我们才有修改后的MAXFILE</li>
+<li><code>make clean</code><br>如果发现测试怎么样都通过不了，觉得思路也没错，那可能是之前版本有问题遗留可以尝试<code>make clean</code></li>
+</ul>
+<h3 id="参考材料"><a href="#参考材料" class="headerlink" title="参考材料"></a>参考材料</h3><ul>
+<li><a target="_blank" rel="noopener" href="https://rootreturn0.github.io/2019/08/31/xv6-%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F/">xv6-文件系统</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.howtogeek.com/howto/16226/complete-guide-to-symbolic-links-symlinks-on-windows-or-linux/">The Complete Guide to Creating Symbolic Links (aka Symlinks) on Windows</a></li>
+</ul>
+<h2 id="实验内容"><a href="#实验内容" class="headerlink" title="实验内容"></a>实验内容</h2><p><strong>警告：此部分涉及实现细节</strong></p>
+<h3 id="bigfile"><a href="#bigfile" class="headerlink" title="bigfile"></a>bigfile</h3><p>实验要求：实现磁盘的二级映射，将磁盘空间由<code>268 blocks</code>扩大为<code>65803 blocks</code>，约为原来的<strong>256倍</strong></p>
+<p>实现思路：将原来的12个直接映射+1个一级间接映射改为<strong>11个直接映射+1个一级间接映射+一个二级映射</strong></p>
+<p>具体而言就是链表多链接一层即可，再改一下参数，写之前最好完完全全看懂原版的<code>bmap()</code>函数。</p>
+<p>注意在进入二级映射之前，记得减掉一个<code>NINDIRECT</code>，保证获取的中间地址号不会多<code>1</code>。</p>
+<h4 id="access-code"><a href="#access-code" class="headerlink" title="access code"></a>access code</h4><p>首先是修改一些定义</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/* fs.h */</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> NDIRECT 11</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> NINDIRECT (BSIZE / sizeof(uint))</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> MAXFILE (NDIRECT + NINDIRECT + (NINDIRECT*NINDIRECT))</span></span><br><span class="line"></span><br><span class="line"><span class="comment">/* file.h */</span></span><br><span class="line"><span class="comment">// in-memory copy of an inode</span></span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">inode</span> &#123;</span></span><br><span class="line">	...</span><br><span class="line">  uint addrs[NDIRECT + <span class="number">2</span>]; <span class="comment">// 11 direct blocks, 1 singly indirect block and 1 double indirect block</span></span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>然后是具体实现</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">static</span> uint</span></span><br><span class="line"><span class="function"><span class="title">bmap</span><span class="params">(struct inode *ip, uint bn)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">  uint addr, *a;</span><br><span class="line">  <span class="class"><span class="keyword">struct</span> <span class="title">buf</span> *<span class="title">bp</span>;</span></span><br><span class="line"></span><br><span class="line">  <span class="comment">// 11 direct block[0 ~ 10] =&gt; [0 ~ 10] </span></span><br><span class="line">  <span class="keyword">if</span>(bn &lt; NDIRECT)&#123;</span><br><span class="line">    <span class="comment">// Load direct block, allocating if necessary.</span></span><br><span class="line">    <span class="keyword">if</span>((addr = ip-&gt;addrs[bn]) == <span class="number">0</span>)</span><br><span class="line">      ip-&gt;addrs[bn] = addr = balloc(ip-&gt;dev);</span><br><span class="line">    <span class="keyword">return</span> addr;</span><br><span class="line">  &#125;</span><br><span class="line">  bn -= NDIRECT;</span><br><span class="line">  </span><br><span class="line">  <span class="comment">// NDIRECT == 11</span></span><br><span class="line">  <span class="comment">// 1 singly direct block[11] =&gt; [0 ~ 255]</span></span><br><span class="line">  <span class="keyword">if</span>(bn &lt; NINDIRECT)&#123;</span><br><span class="line">    <span class="comment">// Load indirect block, allocating if necessary.</span></span><br><span class="line">    <span class="keyword">if</span>((addr = ip-&gt;addrs[NDIRECT]) == <span class="number">0</span>)</span><br><span class="line">      ip-&gt;addrs[NDIRECT] = addr = balloc(ip-&gt;dev);</span><br><span class="line">    </span><br><span class="line">    bp = bread(ip-&gt;dev, addr);</span><br><span class="line">    a = (uint*)bp-&gt;data;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">if</span>((addr = a[bn]) == <span class="number">0</span>)&#123;</span><br><span class="line">      a[bn] = addr = balloc(ip-&gt;dev);</span><br><span class="line">      log_write(bp);</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    brelse(bp);</span><br><span class="line">    <span class="keyword">return</span> addr;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="comment">// go to double direct block[12]</span></span><br><span class="line">  bn -= NINDIRECT;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 1 double direct block[12] =&gt; 256 * [0 ~ 255]</span></span><br><span class="line">  <span class="keyword">if</span>(bn &lt; NINDIRECT * NINDIRECT)&#123;</span><br><span class="line">    <span class="keyword">int</span> mid_addr_num = bn / NINDIRECT; <span class="comment">// get mid_addr_num and c-style: divide(/) to down </span></span><br><span class="line">    bn = bn % NINDIRECT; <span class="comment">// get real bn</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// Load indirect block, allocating if necessary.</span></span><br><span class="line">    <span class="keyword">if</span>((addr = ip-&gt;addrs[NDIRECT + <span class="number">1</span>]) == <span class="number">0</span>)</span><br><span class="line">      ip-&gt;addrs[NDIRECT + <span class="number">1</span>] = addr = balloc(ip-&gt;dev);</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// get the addr of mid_addr_num</span></span><br><span class="line">    bp = bread(ip-&gt;dev, addr);</span><br><span class="line">    a = (uint*)bp-&gt;data;</span><br><span class="line">    <span class="keyword">if</span>((addr = a[mid_addr_num]) == <span class="number">0</span>)&#123;</span><br><span class="line">      a[mid_addr_num] = addr = balloc(ip-&gt;dev);</span><br><span class="line">      log_write(bp);</span><br><span class="line">    &#125;</span><br><span class="line">    brelse(bp);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// get the addr of real bn</span></span><br><span class="line">    bp = bread(ip-&gt;dev, addr);</span><br><span class="line">    a = (uint*)bp-&gt;data;</span><br><span class="line">    <span class="keyword">if</span>((addr = a[bn]) == <span class="number">0</span>)&#123;</span><br><span class="line">      a[bn] = addr = balloc(ip-&gt;dev);</span><br><span class="line">      log_write(bp);</span><br><span class="line">    &#125;</span><br><span class="line">    brelse(bp);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> addr;</span><br><span class="line">  &#125;</span><br><span class="line">  panic(<span class="string">&quot;bmap: out of range&quot;</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// Truncate inode (discard contents).</span></span><br><span class="line"><span class="comment">// Caller must hold ip-&gt;lock.</span></span><br><span class="line"><span class="function"><span class="keyword">void</span></span></span><br><span class="line"><span class="function"><span class="title">itrunc</span><span class="params">(struct inode *ip)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">  <span class="keyword">int</span> i, j, k;</span><br><span class="line">  <span class="class"><span class="keyword">struct</span> <span class="title">buf</span> *<span class="title">bp</span>;</span></span><br><span class="line">  uint *a, *botton_a;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 11 direct block[0 ~ 10] =&gt; [0 ~ 10] </span></span><br><span class="line">  <span class="keyword">for</span>(i = <span class="number">0</span>; i &lt; NDIRECT; i++)&#123;</span><br><span class="line">    <span class="keyword">if</span>(ip-&gt;addrs[i])&#123;</span><br><span class="line">      bfree(ip-&gt;dev, ip-&gt;addrs[i]);</span><br><span class="line">      ip-&gt;addrs[i] = <span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// NDIRECT == 11</span></span><br><span class="line">  <span class="comment">// 1 singly direct block[11] =&gt; [0 ~ 255]</span></span><br><span class="line">  <span class="keyword">if</span>(ip-&gt;addrs[NDIRECT])&#123;</span><br><span class="line">    bp = bread(ip-&gt;dev, ip-&gt;addrs[NDIRECT]);</span><br><span class="line">    a = (uint*)bp-&gt;data;</span><br><span class="line">    <span class="keyword">for</span>(j = <span class="number">0</span>; j &lt; NINDIRECT; j++)&#123;</span><br><span class="line">      <span class="keyword">if</span>(a[j])</span><br><span class="line">        bfree(ip-&gt;dev, a[j]);</span><br><span class="line">    &#125;</span><br><span class="line">    brelse(bp);</span><br><span class="line">    bfree(ip-&gt;dev, ip-&gt;addrs[NDIRECT]);</span><br><span class="line">    ip-&gt;addrs[NDIRECT] = <span class="number">0</span>;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 1 double direct block[12] =&gt; 256 * [0 ~ 255]</span></span><br><span class="line">  <span class="keyword">if</span>(ip-&gt;addrs[NDIRECT + <span class="number">1</span>])&#123;</span><br><span class="line">    <span class="comment">// get a of mid_addr</span></span><br><span class="line">    bp = bread(ip-&gt;dev, ip-&gt;addrs[NDIRECT + <span class="number">1</span>]);</span><br><span class="line">    a = (uint*)bp-&gt;data;</span><br><span class="line">    brelse(bp);</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">for</span>(j = <span class="number">0</span>; j &lt; NINDIRECT; j++)&#123;</span><br><span class="line">      <span class="comment">// get botton_a of botton_addr </span></span><br><span class="line">      <span class="comment">// exist block?</span></span><br><span class="line">      <span class="keyword">if</span>(a[j])&#123;</span><br><span class="line">        bp = bread(ip-&gt;dev, a[j]);</span><br><span class="line">        botton_a = (uint*)bp-&gt;data;</span><br><span class="line">        brelse(bp);</span><br><span class="line">        <span class="comment">// free content of botton_a</span></span><br><span class="line">        <span class="keyword">for</span>(k = <span class="number">0</span>; k &lt; NINDIRECT; k++)</span><br><span class="line">          <span class="keyword">if</span>(botton_a[k])</span><br><span class="line">            bfree(ip-&gt;dev, botton_a[k]);</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    bfree(ip-&gt;dev, ip-&gt;addrs[NDIRECT + <span class="number">1</span>]);</span><br><span class="line">    ip-&gt;addrs[NDIRECT + <span class="number">1</span>] = <span class="number">0</span>;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  ip-&gt;size = <span class="number">0</span>;</span><br><span class="line">  iupdate(ip);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+
+<h3 id="symboil-link"><a href="#symboil-link" class="headerlink" title="symboil link"></a>symboil link</h3><p>实验要求：实现软连接（symboil/soft link）<br>软连接不同于硬连接（hard link），可以在不同的磁盘块下连接起来。比如，我想D盘执行一个程序，但程序文件的位于C盘。那么通过软连接，即可在D盘执行C盘的程序，而硬连接则不行。</p>
+<p>实现思路：实现<code>syccall: sys_symlink</code>，<strong>将目标文件inode指针存储到路径文件的inode结构中</strong>，之后即可通过路径文件来访问目标文件</p>
+<p>具体实现过程中，需要注意路径文件本身可能存在也可能不存在，所以需要检查，根据情况进行创建。这需要处理两个情况，即如果路径文件本身不存在，创建出来后是带锁的，那么自然不需要上锁；但如果路径文件本身就存在，那么它是没有锁的，那么我们就需要使用<code>if(!holdingsleep(&amp;ip-&gt;lock))</code>进行检查。</p>
+<p>同时，软连接到一个不存在的目标文件是被允许的，也就是说目标文件和路径文件一样，可能存在也可能不存在，所以需要检查，根据情况进行创建。这就会导致一个情况，就是<strong>如果带着<code>O_CREATE</code>参数去<code>open()</code>目标文件时，目标文件可能已经在symlink()被创建</strong>，如果再创建就是<strong>重复创建</strong>了，解决方法是进行检查，如果是<code>T_SYMLINK</code>，则不用新创建，改下参数即可；如果不是，则需要将其释放掉，然后再去创建。</p>
+<p>在<code>open()</code>函数中循环查找时记得解锁，再上锁，保证原子性，查找结束后，需要检查一下目标文件是否真的存在，存在的情况是<code>nlink</code>大于<code>0</code>。</p>
+<p>无论是目标文件还是路径文件，只要是<code>T_SYMLINK</code>类型，当被<code>unlink()</code>时，就需要执行<code>iput()</code>，<strong>将其引用减一</strong>，让其有机会被释放掉，否则<code>T_SYMLINK</code>类型的<code>inode</code>就会遗留在cache，无法释放，数量一多，就会导致cache中没有空闲的<code>inode</code>可以存储了。（这点是依据报错和测试程序推测出来的）</p>
+<p>注意，我们不需要处理链接对象是direcitory的情况</p>
+<h4 id="access-code-1"><a href="#access-code-1" class="headerlink" title="access code"></a>access code</h4><p>首先是<code>syccall: sys_symlink</code>的注册流程，我这里就不详细写了，按照提示走即可。</p>
+<p>然后是实现<code>sys_symlink</code></p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">uint64</span></span><br><span class="line"><span class="function"><span class="title">sys_symlink</span><span class="params">(<span class="keyword">void</span>)</span></span></span><br><span class="line"><span class="function"></span>&#123; </span><br><span class="line">  <span class="keyword">char</span> target[MAXPATH], path[MAXPATH];</span><br><span class="line">  <span class="class"><span class="keyword">struct</span> <span class="title">inode</span> *<span class="title">ip</span>, *<span class="title">ip_target</span>;</span></span><br><span class="line"></span><br><span class="line">  <span class="comment">// get the parameter of target and path</span></span><br><span class="line">  <span class="keyword">if</span>(argstr(<span class="number">0</span>, target, MAXPATH) &lt; <span class="number">0</span> || argstr(<span class="number">1</span>, path, MAXPATH) &lt; <span class="number">0</span>)</span><br><span class="line">    <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">  </span><br><span class="line">  begin_op();</span><br><span class="line"></span><br><span class="line">  <span class="comment">// Symlinking to nonexistent file should succeed</span></span><br><span class="line">  <span class="keyword">if</span>((ip_target = namei(target)) == <span class="number">0</span>)&#123;</span><br><span class="line">    <span class="keyword">if</span>((ip_target = create(target, T_SYMLINK, <span class="number">0</span>, <span class="number">0</span>)) == <span class="number">0</span>)&#123; <span class="comment">// diff char* path</span></span><br><span class="line">      end_op();</span><br><span class="line">      <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// create ip if not exist</span></span><br><span class="line">  <span class="keyword">if</span>((ip = namei(path)) == <span class="number">0</span>)&#123; <span class="comment">// diff char* path</span></span><br><span class="line">    <span class="keyword">if</span>((ip = create(path, T_SYMLINK, <span class="number">0</span>, <span class="number">0</span>)) == <span class="number">0</span>)&#123;</span><br><span class="line">      end_op();</span><br><span class="line">      <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">    &#125;   </span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// not have to handle symbolic links to directories for this lab.</span></span><br><span class="line">  <span class="keyword">if</span>(ip_target)&#123;</span><br><span class="line">    <span class="keyword">if</span>(ip_target-&gt;type == T_DIR)&#123;</span><br><span class="line">      end_op();</span><br><span class="line">      <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// inode(ip) with lock return from create(path) </span></span><br><span class="line">  <span class="comment">// inode(ip) without lock return from namei(path)</span></span><br><span class="line">  <span class="comment">// so we need to check and maybe ilock it</span></span><br><span class="line">  <span class="keyword">if</span>(!holdingsleep(&amp;ip-&gt;lock))&#123;</span><br><span class="line">    ilock(ip);</span><br><span class="line">  &#125;</span><br><span class="line">  ip-&gt;sym_link = ip_target;</span><br><span class="line">  iupdate(ip);</span><br><span class="line">  iunlock(ip);</span><br><span class="line">  end_op();</span><br><span class="line">  <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>修改<code>open()</code></p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Modify the open system call to handle the case where the path refers to a symbolic link. </span></span><br><span class="line"><span class="comment">// If the file does not exist, open must fail. </span></span><br><span class="line"><span class="comment">// When a process specifies O_NOFOLLOW in the flags to open, </span></span><br><span class="line"><span class="comment">// open should open the symlink (and not follow the symbolic link).</span></span><br><span class="line"><span class="function">uint64</span></span><br><span class="line"><span class="function"><span class="title">sys_open</span><span class="params">(<span class="keyword">void</span>)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">  <span class="keyword">char</span> path[MAXPATH];</span><br><span class="line">  <span class="keyword">int</span> fd, omode;</span><br><span class="line">  <span class="class"><span class="keyword">struct</span> <span class="title">file</span> *<span class="title">f</span>;</span></span><br><span class="line">  <span class="class"><span class="keyword">struct</span> <span class="title">inode</span> *<span class="title">ip</span>;</span></span><br><span class="line">  <span class="keyword">int</span> n;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">if</span>((n = argstr(<span class="number">0</span>, path, MAXPATH)) &lt; <span class="number">0</span> || argint(<span class="number">1</span>, &amp;omode) &lt; <span class="number">0</span>)</span><br><span class="line">    <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line"></span><br><span class="line">  begin_op();</span><br><span class="line"></span><br><span class="line">  <span class="keyword">if</span>(omode &amp; O_CREATE)&#123;</span><br><span class="line">    ip = namei(path);</span><br><span class="line">    <span class="keyword">if</span>(ip)&#123;</span><br><span class="line">      <span class="comment">// if it is T_SYMLINK, we just change it type</span></span><br><span class="line">      <span class="keyword">if</span>(ip-&gt;type == T_SYMLINK)&#123;</span><br><span class="line">        ip-&gt;type = T_FILE;</span><br><span class="line">        ip-&gt;major = ip-&gt;minor = <span class="number">0</span>;</span><br><span class="line">      &#125;</span><br><span class="line">      <span class="keyword">else</span>&#123;</span><br><span class="line">        <span class="comment">// if not T_SYMLINK we need free it, then create a inode</span></span><br><span class="line">        <span class="comment">// becasue it is a new path so we can sure &#x27;ip-&gt;ref == 1&#x27;</span></span><br><span class="line">        <span class="comment">// &#x27;ip-&gt;ref == 1&#x27;(namei()=&gt;namex()=&gt;idup()=&gt;ip-&gt;ref++=&gt;1)</span></span><br><span class="line">        iput(ip);</span><br><span class="line">        ip = create(path, T_FILE, <span class="number">0</span>, <span class="number">0</span>);</span><br><span class="line">        <span class="keyword">if</span>(ip == <span class="number">0</span>)&#123;</span><br><span class="line">          end_op();</span><br><span class="line">          <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">        &#125;        </span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span>&#123;</span><br><span class="line">      ip = create(path, T_FILE, <span class="number">0</span>, <span class="number">0</span>);</span><br><span class="line">      <span class="keyword">if</span>(ip == <span class="number">0</span>)&#123;</span><br><span class="line">        end_op();</span><br><span class="line">        <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125; </span><br><span class="line">  <span class="keyword">else</span>&#123;</span><br><span class="line">    <span class="keyword">if</span>((ip = namei(path)) == <span class="number">0</span>)&#123;</span><br><span class="line">      end_op();</span><br><span class="line">      <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    ilock(ip);</span><br><span class="line">    <span class="keyword">if</span>(ip-&gt;type == T_DIR &amp;&amp; omode != O_RDONLY)&#123;</span><br><span class="line">      iunlockput(ip);</span><br><span class="line">      end_op();</span><br><span class="line">      <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">if</span>(ip-&gt;type == T_SYMLINK)&#123;</span><br><span class="line">    <span class="comment">// if((omode &amp; O_NOFOLLOW))&#123;</span></span><br><span class="line">    <span class="comment">//     // do nothing</span></span><br><span class="line">    <span class="comment">// &#125;</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// FOLLOW =&gt; follow symlink</span></span><br><span class="line">    <span class="keyword">if</span>(!(omode &amp; O_NOFOLLOW))&#123;</span><br><span class="line">      <span class="comment">// we set threshold = 10, so we only check 10 times</span></span><br><span class="line">      <span class="keyword">int</span> threshold = <span class="number">10</span>;</span><br><span class="line">      <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; threshold; i++)&#123;</span><br><span class="line">        iunlockput(ip);</span><br><span class="line">        ip = ip-&gt;sym_link;</span><br><span class="line">        ilock(ip);</span><br><span class="line">        <span class="keyword">if</span>(ip-&gt;type != T_SYMLINK)&#123;</span><br><span class="line">          <span class="keyword">break</span>;</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;</span><br><span class="line"></span><br><span class="line">      <span class="comment">// check: file really exists?</span></span><br><span class="line">      <span class="keyword">if</span>(ip-&gt;nlink == <span class="number">0</span>)&#123;</span><br><span class="line">        iunlockput(ip);</span><br><span class="line">        end_op();</span><br><span class="line">        <span class="keyword">return</span> <span class="number">-1</span>;        </span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">if</span>(ip-&gt;type == T_DEVICE &amp;&amp; (ip-&gt;major &lt; <span class="number">0</span> || ip-&gt;major &gt;= NDEV))&#123;</span><br><span class="line">    iunlockput(ip);</span><br><span class="line">    end_op();</span><br><span class="line">    <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">if</span>((f = filealloc()) == <span class="number">0</span> || (fd = fdalloc(f)) &lt; <span class="number">0</span>)&#123;</span><br><span class="line">    <span class="keyword">if</span>(f)</span><br><span class="line">      fileclose(f);</span><br><span class="line">    iunlockput(ip);</span><br><span class="line">    end_op();</span><br><span class="line">    <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">if</span>(ip-&gt;type == T_DEVICE)&#123;</span><br><span class="line">    f-&gt;type = FD_DEVICE;</span><br><span class="line">    f-&gt;major = ip-&gt;major;</span><br><span class="line">  &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    f-&gt;type = FD_INODE;</span><br><span class="line">    f-&gt;off = <span class="number">0</span>;</span><br><span class="line">  &#125;</span><br><span class="line">  f-&gt;ip = ip;</span><br><span class="line">  f-&gt;readable = !(omode &amp; O_WRONLY);</span><br><span class="line">  f-&gt;writable = (omode &amp; O_WRONLY) || (omode &amp; O_RDWR);</span><br><span class="line">  </span><br><span class="line">  <span class="keyword">if</span>((omode &amp; O_TRUNC) &amp;&amp; ip-&gt;type == T_FILE)&#123;</span><br><span class="line">    itrunc(ip);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  iunlock(ip);</span><br><span class="line">  end_op();</span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> fd;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>最后是修改<code>unlink()</code></p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">uint64</span></span><br><span class="line"><span class="function"><span class="title">sys_unlink</span><span class="params">(<span class="keyword">void</span>)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">  <span class="class"><span class="keyword">struct</span> <span class="title">inode</span> *<span class="title">ip</span>, *<span class="title">dp</span>;</span></span><br><span class="line">  <span class="class"><span class="keyword">struct</span> <span class="title">dirent</span> <span class="title">de</span>;</span></span><br><span class="line">  <span class="keyword">char</span> name[DIRSIZ], path[MAXPATH];</span><br><span class="line">  uint off;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">if</span>(argstr(<span class="number">0</span>, path, MAXPATH) &lt; <span class="number">0</span>)</span><br><span class="line">    <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line"></span><br><span class="line">  begin_op();</span><br><span class="line">  <span class="keyword">if</span>((dp = nameiparent(path, name)) == <span class="number">0</span>)&#123;</span><br><span class="line">    end_op();</span><br><span class="line">    <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  ilock(dp);</span><br><span class="line"></span><br><span class="line">  <span class="comment">// Cannot unlink &quot;.&quot; or &quot;..&quot;.</span></span><br><span class="line">  <span class="keyword">if</span>(namecmp(name, <span class="string">&quot;.&quot;</span>) == <span class="number">0</span> || namecmp(name, <span class="string">&quot;..&quot;</span>) == <span class="number">0</span>)</span><br><span class="line">    <span class="keyword">goto</span> bad;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">if</span>((ip = dirlookup(dp, name, &amp;off)) == <span class="number">0</span>)</span><br><span class="line">    <span class="keyword">goto</span> bad;</span><br><span class="line">  ilock(ip);</span><br><span class="line"></span><br><span class="line">  <span class="keyword">if</span>(ip-&gt;nlink &lt; <span class="number">1</span>)</span><br><span class="line">    panic(<span class="string">&quot;unlink: nlink &lt; 1&quot;</span>);</span><br><span class="line">  <span class="keyword">if</span>(ip-&gt;type == T_DIR &amp;&amp; !isdirempty(ip))&#123;</span><br><span class="line">    iunlockput(ip);</span><br><span class="line">    <span class="keyword">goto</span> bad;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="built_in">memset</span>(&amp;de, <span class="number">0</span>, <span class="keyword">sizeof</span>(de));</span><br><span class="line">  <span class="keyword">if</span>(writei(dp, <span class="number">0</span>, (uint64)&amp;de, off, <span class="keyword">sizeof</span>(de)) != <span class="keyword">sizeof</span>(de))</span><br><span class="line">    panic(<span class="string">&quot;unlink: writei&quot;</span>);</span><br><span class="line">  <span class="keyword">if</span>(ip-&gt;type == T_DIR)&#123;</span><br><span class="line">    dp-&gt;nlink--;</span><br><span class="line">    iupdate(dp);</span><br><span class="line">  &#125;</span><br><span class="line">  iunlockput(dp);</span><br><span class="line"></span><br><span class="line">  ip-&gt;nlink--;</span><br><span class="line">  iupdate(ip);</span><br><span class="line">  iunlockput(ip);</span><br><span class="line"></span><br><span class="line">  <span class="comment">// we need to ip-&gt;ref-- or free symlink when we call unlink </span></span><br><span class="line">  <span class="keyword">if</span>(ip-&gt;type == T_SYMLINK)&#123;</span><br><span class="line">    iput(ip);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  end_op();</span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">bad:</span><br><span class="line">  iunlockput(dp);</span><br><span class="line">  end_op();</span><br><span class="line">  <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+
+<h3 id="result"><a href="#result" class="headerlink" title="result"></a>result</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">make[1]: Leaving directory <span class="string">&#x27;/home/duile/xv6-labs-2021&#x27;</span></span><br><span class="line">== Test running bigfile ==</span><br><span class="line">$ make qemu-gdb</span><br><span class="line">running bigfile: OK (170.2s)</span><br><span class="line">    (Old xv6.out.bigfile failure <span class="built_in">log</span> removed)</span><br><span class="line">== Test running symlinktest ==</span><br><span class="line">$ make qemu-gdb</span><br><span class="line">(0.9s)</span><br><span class="line">== Test   symlinktest: symlinks ==</span><br><span class="line">  symlinktest: symlinks: OK</span><br><span class="line">== Test   symlinktest: concurrent symlinks ==</span><br><span class="line">  symlinktest: concurrent symlinks: OK</span><br><span class="line">== Test usertests ==</span><br><span class="line">$ make qemu-gdb</span><br><span class="line">usertests: OK (294.8s)</span><br><span class="line">== Test time ==</span><br><span class="line">time: OK</span><br><span class="line">Score: 100/100</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><ul>
+<li>完成日期：<em>22.07.07</em></li>
+<li>耗时15h，也是完全没看任何参考答案完成，bigfile用了3小时，2小时在看材料，看代码，1小时在<strong>写代码</strong>，实际上可能都没一个小时；symlink用了12小时，3小时看材料，查资料，看代码，9小时在<strong>调代码</strong></li>
+<li>一开始写symlink的时候和bigfile区别和大，bigfile是我完全知道自己要干什么，非常清晰，而symlink是毫无头绪，查了不少资料也没有完全懂，后面是模仿着<code>link()</code>才写出个大概，然后一直调一直调一直调。不断猜测题目想要我写的是什么。<br>从这我得出经验，<strong>真正明白编程所运用的知识才能写得流畅</strong>。</li>
+<li>写symlink到四分之一的时候想出两个方案一个是存储路径名字指针，一个是存储路径文件<code>inode</code>指针，一开始用前者，失败了，但没找出原因，然后用后者，但遇到测试<code>open(&quot;/testsymlink/4&quot;, O_CREATE | O_RDWR)</code>时发现重复创建了文件，出现矛盾，想不出好办法解决。于是，又折回去实现名字指针，这回发现原因了，名字指针丢失，但找不出原理，对于我是个黑箱问题，无法解决。最后，折回去实现<code>inode</code>指针，想办法修改明确有问题的<code>open()</code>，解决了重复创建的问题。<br>这个过程告诉我，当编程遇到明显问题的时候，<strong>有些看似无法解决，应该先休息，而不是立马放弃，调整好状态再思考</strong>。同时，<strong>面对黑箱问题和白箱问题，即使前者实现起来更漂亮简洁，还不如后者更实在靠谱</strong>。</li>
+<li><code>open()</code>解决重复创建的那段我觉得我写的不够简洁，或许还能优化下，但加个函数就太做作了。</li>
+<li>printf真好用，但用多了，就想着或许打断点更方便，只是我不熟悉打断点</li>
+<li>最近在听 <em>I Don’t Want To Say Goodbye</em> Teddy Thompson</li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/c/" rel="tag"># c</a>
+              <a href="/tags/OS/" rel="tag"># OS</a>
+              <a href="/tags/xv6/" rel="tag"># xv6</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2022/06/18/MIT6.S081-Lab%20Lock/" rel="prev" title="Lab Lock">
+      <i class="fa fa-chevron-left"></i> Lab Lock
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+    <div class="comments" id="valine-comments"></div>
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Lab-Lock"><span class="nav-number">1.</span> <span class="nav-text">Lab Lock</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%86%99%E5%9C%A8%E5%89%8D%E9%9D%A2"><span class="nav-number">1.1.</span> <span class="nav-text">写在前面</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%B8%A9%E5%9D%91"><span class="nav-number">1.1.1.</span> <span class="nav-text">踩坑</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8F%82%E8%80%83%E6%9D%90%E6%96%99"><span class="nav-number">1.1.2.</span> <span class="nav-text">参考材料</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%9E%E9%AA%8C%E5%86%85%E5%AE%B9"><span class="nav-number">1.2.</span> <span class="nav-text">实验内容</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#bigfile"><span class="nav-number">1.2.1.</span> <span class="nav-text">bigfile</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#access-code"><span class="nav-number">1.2.1.1.</span> <span class="nav-text">access code</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#symboil-link"><span class="nav-number">1.2.2.</span> <span class="nav-text">symboil link</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#access-code-1"><span class="nav-number">1.2.2.1.</span> <span class="nav-text">access code</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#result"><span class="nav-number">1.2.3.</span> <span class="nav-text">result</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%80%BB%E7%BB%93"><span class="nav-number">1.3.</span> <span class="nav-text">总结</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Huang Jinhong</p>
+  <div class="site-description" itemprop="description">“我们来到这世上是为的是看太阳”</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">21</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">7</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/duilec" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;duilec" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://www.cnblogs.com/duile" title="博客园 → https:&#x2F;&#x2F;www.cnblogs.com&#x2F;duile" rel="noopener" target="_blank"><i class="fab fa-cnblog fa-fw"></i>博客园</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Huang Jinhong</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> 强力驱动
+  </div>
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+<script>
+  (function() {
+    function leancloudSelector(url) {
+      url = encodeURI(url);
+      return document.getElementById(url).querySelector('.leancloud-visitors-count');
+    }
+
+    function addCount(Counter) {
+      var visitors = document.querySelector('.leancloud_visitors');
+      var url = decodeURI(visitors.id);
+      var title = visitors.dataset.flagTitle;
+
+      Counter('get', '/classes/Counter?where=' + encodeURIComponent(JSON.stringify({ url })))
+        .then(response => response.json())
+        .then(({ results }) => {
+          if (results.length > 0) {
+            var counter = results[0];
+            leancloudSelector(url).innerText = counter.time + 1;
+            Counter('put', '/classes/Counter/' + counter.objectId, { time: { '__op': 'Increment', 'amount': 1 } })
+              .catch(error => {
+                console.error('Failed to save visitor count', error);
+              });
+          } else {
+              leancloudSelector(url).innerText = 'Counter not initialized! More info at console err msg.';
+              console.error('ATTENTION! LeanCloud counter has security bug, see how to solve it here: https://github.com/theme-next/hexo-leancloud-counter-security. \n However, you can still use LeanCloud without security, by setting `security` option to `false`.');
+            
+          }
+        })
+        .catch(error => {
+          console.error('LeanCloud Counter Error', error);
+        });
+    }
+
+    function showTime(Counter) {
+      var visitors = document.querySelectorAll('.leancloud_visitors');
+      var entries = [...visitors].map(element => {
+        return decodeURI(element.id);
+      });
+
+      Counter('get', '/classes/Counter?where=' + encodeURIComponent(JSON.stringify({ url: { '$in': entries } })))
+        .then(response => response.json())
+        .then(({ results }) => {
+          for (let url of entries) {
+            let target = results.find(item => item.url === url);
+            leancloudSelector(url).innerText = target ? target.time : 0;
+          }
+        })
+        .catch(error => {
+          console.error('LeanCloud Counter Error', error);
+        });
+    }
+
+    let { app_id, app_key, server_url } = {"enable":true,"app_id":"fflLscOo9DyB8Fx8ubGOzkl5-MdYXbMMI","app_key":"RrGHmVsgcizeqfrfsKcX4Sko","server_url":null,"security":true};
+    function fetchData(api_server) {
+      var Counter = (method, url, data) => {
+        return fetch(`${api_server}/1.1${url}`, {
+          method,
+          headers: {
+            'X-LC-Id'     : app_id,
+            'X-LC-Key'    : app_key,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(data)
+        });
+      };
+      if (CONFIG.page.isPost) {
+        if (CONFIG.hostname !== location.hostname) return;
+        addCount(Counter);
+      } else if (document.querySelectorAll('.post-title-link').length >= 1) {
+        showTime(Counter);
+      }
+    }
+
+    let api_server = app_id.slice(-9) !== '-MdYXbMMI' ? server_url : `https://${app_id.slice(0, 8).toLowerCase()}.api.lncldglobal.com`;
+
+    if (api_server) {
+      fetchData(api_server);
+    } else {
+      fetch('https://app-router.leancloud.cn/2/route?appId=' + app_id)
+        .then(response => response.json())
+        .then(({ api_server }) => {
+          fetchData('https://' + api_server);
+        });
+    }
+  })();
+</script>
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+
+<script>
+NexT.utils.loadComments(document.querySelector('#valine-comments'), () => {
+  NexT.utils.getScript('//unpkg.com/valine/dist/Valine.min.js', () => {
+    var GUEST = ['nick', 'mail', 'link'];
+    var guest = 'nick,mail,link';
+    guest = guest.split(',').filter(item => {
+      return GUEST.includes(item);
+    });
+    new Valine({
+      el         : '#valine-comments',
+      verify     : false,
+      notify     : false,
+      appId      : 'fflLscOo9DyB8Fx8ubGOzkl5-MdYXbMMI',
+      appKey     : 'RrGHmVsgcizeqfrfsKcX4Sko',
+      placeholder: "发表评论",
+      avatar     : 'mm',
+      meta       : guest,
+      pageSize   : '10' || 10,
+      visitor    : false,
+      lang       : '' || 'zh-cn',
+      path       : location.pathname,
+      recordIP   : false,
+      serverURLs : ''
+    });
+  }, window.Valine);
+});
+</script>
+
+</body>
+</html>
