@@ -1,0 +1,816 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"example.com","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="CacheLab开始日期：21.12.25 操作系统：linux 调试工具：gdb Link：CS:APP3e">
+<meta property="og:type" content="article">
+<meta property="og:title" content="CacheLab">
+<meta property="og:url" content="http://example.com/2021/12/25/CSAPP/CSAPP-CacheLab/index.html">
+<meta property="og:site_name" content="Memory Dot">
+<meta property="og:description" content="CacheLab开始日期：21.12.25 操作系统：linux 调试工具：gdb Link：CS:APP3e">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://s3.bmp.ovh/imgs/2021/12/cef7c8d5690b1de5.png">
+<meta property="og:image" content="https://s3.bmp.ovh/imgs/2021/12/e5ed738388195885.png">
+<meta property="og:image" content="https://s3.bmp.ovh/imgs/2021/12/8c8968cb24a76f9e.png">
+<meta property="og:image" content="https://s3.bmp.ovh/imgs/2022/01/5bfec9f72877081c.png">
+<meta property="og:image" content="https://s3.bmp.ovh/imgs/2022/01/566dfedd9b20c970.png">
+<meta property="og:image" content="https://s3.bmp.ovh/imgs/2022/01/5306e0c0012ee95b.png">
+<meta property="og:image" content="https://s3.bmp.ovh/imgs/2022/01/43d546ee04b74fbb.png">
+<meta property="og:image" content="https://s3.bmp.ovh/imgs/2022/01/2aa81abc1ec2b6d0.png">
+<meta property="og:image" content="https://s3.bmp.ovh/imgs/2022/01/43d546ee04b74fbb.png">
+<meta property="article:published_time" content="2021-12-25T09:22:22.000Z">
+<meta property="article:modified_time" content="2022-03-09T02:45:28.233Z">
+<meta property="article:author" content="Huang Jinhong">
+<meta property="article:tag" content="c">
+<meta property="article:tag" content="csapp_lab">
+<meta property="article:tag" content="assembly">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://s3.bmp.ovh/imgs/2021/12/cef7c8d5690b1de5.png">
+
+<link rel="canonical" href="http://example.com/2021/12/25/CSAPP/CSAPP-CacheLab/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>CacheLab | Memory Dot</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Memory Dot</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/12/25/CSAPP/CSAPP-CacheLab/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Huang Jinhong">
+      <meta itemprop="description" content="“我们来到这世上是为的是看太阳”">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Memory Dot">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          CacheLab
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2021-12-25 17:22:22" itemprop="dateCreated datePublished" datetime="2021-12-25T17:22:22+08:00">2021-12-25</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2022-03-09 10:45:28" itemprop="dateModified" datetime="2022-03-09T10:45:28+08:00">2022-03-09</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/csapp-lab/" itemprop="url" rel="index"><span itemprop="name">csapp lab</span></a>
+                </span>
+            </span>
+
+          
+            <span id="/2021/12/25/CSAPP/CSAPP-CacheLab/" class="post-meta-item leancloud_visitors" data-flag-title="CacheLab" title="阅读次数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span class="leancloud-visitors-count"></span>
+            </span>
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine：</span>
+    
+    <a title="valine" href="/2021/12/25/CSAPP/CSAPP-CacheLab/#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/2021/12/25/CSAPP/CSAPP-CacheLab/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="CacheLab"><a href="#CacheLab" class="headerlink" title="CacheLab"></a>CacheLab</h1><p>开始日期：<em>21.12.25</em></p>
+<p>操作系统：<strong>linux</strong></p>
+<p>调试工具：<a target="_blank" rel="noopener" href="https://kapeli.com/cheat_sheets/GDB.docset/Contents/Resources/Documents/index">gdb</a></p>
+<p>Link：<a target="_blank" rel="noopener" href="http://csapp.cs.cmu.edu/3e/labs.html">CS:APP3e</a></p>
+<span id="more"></span> 
+
+<h2 id="Part-A"><a href="#Part-A" class="headerlink" title="Part A"></a>Part A</h2><h3 id="pre-knowledge"><a href="#pre-knowledge" class="headerlink" title="pre-knowledge"></a><strong>pre-knowledge</strong></h3><p><img src="https://s3.bmp.ovh/imgs/2021/12/cef7c8d5690b1de5.png"></p>
+<p>如上图所示，我们需要理清楚organization（组织）和address（地址）的<strong>区别</strong>：<br>organization表明<strong>cache（高速缓存）是如何组织的</strong>；<br>address表明<strong>指令的位置</strong>，当cpu需要执行某指令（instruction）时（instruction被存储在cache组织中），我们通过address找到这个指令。</p>
+<br>
+
+<p><img src="https://s3.bmp.ovh/imgs/2021/12/e5ed738388195885.png"></p>
+<p>同第一张图一起理解所给的参数（parameter），<strong>大小写不同时所对应的意思也是不同</strong>。</p>
+<br>
+
+<p>那么我们可以知道writeup.pdf所给的例子：</p>
+<blockquote>
+<p><code>linux&gt; ./csim-ref -s 4 -E 1 -b 4 -t traces/yi.</code><br><code>tracehits:4 misses:5 evictions:3</code></p>
+</blockquote>
+<p>等价于：**(s, E, b)<strong>中的数值为：<code>2^4 sets, 1 line per set, block of 4 bytes per line</code><br>（此处用英文来理解会更好，</strong>address<strong>的位数默认为</strong>32bits**）</p>
+<p>从cache中读取指令，采用的策略是LRU(<strong>L</strong>east <strong>R</strong>ecently <strong>U</strong>sed)，该策略可以看作一个算法，简单来说，该算法是将最近最少使用的line重置，实现可以用累加器（时间戳）和队列，这里使用的是累加器（counter），具体代码实现见下文。</p>
+<h3 id="AC-code"><a href="#AC-code" class="headerlink" title="AC code"></a><strong>AC code</strong></h3><ul>
+<li><p>明确这只是个简易模拟器，并不需要完全模拟</p>
+</li>
+<li><p>首先是使用到的库，主要使用的函数或者数据类型见注释</p>
+</li>
+<li><p>友情链接：<a target="_blank" rel="noopener" href="https://www.cnblogs.com/qingergege/p/5914218.html">getopt()</a>以及cmu给的<a target="_blank" rel="noopener" href="https://www.cs.cmu.edu/afs/cs/academic/class/15213-f15//www/recitations/rec07.pdf">更多提示</a></p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&quot;cachelab.h&quot;</span> <span class="comment">//printSummary()</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;stdio.h&gt;</span> <span class="comment">//fopen() fclose() fscanf() </span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;getopt.h&gt;</span> <span class="comment">//getopt()</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdlib.h&gt;</span> <span class="comment">//malloc()</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;string.h&gt;</span> <span class="comment">//strcpy()</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdbool.h&gt;</span> <span class="comment">//bool</span></span></span><br></pre></td></tr></table></figure></li>
+<li><p>然后是数据结构和<strong>一个结构体</strong>全局变量</p>
+<ul>
+<li>参数<code>Args</code>是服务于linux指令的（eg. <code>./csim-ref -s 4 -E 1 -b 4 -t traces/yi.</code>）</li>
+<li><code>Line, Set, Sets</code>是用来构建Cacha的（在之后的函数部分会给出如何构建的简易图示）</li>
+<li><code>Result</code>是我们最终输出结果，用结构体表示能节省空间</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> &#123;</span></span><br><span class="line">    <span class="keyword">bool</span> h;</span><br><span class="line">    <span class="keyword">bool</span> v;</span><br><span class="line">    <span class="keyword">int</span> s;</span><br><span class="line">    <span class="keyword">int</span> E;</span><br><span class="line">    <span class="keyword">int</span> b;</span><br><span class="line">    <span class="keyword">char</span> t[<span class="number">50</span>];</span><br><span class="line">&#125;Args;</span><br><span class="line"></span><br><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span>&#123;</span></span><br><span class="line">    <span class="keyword">int</span> miss;</span><br><span class="line">    <span class="keyword">int</span> hit;</span><br><span class="line">    <span class="keyword">int</span> eviction; </span><br><span class="line">&#125;Result;</span><br><span class="line"></span><br><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span>&#123;</span></span><br><span class="line">    <span class="keyword">bool</span> valid;</span><br><span class="line">    <span class="keyword">int</span> tag;</span><br><span class="line">    <span class="keyword">int</span> counter; <span class="comment">// use LRU by countering numbers of valid</span></span><br><span class="line">&#125;Line, *Set, **Sets; <span class="comment">// set == one ground of lines, all sets == one cache</span></span><br><span class="line"></span><br><span class="line">Result result;</span><br><span class="line"></span><br></pre></td></tr></table></figure></li>
+<li><p>函数声明和主函数调用内容</p>
+<ul>
+<li>步骤是：先根据linux指令初始化参数，再根据参数构建Cache(sets)，然后解析得出结果（解析过程会用到get()函数），最后打印结果</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">Args <span class="title">initArgs</span><span class="params">(<span class="keyword">int</span> argc, <span class="keyword">char</span>* <span class="keyword">const</span> argv[])</span></span>;</span><br><span class="line"><span class="function">Sets <span class="title">createCache</span><span class="params">(Args args)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">parse</span><span class="params">(Sets sets, Args args)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">printSummary</span><span class="params">(<span class="keyword">int</span> hits, <span class="keyword">int</span> misses, <span class="keyword">int</span> evictions)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">get</span><span class="params">(Sets sets, Args args, <span class="keyword">unsigned</span> <span class="keyword">int</span> address)</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">int</span> argc, <span class="keyword">char</span>* <span class="keyword">const</span> argv[])</span></span>&#123;</span><br><span class="line">	  Args args = initArgs(argc, argv); <span class="comment">// initialize arguments from linux command(hvs:E:b:t:)</span></span><br><span class="line">    Sets sets = createCache(args); <span class="comment">// initialize one Cache by arguments</span></span><br><span class="line">    parse(sets, args);  <span class="comment">// parse Cache and get result</span></span><br><span class="line">    printSummary(result.hit, result.miss, result.eviction); <span class="comment">//print result</span></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+<li><p>接下来进入函数部分</p>
+</li>
+<li><p>首先是初始化参数这里用到了getopt函数（友情链接：<a target="_blank" rel="noopener" href="https://www.cnblogs.com/qingergege/p/5914218.html">getopt()</a>以及cmu给的<a target="_blank" rel="noopener" href="https://www.cs.cmu.edu/afs/cs/academic/class/15213-f15//www/recitations/rec07.pdf">更多提示</a>）以及归属于getopt的atol函数，该函数将参数转化为了长整型，还有复制文件名的strcpy函数。</p>
+<ul>
+<li>-h 和 -v指令是可以无视的，不影响评分，所以这里的具体代码只是服务linux指令，没有作用</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">Args <span class="title">initArgs</span><span class="params">(<span class="keyword">int</span> argc, <span class="keyword">char</span>* <span class="keyword">const</span> argv[])</span></span>&#123;</span><br><span class="line">    Args args;</span><br><span class="line">    args.h = <span class="literal">false</span>;</span><br><span class="line">    args.v = <span class="literal">false</span>;</span><br><span class="line">    <span class="keyword">int</span> opt;</span><br><span class="line">    <span class="keyword">while</span> (<span class="number">-1</span> != (opt = getopt(argc, argv, <span class="string">&quot;hvs:E:b:t:&quot;</span>)))&#123; <span class="comment">//argues the &#x27;agrs&#x27; one by one</span></span><br><span class="line">        <span class="keyword">switch</span> (opt)&#123;</span><br><span class="line">        <span class="keyword">case</span> <span class="string">&#x27;h&#x27;</span>:</span><br><span class="line">            args.h = <span class="literal">true</span>; <span class="comment">//help_message, but we don&#x27;t have to write it</span></span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line">        <span class="keyword">case</span> <span class="string">&#x27;v&#x27;</span>:</span><br><span class="line">            args.v = <span class="literal">true</span>; <span class="comment">//verbose mode(express detials), but we don&#x27;t have to write it</span></span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line">        <span class="keyword">case</span> <span class="string">&#x27;s&#x27;</span>:</span><br><span class="line">            args.s = atol(optarg); <span class="comment">// change s(int) to long type</span></span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line">        <span class="keyword">case</span> <span class="string">&#x27;E&#x27;</span>:</span><br><span class="line">            args.E = atol(optarg); </span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line">        <span class="keyword">case</span> <span class="string">&#x27;b&#x27;</span>:</span><br><span class="line">            args.b = atol(optarg); </span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line">        <span class="keyword">case</span> <span class="string">&#x27;t&#x27;</span>:</span><br><span class="line">            <span class="built_in">strcpy</span>(args.t, optarg); <span class="comment">//copy tracefile&#x27;name to optarg </span></span><br><span class="line">            <span class="keyword">break</span>;                                                            </span><br><span class="line">        <span class="keyword">default</span>:</span><br><span class="line">            args.h = <span class="literal">true</span>;</span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> args;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+<li><p>根据参数构建Cache(Sets)</p>
+<ul>
+<li>一个Cache即是一个Sets，由S个set组成的，而每一个set又是由E个line组成的，采用malloc即可构建</li>
+<li>可以看到，一个Sets其实是以结构体line为元素组成的2维矩阵<code>Sets[S][E]</code></li>
+<li>注意到Sets、set分别是二级指针、一级指针（更详细的解释可以<a target="_blank" rel="noopener" href="https://www.cnblogs.com/liqiuhao/p/8026100.html?utm_source=debugrun&utm_medium=referral">看这</a>的图示）</li>
+<li>valid统一设为<code>false</code>，保证Cache一开始是<strong>冷</strong>的，即没有还没有执行任何操作，所有line都是无效的</li>
+<li>tag设为<code>-1 = 0xffffffff</code>，<code>-1 = 0xffffffff</code>或者<strong>不设</strong>都可以，因为后续都是直接address中的tag给替代掉的</li>
+<li>counter是统计valid有效次数的，当然一开始也统一为<code>0</code></li>
+</ul>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">Sets <span class="title">createCache</span><span class="params">(Args args)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">int</span> S = <span class="number">1</span> &lt;&lt; args.s; <span class="comment">//S = 2^s</span></span><br><span class="line">    <span class="keyword">int</span> E = args.E;</span><br><span class="line">    Sets sets = (Sets)<span class="built_in">malloc</span>(<span class="keyword">sizeof</span>(Set) * S); <span class="comment">//build Sets(one Sets have S numbers of Set), 2D(row and colum)</span></span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; S; i++) &#123;</span><br><span class="line">        sets[i] = (Set)<span class="built_in">malloc</span>(<span class="keyword">sizeof</span>(Line) * E); <span class="comment">//build Set(one Set have E numbers of line), [i] is number of row</span></span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">0</span>; j &lt; E; j++) &#123; <span class="comment">//build Line</span></span><br><span class="line">            sets[i][j].valid = <span class="literal">false</span>;</span><br><span class="line">            sets[i][j].tag;</span><br><span class="line">            sets[i][j].counter = <span class="number">0</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> sets;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p>这是一个简易Cache，<code>Sets[4][5]</code></p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// sets[4][5]:</span></span><br><span class="line"><span class="comment">// Line Line Line Line Line</span></span><br><span class="line"><span class="comment">// Line Line Line Line Line</span></span><br><span class="line"><span class="comment">// Line Line Line Line Line</span></span><br><span class="line"><span class="comment">// Line Line Line Line Line</span></span><br></pre></td></tr></table></figure></li>
+</ul>
+</li>
+<li><p>解析得出结果</p>
+</li>
+<li><p>首先是parse函数</p>
+<ul>
+<li>涉及到了fopen() fclose() fscanf() ，作用分别是打开，关闭，读入文件（链接：<a target="_blank" rel="noopener" href="https://www.runoob.com/?s=fopen">fopen</a>）</li>
+<li>这里读入的文件指令显然和linux指令不同，是从tracefile中读取的，给出了操作，地址和字节大小</li>
+<li><code>I</code>，载入指令，在这个简易的cache simulator中没有对应的实际操作</li>
+<li>记得要释放内存</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">parse</span><span class="params">(Sets sets, Args args)</span> </span>&#123;</span><br><span class="line">    FILE* fp = fopen(args.t, <span class="string">&quot;r&quot;</span>); <span class="comment">//open a tracefile with &#x27;r&#x27;ead mode</span></span><br><span class="line">    <span class="keyword">if</span> (fp == <span class="literal">NULL</span>) &#123;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;open error&quot;</span>);</span><br><span class="line">        <span class="built_in">exit</span>(<span class="number">0</span>); <span class="comment">//exit this process</span></span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">char</span> operation;</span><br><span class="line">    <span class="keyword">unsigned</span> <span class="keyword">int</span> address;</span><br><span class="line">    <span class="keyword">int</span> size;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">while</span>(<span class="built_in">fscanf</span>(fp, <span class="string">&quot; %c %xu,%d&quot;</span>, &amp;operation, &amp;address, &amp;size) &gt; <span class="number">0</span>) &#123; <span class="comment">//write instrution from file, abandon &#x27;I&#x27; without [space]</span></span><br><span class="line">        <span class="keyword">switch</span>(operation) &#123;</span><br><span class="line">            <span class="comment">// we don&#x27;t care &#x27;I&#x27;</span></span><br><span class="line">            <span class="keyword">case</span> <span class="string">&#x27;L&#x27;</span>: </span><br><span class="line">                get(sets, args, address);</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            <span class="keyword">case</span> <span class="string">&#x27;M&#x27;</span>: <span class="comment">// &#x27;M&#x27; equal two get() so we don&#x27;t need &#x27;break;&#x27;</span></span><br><span class="line">                get(sets, args, address);</span><br><span class="line">            <span class="keyword">case</span> <span class="string">&#x27;S&#x27;</span>:</span><br><span class="line">                get(sets, args, address);</span><br><span class="line">            <span class="keyword">default</span>:;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    fclose(fp);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// free store</span></span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>, S = <span class="number">1</span> &lt;&lt; args.s; i &lt; S;i++) &#123;</span><br><span class="line">        <span class="built_in">free</span>(sets[i]);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">free</span>(sets);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+<li><p>最后是get函数</p>
+<ul>
+<li><p>把一个文件指令给出的地址转化为我们要的index（组号）和tag，这个简易不需要用到data of block及block offset（具体转化过程见注释）</p>
+</li>
+<li><p>然后根据index（组号）和tag先找出对应的set（组），注意要和set<strong>s</strong>集合区别开来</p>
+</li>
+<li><p>一个set由许多line组成，一个line的构成见下：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//line ==&gt; 0x|valid bit|tag bits|counter bits|</span></span><br></pre></td></tr></table></figure></li>
+<li><p>这里我用<code>set = sets[index]</code>表示哪一组，用<code>set[j]</code>表示这一组哪一行</p>
+</li>
+<li><p>LRU的具体实现依靠counter（累加器），<strong>在只要valid有效counter就加一的操作之后</strong>，所有情况见下：</p>
+</li>
+<li><table>
+<thead>
+<tr>
+<th align="center">valid</th>
+<th align="center">tag</th>
+<th align="center">operation</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">false</td>
+<td align="center">unequal</td>
+<td align="center">miss++，get tag，valid = 1，counter = 0</td>
+</tr>
+<tr>
+<td align="center">false</td>
+<td align="center">equal</td>
+<td align="center">miss++，get tag，valid = 1，counter = 0</td>
+</tr>
+<tr>
+<td align="center">true</td>
+<td align="center">unequal</td>
+<td align="center">eviction++，miss++，get tag，counter = 0</td>
+</tr>
+<tr>
+<td align="center">true</td>
+<td align="center">equal</td>
+<td align="center">hit++，counter = 0</td>
+</tr>
+</tbody></table>
+</li>
+<li><p>这里需要特别注意的是，当valid有效且tag不相等时，我们就要<strong>找到目前该组counter最大的line舍去它，同时将其重置</strong>。</p>
+</li>
+<li><p>在这里，所谓的LRU，最近最少使用，counter最大就说明这个line离寄存器最近且最少使用</p>
+</li>
+<li><p>在c语言中，无论是有符号数还是无符号数，逻辑/算术<strong>左移</strong>统一补<code>0</code>，<strong>逻辑右移</strong>也统一补<code>0</code>；但只有一种特殊情况：<strong>有符号数执行算术右移</strong>时，<strong>补符号位</strong>。</p>
+</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">get</span><span class="params">(Sets sets, Args args, <span class="keyword">unsigned</span> <span class="keyword">int</span> address)</span> </span>&#123;</span><br><span class="line">  	<span class="comment">// mask ==&gt; 0x|0...|1 of s bits|</span></span><br><span class="line">    <span class="keyword">unsigned</span> <span class="keyword">long</span> mask = <span class="number">0xffffffffffffffff</span> &gt;&gt; (<span class="number">64</span> - args.s); </span><br><span class="line">    <span class="comment">//because it is 64bits computer and atol(optarg)</span></span><br><span class="line">    </span><br><span class="line">    <span class="comment">// get index of set</span></span><br><span class="line">  	<span class="comment">//address = 0x|t bits|s bits|b bits| ==&gt; address = 0x|0...|t bits|s bits|</span></span><br><span class="line">    address &gt;&gt;= args.b; </span><br><span class="line">    <span class="keyword">int</span> index = mask &amp; address; <span class="comment">//index = 0x|0...|s bits| </span></span><br><span class="line">    <span class="keyword">int</span> tag = address &gt;&gt; args.s; <span class="comment">//tag = 0x|0...|t bits|</span></span><br><span class="line">    Set <span class="built_in">set</span> = sets[index]; </span><br><span class="line"></span><br><span class="line">    <span class="comment">//LRU</span></span><br><span class="line">    <span class="keyword">int</span> j;</span><br><span class="line">    <span class="keyword">int</span> E = args.E;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//counter == valid_counter</span></span><br><span class="line">    <span class="keyword">for</span> (j = <span class="number">0</span>; j &lt; E; j++) &#123;</span><br><span class="line">        <span class="keyword">if</span> (<span class="built_in">set</span>[j].valid == <span class="literal">true</span>) &#123;</span><br><span class="line">            <span class="built_in">set</span>[j].counter++; </span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//valid and equaling of tag so hit++</span></span><br><span class="line">    <span class="keyword">for</span> (j = <span class="number">0</span>; j &lt; E; j++) &#123;</span><br><span class="line">        <span class="keyword">if</span> (<span class="built_in">set</span>[j].valid == <span class="literal">true</span> &amp;&amp; <span class="built_in">set</span>[j].tag == tag) &#123;</span><br><span class="line">            <span class="built_in">set</span>[j].counter = <span class="number">0</span>;</span><br><span class="line">            result.hit++;</span><br><span class="line">            <span class="keyword">return</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//invalid so miss++, change to valid and get tag bits(tag = 0x|0...|t bits|)</span></span><br><span class="line">    <span class="keyword">for</span> (j = <span class="number">0</span>; j &lt; E; j++) &#123;</span><br><span class="line">        <span class="keyword">if</span> (<span class="built_in">set</span>[j].valid == <span class="literal">false</span>) &#123;</span><br><span class="line">            result.miss++;</span><br><span class="line">            <span class="built_in">set</span>[j].valid = <span class="literal">true</span>;</span><br><span class="line">            <span class="built_in">set</span>[j].tag = tag;</span><br><span class="line">            <span class="keyword">return</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//no equaling of tag so eviction++, evict line of max_counter(change to 0) and update tag</span></span><br><span class="line">    <span class="comment">//in the meantime, miss++</span></span><br><span class="line">    result.eviction++;</span><br><span class="line">    result.miss++;</span><br><span class="line">    <span class="keyword">int</span> max_counter = <span class="built_in">set</span>[<span class="number">0</span>].counter;</span><br><span class="line">    <span class="keyword">int</span> max_j = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span> (j = <span class="number">1</span>; j &lt; E; j++) &#123;</span><br><span class="line">        <span class="keyword">if</span> (<span class="built_in">set</span>[j].valid == <span class="literal">true</span> &amp;&amp; <span class="built_in">set</span>[j].counter &gt; max_counter) &#123;</span><br><span class="line">            max_j = j;</span><br><span class="line">            max_counter = <span class="built_in">set</span>[j].counter;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">set</span>[max_j].tag = tag;</span><br><span class="line">    <span class="built_in">set</span>[max_j].counter = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">return</span>;   </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+</ul>
+<h3 id="Test"><a href="#Test" class="headerlink" title="Test"></a>Test</h3><p>（注意<code>csim.c cachelab.c</code>要link起来）</p>
+<p><img src="https://s3.bmp.ovh/imgs/2021/12/8c8968cb24a76f9e.png"></p>
+<p><br><br></p>
+<p>完成日期：<em>21.12.28</em></p>
+<p>更新：<em>21.12.30</em>：参数构建Cache部分，增加了一些注释；增加测试结果图片</p>
+<p><strong>参考链接：</strong><br><a target="_blank" rel="noopener" href="https://www.cnblogs.com/liqiuhao/p/8026100.html">CS:APP3e 深入理解计算机系统_3e CacheLab实验</a><br><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/42754565">《深入理解计算机系统》配套实验4: Cache lab</a><br><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/79058089">CSAPP实验之cachelab</a></p>
+<p><strong>ps：最近在练习写英文注释，有错误的话，敬请指正</strong></p>
+<h2 id="Part-B"><a href="#Part-B" class="headerlink" title="Part B"></a>Part B</h2><p>开始日期：<em>22.1.8</em></p>
+<p>请注意要安装<strong>valgrind</strong></p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">valgrind --version # 查看版本号检查</span><br><span class="line">sudo -i # 进入root模式后才能安装</span><br><span class="line">apt install valgrind # 安装</span><br></pre></td></tr></table></figure>
+
+<p>以及要连续完成这三条linux指令之后才能执行<code>./test-trans</code>，一直运行不了函数，试了好久才发现的，需要这些准备的原因应该是：trace文件中原本存在着需要当作输入的参数linux指令、 过程中还需要用到valgrind，但我们完全不需要知道内部细节。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">gcc -O0 -c trans.c <span class="meta">#make tran.o</span></span><br><span class="line">gcc -O0 -o tracegen tracegen.c trans.o cachelab.c <span class="meta">#make tracegen.exe</span></span><br><span class="line">gcc -o test-trans test-trans.c cachelab.c trans.o <span class="meta">#make test-trans.exe</span></span><br><span class="line">./test-trans -M <span class="number">32</span> -N <span class="number">32</span> <span class="meta">#evaluation</span></span><br></pre></td></tr></table></figure>
+
+<p>这些指令都存放在已经给出的<code>Makefile</code>这个文件当中。</p>
+<blockquote>
+<p> 实际上运用：<br> The program is structured so that it loads a chunk into the L1 cache, does all the reads and writes that it needs to on that chunk, then discards the chunk, loads in the next chunk, and so on.<br> 理解：把数据块再分为块（chunck），每次只读、写一块需要的，然后就丢弃，以此类推</p>
+<p> 这个lab要用到的：<br> Blocking: divide matrix into sub-matrices.<br> Size of sub-matrix depends on cache block size, cache size, input matrix size.<br> 把矩阵分为多个子矩阵<br> 子矩阵大小根据cache block、cache、input 矩阵的大小决定</p>
+</blockquote>
+<p>由此得知道，需要用到blocking技术。</p>
+<p>需要注意的是，writeup中的Programming Rules for Part B有给出规则，比较重要的是：</p>
+<ul>
+<li>最多使用12个变量</li>
+<li>不能使用long类型、bit技巧</li>
+<li>不能使用迭代（recoursion）</li>
+<li>矩阵A不能修改，矩阵B可以任意修改</li>
+<li>不能使用<code>malloc()</code>函数</li>
+</ul>
+<h3 id="32-32"><a href="#32-32" class="headerlink" title="32 * 32"></a>32 * 32</h3><p>根据所给参数 <code>-s 5 -E 1 -b 5 </code>，可以知道，<code>-S 32 -E 1 -B 32 </code>，从而有下表：（<code>1 int = 4 bytes</code>）</p>
+<table>
+<thead>
+<tr>
+<th>line(cache block)</th>
+<th>32 (bytes) == 8 (int)</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>cache(sets)</td>
+<td>32 * 8 (int)</td>
+</tr>
+<tr>
+<td><code>A[M][N]</code></td>
+<td>32 * 32 (int)</td>
+</tr>
+</tbody></table>
+<p>在给出的<a target="_blank" rel="noopener" href="https://www.cs.cmu.edu/afs/cs/academic/class/15213-f15//www/recitations/rec07.pdf">提示</a>及<a target="_blank" rel="noopener" href="http://csapp.cs.cmu.edu/2e/waside/waside-blocking.pdf">waside-blocking</a>得知，blocking（分块技术）应当按照cache block（数据块）来划分，所以blocking为<code>8 * 8</code>的子矩阵。然后根据置换矩阵的要求，<strong>对换</strong>即可，从而有：<br>（分块写入比元素写入快了许多，因为元素都是一个个放入，每一个都会cool miss[冷失效]，但分块不会，每一个分块只有第一个元素会cool miss）</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> (M == <span class="number">32</span>)&#123;</span><br><span class="line">    <span class="keyword">int</span> i, j, i1, j1;</span><br><span class="line">    <span class="keyword">for</span> (i = <span class="number">0</span>; i &lt; N; i += <span class="number">8</span>) &#123; <span class="comment">//blocking to 8*8 submatrix</span></span><br><span class="line">        <span class="keyword">for</span> (j = <span class="number">0</span>; j &lt; M; j += <span class="number">8</span>) &#123;</span><br><span class="line">            <span class="keyword">for</span> (i1 = i; i1 &lt; i+<span class="number">8</span>; i1++) <span class="comment">//swap</span></span><br><span class="line">                <span class="keyword">for</span> (j1 = j; j1 &lt; j+<span class="number">8</span>; j1++)</span><br><span class="line">                    B[i1][j1] = A[i1][j1];</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;          </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>相比最原始的二重循环来置换矩阵，速度已经快了不少：</p>
+<p><img src="https://s3.bmp.ovh/imgs/2022/01/5bfec9f72877081c.png"></p>
+<blockquote>
+<p>Since  your  transpose  function  is  being  evaluated  on  a  direct-mapped  cache,  conflict  misses  are  apotential problem.  Think about the potential for conflict misses in your code,  especially along the diagonal. Try to think of access patterns that will decrease the number of these conflict misses.<br>理解：由于这是<strong>直接映射</strong>cache，那么，使用矩阵A通过cache执行转置函数写到矩阵B的过程中，容易出现冲突失效，同时暗示很有可能是因为对角线的元素。</p>
+</blockquote>
+<p>没有小于300，达不到满分，说明其中出现了问题，很容易想到对角线处的元素的对换过程会出现冲突。</p>
+<p>由于这是<strong>直接映射</strong>cache，初始化完A、 B矩阵之后，<strong>那么A、B矩阵相同索引的地址将会映射到相同的cache地址当中</strong>。</p>
+<p><em>对换</em>实际上是cache对A矩阵执行一次Load操作和对B矩阵一次Store操作，用对换是为了形象描述操作。<br>转置时，对<strong>非对角线的元素</strong>执行对换时，<strong>因为映射到cache的地址不同所以不会出现冲突</strong>，但<strong>对角线的元素</strong>执行对换时，<strong>因为映射到cache的地址相同所以会出现冲突</strong>。（映射到cache的地址相同所引起的miss称为<strong>conflict miss</strong>）</p>
+<p>如何避免冲突呢？我们按行看，因为cache是按行存放的，一个cache line有8 int，而我们至多有12个变量可以用，我们取8个变量临时存放数据，用空间换取时间上的效率。用8个不可能与A、B矩阵相同的地址，用来暂存数据，那么对角线就不会出现地址位置上的冲突了。代码如下：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> (M == <span class="number">32</span>)&#123;</span><br><span class="line">    <span class="keyword">int</span> i, j, k, v0, v1, v2, v3, v4, v5, v6, v7;</span><br><span class="line">    <span class="keyword">for</span> (i = <span class="number">0</span>; i &lt; N; i += <span class="number">8</span>) &#123;</span><br><span class="line">        <span class="keyword">for</span> (j = <span class="number">0</span>; j &lt; M; j += <span class="number">8</span>) &#123;</span><br><span class="line">            <span class="keyword">for</span>(k = i; k &lt; i+<span class="number">8</span>; k++)&#123;</span><br><span class="line">                v0 = A[k][j];</span><br><span class="line">                v1 = A[k][j+<span class="number">1</span>];</span><br><span class="line">                v2 = A[k][j+<span class="number">2</span>];</span><br><span class="line">                v3 = A[k][j+<span class="number">3</span>];</span><br><span class="line">                v4 = A[k][j+<span class="number">4</span>];</span><br><span class="line">                v5 = A[k][j+<span class="number">5</span>];</span><br><span class="line">                v6 = A[k][j+<span class="number">6</span>];</span><br><span class="line">                v7 = A[k][j+<span class="number">7</span>];</span><br><span class="line">                B[j][k] = v0;</span><br><span class="line">                B[j+<span class="number">1</span>][k] = v1;</span><br><span class="line">                B[j+<span class="number">2</span>][k] = v2;</span><br><span class="line">                B[j+<span class="number">3</span>][k] = v3;</span><br><span class="line">                B[j+<span class="number">4</span>][k] = v4;</span><br><span class="line">                B[j+<span class="number">5</span>][k] = v5;</span><br><span class="line">                B[j+<span class="number">6</span>][k] = v6;</span><br><span class="line">                B[j+<span class="number">7</span>][k] = v7;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;          </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><code>miss = 287</code>，已经满分了，但还有逼近理论<code>miss = 256</code>的<a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/79058089">解法</a>，祝参考得开心 = / =</p>
+<p><img src="https://s3.bmp.ovh/imgs/2022/01/566dfedd9b20c970.png"></p>
+<h3 id="64-64"><a href="#64-64" class="headerlink" title="64 * 64"></a>64 * 64</h3><p>比较难，这里主要参考了<a target="_blank" rel="noopener" href="https://www.cnblogs.com/liqiuhao/p/8026100.html?utm_source=debugrun&utm_medium=referral">这篇blog1</a></p>
+<p>一般分块是按照block的规模来blocking的，但在这道题中，最好按照矩阵在cache中存储规模来决定，<code>32*32</code>时，cache是<code>32*8</code>，也就是说，cache能存<strong>8行32个int</strong>元素。<strong>如果不考虑转置功能</strong>，那么<strong>每8行之后映射到相同cache位置的元素就会冲突</strong>，即<code>B[i][j+8k] = A[i][j]</code>时会出现冲突，之后只能进行替换，那么必然引起两次miss（冲突一次，替换一次）。<strong>如果考虑转置功能</strong>，那么，<strong>只有位于矩阵对角线的元素才会出现位置相同的情况</strong>，非对角线的元素对换时永远是<code>B[j][i] = A[i][j] </code>的情况，不可能是<code>B[i][j+8k] = A[i][j] </code>。综上，<code>32*32</code>时，我们采用<code>8*8</code>的blocking，<strong>因为每8行之后映射到相同cache位置的元素就会冲突</strong>。</p>
+<p><code>64*64</code>时，cache还是<code>32*8</code>，可以看作cache是<code>64*4</code>，从而cache能存<strong>4行64个int</strong>元素。那么<strong>每4行之后映射到相同cache位置的元素就会冲突</strong>，故而我们采用<code>4*4</code>的blocking。</p>
+<p>但是<code>4*4</code>并不能合理利用cache的矩阵格式，我们把cache看作是<code>64*4</code>的矩阵，但实际上它是<code>32*8</code>，为了合理利用cache的矩阵格式，我们运用<strong>分而治之</strong>的思想，仍采用<code>8*8</code>的blocking但<strong>处理时</strong>把它看作是<strong>4个</strong><code>4*4</code>block。</p>
+<p>而采用的图示为<a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/42754565">这篇blog2</a>，主要解决了两个问题才能优化成功达到满分。（<em>下列的abcd，a’b’c’d’都源于blog2</em>）</p>
+<ul>
+<li>每4行，cache行就会被覆盖，所以写入b’的时候需要再重新写一遍，将导致miss，所以我们考虑现将b’放到原c’的位置，也就是先把b’和c**’互换位置**，之后再交换回来。</li>
+<li>想办法在存入c’的时候直接将b’<strong>复原</strong>， 这里合理利用了cache：<strong>最近使用的cache line先保留下来，以便使用。</strong><ul>
+<li>将b<strong>逆序存放</strong>，<strong>而后在存入c’的时候直接将b’复原</strong></li>
+<li>为什么这样可行？因为此时cache中存放有全部的b’的数据，<strong>如果数据不是逆序存放</strong>，c’、 d’第一行的缓存会覆盖掉b’第一行的缓存，此时无法读入b’第一行放到c’第一行，将会出现miss。反之，<strong>如果数据是逆序存放的</strong>，因为只覆盖了b’第一行的缓存，但我们读入的是b’第4行的数据，而b’第4行的数据仍然在缓存中，这样就能hit了。</li>
+<li>给个灵魂图示：（doge<br><img src="https://s3.bmp.ovh/imgs/2022/01/5306e0c0012ee95b.png"></li>
+</ul>
+</li>
+</ul>
+<p>代码如下：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> (M == <span class="number">64</span>)&#123;</span><br><span class="line">    <span class="keyword">int</span> i, j, k, h, v0, v1, v2, v3, v4, v5, v6, v7;</span><br><span class="line">    <span class="keyword">for</span> (i = <span class="number">0</span>; i &lt; N; i += <span class="number">8</span>) &#123;</span><br><span class="line">        <span class="keyword">for</span> (j = <span class="number">0</span>; j &lt; M; j += <span class="number">8</span>) &#123;</span><br><span class="line">            <span class="keyword">for</span> (k = i; k &lt; i + <span class="number">4</span>; k++) &#123;</span><br><span class="line">                <span class="comment">// 8*8，但之后处理时看作4*4</span></span><br><span class="line">                v0 = A[k][j];</span><br><span class="line">                v1 = A[k][j+<span class="number">1</span>];</span><br><span class="line">                v2 = A[k][j+<span class="number">2</span>];</span><br><span class="line">                v3 = A[k][j+<span class="number">3</span>];</span><br><span class="line">                v4 = A[k][j+<span class="number">4</span>];</span><br><span class="line">                v5 = A[k][j+<span class="number">5</span>];</span><br><span class="line">                v6 = A[k][j+<span class="number">6</span>];</span><br><span class="line">                v7 = A[k][j+<span class="number">7</span>];</span><br><span class="line"></span><br><span class="line">                <span class="comment">// a</span></span><br><span class="line">                B[j][k] = v0;</span><br><span class="line">                B[j+<span class="number">1</span>][k] = v1;</span><br><span class="line">                B[j+<span class="number">2</span>][k] = v2;</span><br><span class="line">                B[j+<span class="number">3</span>][k] = v3;</span><br><span class="line"></span><br><span class="line">                <span class="comment">// b 逆序放到c&#x27;（右上角）</span></span><br><span class="line">                B[j+<span class="number">0</span>][k+<span class="number">4</span>] = v7;</span><br><span class="line">                B[j+<span class="number">1</span>][k+<span class="number">4</span>] = v6;</span><br><span class="line">                B[j+<span class="number">2</span>][k+<span class="number">4</span>] = v5;</span><br><span class="line">                B[j+<span class="number">3</span>][k+<span class="number">4</span>] = v4;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> h = <span class="number">0</span>; h &lt; <span class="number">4</span>; h++) &#123;</span><br><span class="line">                <span class="comment">// c</span></span><br><span class="line">                v0 = A[i+<span class="number">4</span>][j+<span class="number">3</span>-h];</span><br><span class="line">                v1 = A[i+<span class="number">5</span>][j+<span class="number">3</span>-h];</span><br><span class="line">                v2 = A[i+<span class="number">6</span>][j+<span class="number">3</span>-h];</span><br><span class="line">                v3 = A[i+<span class="number">7</span>][j+<span class="number">3</span>-h];</span><br><span class="line">                <span class="comment">// d</span></span><br><span class="line">                v4 = A[i+<span class="number">4</span>][j+<span class="number">4</span>+h];</span><br><span class="line">                v5 = A[i+<span class="number">5</span>][j+<span class="number">4</span>+h];</span><br><span class="line">                v6 = A[i+<span class="number">6</span>][j+<span class="number">4</span>+h];</span><br><span class="line">                v7 = A[i+<span class="number">7</span>][j+<span class="number">4</span>+h];</span><br><span class="line"></span><br><span class="line">                <span class="comment">// b&#x27;到原本左下角的位置</span></span><br><span class="line">                B[j+<span class="number">4</span>+h][i+<span class="number">0</span>] = B[j+<span class="number">3</span>-h][i+<span class="number">4</span>];</span><br><span class="line">                B[j+<span class="number">4</span>+h][i+<span class="number">1</span>] = B[j+<span class="number">3</span>-h][i+<span class="number">5</span>];</span><br><span class="line">                B[j+<span class="number">4</span>+h][i+<span class="number">2</span>] = B[j+<span class="number">3</span>-h][i+<span class="number">6</span>];</span><br><span class="line">                B[j+<span class="number">4</span>+h][i+<span class="number">3</span>] = B[j+<span class="number">3</span>-h][i+<span class="number">7</span>];</span><br><span class="line"></span><br><span class="line">                <span class="comment">// 存放c到原本c&#x27;的位置（右上角）</span></span><br><span class="line">                B[j+<span class="number">3</span>-h][i+<span class="number">4</span>] = v0;</span><br><span class="line">                B[j+<span class="number">3</span>-h][i+<span class="number">5</span>] = v1;</span><br><span class="line">                B[j+<span class="number">3</span>-h][i+<span class="number">6</span>] = v2;</span><br><span class="line">                B[j+<span class="number">3</span>-h][i+<span class="number">7</span>] = v3;</span><br><span class="line">                <span class="comment">// 存放d到d&#x27;</span></span><br><span class="line">                B[j+<span class="number">4</span>+h][i+<span class="number">4</span>] = v4;</span><br><span class="line">                B[j+<span class="number">4</span>+h][i+<span class="number">5</span>] = v5;</span><br><span class="line">                B[j+<span class="number">4</span>+h][i+<span class="number">6</span>] = v6;</span><br><span class="line">                B[j+<span class="number">4</span>+h][i+<span class="number">7</span>] = v7;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>结果：<br><img src="https://s3.bmp.ovh/imgs/2022/01/43d546ee04b74fbb.png"></p>
+<h3 id="61-67"><a href="#61-67" class="headerlink" title="61 * 67"></a>61 * 67</h3><p>由于是不规则矩阵，我们的思路也很简单，分而治之即可，分为规则部分、不规则部分，分开处理就行了。<br>规则部分我们取<code>48*48</code>的矩阵，如果合理利用<code>32*8</code>cache矩阵的话，最好blocking为<code>16*16</code>的矩阵然后再划分为<em>4个</em><code>8*8</code>处理，但是题目要求很宽松，<em>miss小于2000即可</em>。那满足优化要求分为<code>16*16</code>就行了，参照第一关，处理对角线元素即可。<strong>而不规则部分，只要考虑索引相同的情况即可</strong>，因为此时映射到cache的位置相同，例如：<code>B[55][55] = A[55][55]</code>。</p>
+<p>代码如下：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">else</span>&#123;</span><br><span class="line">    <span class="keyword">int</span> i, j, k, h, v0, v1, v2, v3, v4, v5, v6, v7;</span><br><span class="line">    <span class="comment">// 48 * 48，只有8个变量，分开处理</span></span><br><span class="line">    <span class="keyword">for</span> (i = <span class="number">0</span>; i+<span class="number">16</span> &lt; N; i += <span class="number">16</span>) &#123;</span><br><span class="line">        <span class="keyword">for</span> (j = <span class="number">0</span>; j+<span class="number">16</span> &lt; M; j+=<span class="number">16</span>) &#123;</span><br><span class="line">            <span class="keyword">for</span> (k = i; k &lt; i+<span class="number">16</span>; k++) &#123;</span><br><span class="line">                v0 = A[k][j];</span><br><span class="line">                v1 = A[k][j+<span class="number">1</span>];</span><br><span class="line">                v2 = A[k][j+<span class="number">2</span>];</span><br><span class="line">                v3 = A[k][j+<span class="number">3</span>];</span><br><span class="line">                v4 = A[k][j+<span class="number">4</span>];</span><br><span class="line">                v5 = A[k][j+<span class="number">5</span>];</span><br><span class="line">                v6 = A[k][j+<span class="number">6</span>];</span><br><span class="line">                v7 = A[k][j+<span class="number">7</span>];</span><br><span class="line"></span><br><span class="line">                B[j][k] = v0;</span><br><span class="line">                B[j+<span class="number">1</span>][k] = v1;</span><br><span class="line">                B[j+<span class="number">2</span>][k] = v2;</span><br><span class="line">                B[j+<span class="number">3</span>][k] = v3;</span><br><span class="line">                B[j+<span class="number">4</span>][k] = v4;</span><br><span class="line">                B[j+<span class="number">5</span>][k] = v5;</span><br><span class="line">                B[j+<span class="number">6</span>][k] = v6;</span><br><span class="line">                B[j+<span class="number">7</span>][k] = v7;</span><br><span class="line"></span><br><span class="line">                v0 = A[k][j+<span class="number">8</span>];</span><br><span class="line">                v1 = A[k][j+<span class="number">9</span>];</span><br><span class="line">                v2 = A[k][j+<span class="number">10</span>];</span><br><span class="line">                v3 = A[k][j+<span class="number">11</span>];</span><br><span class="line">                v4 = A[k][j+<span class="number">12</span>];</span><br><span class="line">                v5 = A[k][j+<span class="number">13</span>];</span><br><span class="line">                v6 = A[k][j+<span class="number">14</span>];</span><br><span class="line">                v7 = A[k][j+<span class="number">15</span>];</span><br><span class="line"></span><br><span class="line">                B[j+<span class="number">8</span>][k] = v0;</span><br><span class="line">                B[j+<span class="number">9</span>][k] = v1;</span><br><span class="line">                B[j+<span class="number">10</span>][k] = v2;</span><br><span class="line">                B[j+<span class="number">11</span>][k] = v3;</span><br><span class="line">                B[j+<span class="number">12</span>][k] = v4;</span><br><span class="line">                B[j+<span class="number">13</span>][k] = v5;</span><br><span class="line">                B[j+<span class="number">14</span>][k] = v6;</span><br><span class="line">                B[j+<span class="number">15</span>][k] = v7;</span><br><span class="line"></span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 处理不规则的部分，分两部分</span></span><br><span class="line">    <span class="keyword">for</span> (k = i; k &lt; N; k++) &#123; <span class="comment">// k = (i == 48) &lt; 61 , h = 0 &lt; 67</span></span><br><span class="line">        <span class="keyword">for</span> (h = <span class="number">0</span>; h &lt; M; h++)&#123;</span><br><span class="line">            B[h][k] = A[k][h];</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">for</span> (k = <span class="number">0</span>; k &lt; i; k++) &#123; <span class="comment">// k = 0 &lt; 48, h = (j == 48) &lt; 67</span></span><br><span class="line">        <span class="keyword">for</span> (h = j; h &lt; M; h++) &#123;</span><br><span class="line">            B[h][k] = A[k][h];</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>给个图示：<br><img src="https://s3.bmp.ovh/imgs/2022/01/2aa81abc1ec2b6d0.png"></p>
+<p>结果：<br><img src="https://s3.bmp.ovh/imgs/2022/01/43d546ee04b74fbb.png"></p>
+<p>完成日期：<em>22.1.13</em></p>
+<h1 id="Conclusion"><a href="#Conclusion" class="headerlink" title="Conclusion"></a>Conclusion</h1><ul>
+<li>期间因为考试周（<em>21.12.31~22.1.7</em>）和休息（<em>22.1.9~22.1.12</em>）暂停了几天。</li>
+<li>参考了非常多的内容，写得不容易，写完还是很开心的</li>
+<li>后续的lab会继续，但算法和c++的学习要提上日程了</li>
+<li><em>我觉得自己从镜子里走出来了。——《一场事先张扬的凶杀案》马尔克斯</em></li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/c/" rel="tag"># c</a>
+              <a href="/tags/csapp-lab/" rel="tag"># csapp_lab</a>
+              <a href="/tags/assembly/" rel="tag"># assembly</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2021/10/16/PTA/PTA-DS&A-%20fall-2021/" rel="prev" title="中国大学MOOC-陈越、何钦铭-数据结构-2021秋">
+      <i class="fa fa-chevron-left"></i> 中国大学MOOC-陈越、何钦铭-数据结构-2021秋
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2022/02/08/CSAPP/CSAPP-MallocLab/" rel="next" title="MallocLab">
+      MallocLab <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+    <div class="comments" id="valine-comments"></div>
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#CacheLab"><span class="nav-number">1.</span> <span class="nav-text">CacheLab</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Part-A"><span class="nav-number">1.1.</span> <span class="nav-text">Part A</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#pre-knowledge"><span class="nav-number">1.1.1.</span> <span class="nav-text">pre-knowledge</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#AC-code"><span class="nav-number">1.1.2.</span> <span class="nav-text">AC code</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Test"><span class="nav-number">1.1.3.</span> <span class="nav-text">Test</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Part-B"><span class="nav-number">1.2.</span> <span class="nav-text">Part B</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#32-32"><span class="nav-number">1.2.1.</span> <span class="nav-text">32 * 32</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#64-64"><span class="nav-number">1.2.2.</span> <span class="nav-text">64 * 64</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#61-67"><span class="nav-number">1.2.3.</span> <span class="nav-text">61 * 67</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Conclusion"><span class="nav-number">2.</span> <span class="nav-text">Conclusion</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Huang Jinhong</p>
+  <div class="site-description" itemprop="description">“我们来到这世上是为的是看太阳”</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">21</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">7</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/duilec" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;duilec" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://www.cnblogs.com/duile" title="博客园 → https:&#x2F;&#x2F;www.cnblogs.com&#x2F;duile" rel="noopener" target="_blank"><i class="fab fa-cnblog fa-fw"></i>博客园</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Huang Jinhong</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> 强力驱动
+  </div>
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+<script>
+  (function() {
+    function leancloudSelector(url) {
+      url = encodeURI(url);
+      return document.getElementById(url).querySelector('.leancloud-visitors-count');
+    }
+
+    function addCount(Counter) {
+      var visitors = document.querySelector('.leancloud_visitors');
+      var url = decodeURI(visitors.id);
+      var title = visitors.dataset.flagTitle;
+
+      Counter('get', '/classes/Counter?where=' + encodeURIComponent(JSON.stringify({ url })))
+        .then(response => response.json())
+        .then(({ results }) => {
+          if (results.length > 0) {
+            var counter = results[0];
+            leancloudSelector(url).innerText = counter.time + 1;
+            Counter('put', '/classes/Counter/' + counter.objectId, { time: { '__op': 'Increment', 'amount': 1 } })
+              .catch(error => {
+                console.error('Failed to save visitor count', error);
+              });
+          } else {
+              leancloudSelector(url).innerText = 'Counter not initialized! More info at console err msg.';
+              console.error('ATTENTION! LeanCloud counter has security bug, see how to solve it here: https://github.com/theme-next/hexo-leancloud-counter-security. \n However, you can still use LeanCloud without security, by setting `security` option to `false`.');
+            
+          }
+        })
+        .catch(error => {
+          console.error('LeanCloud Counter Error', error);
+        });
+    }
+
+    function showTime(Counter) {
+      var visitors = document.querySelectorAll('.leancloud_visitors');
+      var entries = [...visitors].map(element => {
+        return decodeURI(element.id);
+      });
+
+      Counter('get', '/classes/Counter?where=' + encodeURIComponent(JSON.stringify({ url: { '$in': entries } })))
+        .then(response => response.json())
+        .then(({ results }) => {
+          for (let url of entries) {
+            let target = results.find(item => item.url === url);
+            leancloudSelector(url).innerText = target ? target.time : 0;
+          }
+        })
+        .catch(error => {
+          console.error('LeanCloud Counter Error', error);
+        });
+    }
+
+    let { app_id, app_key, server_url } = {"enable":true,"app_id":"fflLscOo9DyB8Fx8ubGOzkl5-MdYXbMMI","app_key":"RrGHmVsgcizeqfrfsKcX4Sko","server_url":null,"security":true};
+    function fetchData(api_server) {
+      var Counter = (method, url, data) => {
+        return fetch(`${api_server}/1.1${url}`, {
+          method,
+          headers: {
+            'X-LC-Id'     : app_id,
+            'X-LC-Key'    : app_key,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(data)
+        });
+      };
+      if (CONFIG.page.isPost) {
+        if (CONFIG.hostname !== location.hostname) return;
+        addCount(Counter);
+      } else if (document.querySelectorAll('.post-title-link').length >= 1) {
+        showTime(Counter);
+      }
+    }
+
+    let api_server = app_id.slice(-9) !== '-MdYXbMMI' ? server_url : `https://${app_id.slice(0, 8).toLowerCase()}.api.lncldglobal.com`;
+
+    if (api_server) {
+      fetchData(api_server);
+    } else {
+      fetch('https://app-router.leancloud.cn/2/route?appId=' + app_id)
+        .then(response => response.json())
+        .then(({ api_server }) => {
+          fetchData('https://' + api_server);
+        });
+    }
+  })();
+</script>
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+
+<script>
+NexT.utils.loadComments(document.querySelector('#valine-comments'), () => {
+  NexT.utils.getScript('//unpkg.com/valine/dist/Valine.min.js', () => {
+    var GUEST = ['nick', 'mail', 'link'];
+    var guest = 'nick,mail,link';
+    guest = guest.split(',').filter(item => {
+      return GUEST.includes(item);
+    });
+    new Valine({
+      el         : '#valine-comments',
+      verify     : false,
+      notify     : false,
+      appId      : 'fflLscOo9DyB8Fx8ubGOzkl5-MdYXbMMI',
+      appKey     : 'RrGHmVsgcizeqfrfsKcX4Sko',
+      placeholder: "发表评论",
+      avatar     : 'mm',
+      meta       : guest,
+      pageSize   : '10' || 10,
+      visitor    : false,
+      lang       : '' || 'zh-cn',
+      path       : location.pathname,
+      recordIP   : false,
+      serverURLs : ''
+    });
+  }, window.Valine);
+});
+</script>
+
+</body>
+</html>

@@ -1,0 +1,765 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"example.com","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="TshLab开始日期：22.1.20 操作系统：linux 调试工具：linux terminal Link：CS:APP3e">
+<meta property="og:type" content="article">
+<meta property="og:title" content="TshLab">
+<meta property="og:url" content="http://example.com/2022/02/15/CSAPP/CSAPP-TshLab/index.html">
+<meta property="og:site_name" content="Memory Dot">
+<meta property="og:description" content="TshLab开始日期：22.1.20 操作系统：linux 调试工具：linux terminal Link：CS:APP3e">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://s2.loli.net/2022/04/22/QAhPWvRwbjGVcqF.png">
+<meta property="og:image" content="https://s2.loli.net/2022/04/22/lnNPrOUifh7E1xy.png">
+<meta property="article:published_time" content="2022-02-15T03:02:23.000Z">
+<meta property="article:modified_time" content="2022-04-22T06:37:44.152Z">
+<meta property="article:author" content="Huang Jinhong">
+<meta property="article:tag" content="c">
+<meta property="article:tag" content="csapp_lab">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://s2.loli.net/2022/04/22/QAhPWvRwbjGVcqF.png">
+
+<link rel="canonical" href="http://example.com/2022/02/15/CSAPP/CSAPP-TshLab/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>TshLab | Memory Dot</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Memory Dot</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/02/15/CSAPP/CSAPP-TshLab/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Huang Jinhong">
+      <meta itemprop="description" content="“我们来到这世上是为的是看太阳”">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Memory Dot">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          TshLab
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2022-02-15 11:02:23" itemprop="dateCreated datePublished" datetime="2022-02-15T11:02:23+08:00">2022-02-15</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2022-04-22 14:37:44" itemprop="dateModified" datetime="2022-04-22T14:37:44+08:00">2022-04-22</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/csapp-lab/" itemprop="url" rel="index"><span itemprop="name">csapp lab</span></a>
+                </span>
+            </span>
+
+          
+            <span id="/2022/02/15/CSAPP/CSAPP-TshLab/" class="post-meta-item leancloud_visitors" data-flag-title="TshLab" title="阅读次数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span class="leancloud-visitors-count"></span>
+            </span>
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine：</span>
+    
+    <a title="valine" href="/2022/02/15/CSAPP/CSAPP-TshLab/#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/2022/02/15/CSAPP/CSAPP-TshLab/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="TshLab"><a href="#TshLab" class="headerlink" title="TshLab"></a>TshLab</h1><p>开始日期：<em>22.1.20</em></p>
+<p>操作系统：<strong>linux</strong></p>
+<p>调试工具：<strong>linux terminal</strong></p>
+<p>Link：<a target="_blank" rel="noopener" href="http://csapp.cs.cmu.edu/3e/labs.html">CS:APP3e</a></p>
+<span id="more"></span> 
+
+<h2 id="Preknowledge"><a href="#Preknowledge" class="headerlink" title="Preknowledge"></a>Preknowledge</h2><ul>
+<li>tshlab的意思是：tiny shell lab</li>
+<li>EOF（第八章）这一章务必看到8.6，笔者是把里面可运行的源代码都敲了一遍，想要方便的可以参考如下两个链接：<a target="_blank" rel="noopener" href="http://csapp.cs.cmu.edu/3e/code.html">源代码</a>，<a target="_blank" rel="noopener" href="https://blog.csdn.net/ustc_sse_shenzhang/article/details/105744435">csapp.h的使用</a></li>
+<li>write up务必认真看，里面的<strong>hint</strong>部分很重要。</li>
+<li>trace01.txt - Properly terminate on EOF，告诉我们，tsh的主要任务是<strong>恰当的终止异常</strong></li>
+</ul>
+<h2 id="Functions"><a href="#Functions" class="headerlink" title="Functions"></a>Functions</h2><h3 id="Attention"><a href="#Attention" class="headerlink" title="Attention"></a>Attention</h3><ul>
+<li><p>正式做实验时，要按照trace01 ~ 16的任务要求编写7个函数，一开始无从下手很正常，不用着急，多查查资料，多想想。本文主要借鉴了这两篇：<a target="_blank" rel="noopener" href="https://www.cnblogs.com/liqiuhao/p/8120617.html">CS:APP3e 深入理解计算机系统_3e ShellLab(tsh)实验 </a>，<a target="_blank" rel="noopener" href="https://www.zhihu.com/column/c_142489852">myk的CS学习之旅</a></p>
+</li>
+<li><p>要<em>借鉴</em>教材给出的相关函数。</p>
+</li>
+<li><p>一个pg（进程组）中有一个或多个pg（进程），一个pg也称为一个job（工作），jobs是所有工作的集合</p>
+</li>
+<li><p>jid是一个job在jobs中的序列[1, 2, ….]</p>
+</li>
+<li><p>pid：<strong>如果是child（子程序）就代表child的进程编号</strong>；<br><strong>如果是parent（父程序）既代表parent的进程编号也代表parent所在程序组的编号（pgid）</strong></p>
+</li>
+<li><p>shell会分为foreground（前台）和background（后台）两项工作列表，其中foreground中只能有一个工作，但background中可以有多个工作</p>
+</li>
+<li><p> 有<code>&amp;</code>代表后台任务，无<code>&amp;</code>代表前台任务</p>
+</li>
+<li><p>有<code>%</code>代表进程组，无<code>%</code>代表进程</p>
+</li>
+<li><p>额外设置了全局变量<code>flag</code>，用来<strong>表明前台工作是否终止（或停止）</strong>。（遇到foreground都要使用<code>flag</code>）</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">volatile</span>  <span class="keyword">sig_atomic_t</span> flag; </span><br><span class="line"><span class="comment">/* equal 1 =&gt; jobs terminated or stopped in fg; equal 0 =&gt; jobs running in fg */</span></span><br></pre></td></tr></table></figure></li>
+<li><p><code>handler</code>系列函数要设置<code>erron</code>复原</p>
+</li>
+<li><p><code>main()</code>中，信号已经install（安装）完毕</p>
+</li>
+<li><p>使用<code>&amp;</code><strong>取地址运算符</strong>来取得数据、状态的地址</p>
+</li>
+</ul>
+<h3 id="eval"><a href="#eval" class="headerlink" title="eval()"></a>eval()</h3><ul>
+<li><p>主要功能：</p>
+<ul>
+<li><blockquote>
+<ul>
+<li><p>eval - Evaluate the command line that the user has just typed in</p>
+</li>
+<li><p>If the user has requested a built-in command (quit, jobs, bg or fg)<br>then execute it immediately. Otherwise, fork a child process and<br>run the job in the context of the child. If the job is running in<br>the foreground, wait for it to terminate and then return.  Note:<br>each child process must have a unique process group ID so that our<br>background children don’t receive SIGINT (SIGTSTP) from the kernel<br>when we type ctrl-c (ctrl-z) at the keyboard.  </p>
+</li>
+</ul>
+</blockquote>
+</li>
+<li>可以知道，eval()是用来评估用户键入的指令，如果是内嵌指令就立刻执行；<br>否则，就要创建并运行子程序，对于这个子程序，<strong>如果它运行在前台就要等待它终止或返回</strong>；<br><strong>如果它运行在后台，那它就不能接收终止/停止信号</strong>（<code>SIGINT/SIGTSTP</code>），这些信号可以通过用户键入<code>ctrl-c/ctrl-z</code>发送</li>
+</ul>
+</li>
+<li><p>trace04.txt - Run a background job. 要调用运行一个后台工作，然后<code>printf()</code>出相关信息（jid，pid，进程名字），将会用到已经提供的函数：<code>pid2jid()</code></p>
+</li>
+<li><p>trace06.txt - Forward SIGINT to foreground job;<br>trace07.txt - Forward SIGINT only to foreground job;<br>trace08.txt - Forward SIGTSTP only to foreground job;<br>trace11.txt - Forward SIGINT to every process in foreground process group;<br>trace12.txt - Forward SIGTSTP to every process in foreground process group.</p>
+<ul>
+<li><p>trace06, 07, 08, 11, 12涉及到信号，那就必须创建并运行child了（得写<code>sigchld_handler()</code>），由此便会产生child和parent之间的race（竞争），必须解决它。同时，因为涉及到<code>SITINT</code>、<code>SIGTSTP</code>，得写<code>sigint_handler()</code>、<code>sigtstp_handler()</code>。</p>
+</li>
+<li><p>child和parent之间的race，按照书中方式，只需要<strong>在创建child之前block</strong>（阻塞）<code>SIGCHLD</code>，<strong>在创建child并运行之后unblock</strong>（解除阻塞）即可。</p>
+</li>
+<li><p>注意write up中给出的提示：</p>
+<ul>
+<li><blockquote>
+<p>After the fork, but before the execve, the child process should call setpgid(0, 0), which puts the child in a new process group whose group ID is identical to the child’s PID. This ensures that there will be only one process, your shell, in the foreground process group. When you type ctrl-c, the shell should catch the resulting SIGINT and then forward it to the appropriate foreground job (or more precisely, the process group that contains the foreground job).</p>
+</blockquote>
+</li>
+<li><p>因此我们调用<code>setpgid(0, 0)</code>，<strong>将foreground中进程组的pgid设置为child的pid</strong>。</p>
+</li>
+</ul>
+</li>
+<li><p>对于parent，<code>before add/delete job, we must block all sigs</code>，<strong>防止信号干扰到job的增删</strong> </p>
+<ul>
+<li>如果是前台，先设置<code>flag = 1</code>，然后<code>addjob()</code>，最后需要显式地等待工作终止即调用<code>waitfg()</code></li>
+<li>如果是后台，直接<code>addjob()</code>，然后unblock即可。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>打印<code>Command not found.</code>（trace14）</p>
+</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">eval</span><span class="params">(<span class="keyword">char</span> *cmdline)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">char</span> *argv[MAXARGS];</span><br><span class="line">    <span class="keyword">char</span> buf[MAXLINE];</span><br><span class="line">    <span class="keyword">int</span> bg;   </span><br><span class="line">    <span class="keyword">pid_t</span> pid;</span><br><span class="line">		<span class="keyword">sigset_t</span> mask_all, mask_one, prev;</span><br><span class="line">	</span><br><span class="line">		sigfillset(&amp;mask_all); <span class="comment">//fill all sigs to mask</span></span><br><span class="line">		sigemptyset(&amp;mask_one);</span><br><span class="line">		sigaddset(&amp;mask_one, SIGCHLD); <span class="comment">//mask_one has one sig: SIGCHLD</span></span><br><span class="line">		<span class="comment">//initjobs(jobs); already use in main(), recalled will empty new lists of jobs</span></span><br><span class="line"></span><br><span class="line">    <span class="built_in">strcpy</span>(buf, cmdline);</span><br><span class="line">    bg = parseline(buf, argv); <span class="comment">//return true, if it is background </span></span><br><span class="line">    <span class="keyword">if</span>(argv[<span class="number">0</span>] == <span class="literal">NULL</span>) <span class="comment">//if not any cmd</span></span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    <span class="comment">//exeluate buliltin_cmd, if not buliltin_cmd(filepath, ./exe and so on), shell will create a child process and run it</span></span><br><span class="line">    <span class="keyword">if</span>(!builtin_cmd(argv)) &#123; </span><br><span class="line">    	sigprocmask(SIG_BLOCK, &amp;mask_one, &amp;prev); <span class="comment">//block SIGCHLD to avoid race</span></span><br><span class="line">        <span class="keyword">if</span>((pid = fork()) == <span class="number">0</span>)&#123; <span class="comment">//create a child process</span></span><br><span class="line">        	setpgid(<span class="number">0</span>, <span class="number">0</span>); <span class="comment">//or call setpgrp()</span></span><br><span class="line">        	sigprocmask(SIG_SETMASK, &amp;prev, <span class="literal">NULL</span>); <span class="comment">//unblock SIGCHLD</span></span><br><span class="line">            <span class="keyword">if</span>(execve(argv[<span class="number">0</span>], argv, environ) &lt; <span class="number">0</span>) &#123; <span class="comment">//run it and if it can&#x27;t run</span></span><br><span class="line">                <span class="built_in">printf</span>(<span class="string">&quot;%s: Command not found.\n&quot;</span>, argv[<span class="number">0</span>]);</span><br><span class="line">                <span class="built_in">exit</span>(<span class="number">0</span>);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">     	</span><br><span class="line">     	<span class="comment">//before add/delete job, we must block all sigs</span></span><br><span class="line">     	sigprocmask(SIG_BLOCK, &amp;mask_all, <span class="literal">NULL</span>);  <span class="comment">/* Parent: block all sigs */</span>   </span><br><span class="line">     	</span><br><span class="line">     	<span class="comment">//background: </span></span><br><span class="line">    	<span class="keyword">if</span>(bg) &#123;</span><br><span class="line">     		addjob(jobs, pid, BG, cmdline); <span class="comment">// add job to jobs(list) in background</span></span><br><span class="line">     		sigprocmask(SIG_SETMASK, &amp;prev, <span class="literal">NULL</span>); <span class="comment">/* Unblock all sig */</span></span><br><span class="line">     		<span class="comment">// get jid by pid</span></span><br><span class="line">     		<span class="built_in">printf</span>(<span class="string">&quot;[%d] (%d) %s&quot;</span>, pid2jid(pid), pid, cmdline);      	</span><br><span class="line">     	&#125;</span><br><span class="line">     	</span><br><span class="line">     	<span class="comment">//foreground: If the job is running in the foreground, wait for it to terminate and then return.</span></span><br><span class="line">     	<span class="keyword">else</span> &#123; </span><br><span class="line">    		flag = <span class="number">0</span>; <span class="comment">//job running in foreground</span></span><br><span class="line">     		addjob(jobs, pid, FG, cmdline);</span><br><span class="line">     		<span class="comment">//Still block until process pid is no longer the foreground process</span></span><br><span class="line">     		waitfg(pid);</span><br><span class="line">     	&#125;</span><br><span class="line">   &#125;</span><br><span class="line">   <span class="keyword">return</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="do-bgfg"><a href="#do-bgfg" class="headerlink" title="do_bgfg()"></a>do_bgfg()</h3><ul>
+<li>主要功能：Execute the builtin bg and fg commands.</li>
+<li>trace09.txt - Process bg builtin command<br>trace10.txt - Process fg builtin command.<br>trace13.txt - Restart every stopped process in process group;<br>trace14.txt - Simple error handling.</li>
+<li>Add job to jobs(list) in bg will builds new jobs, so we can only change the <strong>state</strong> of job<br>bg部分：改state为BG再打印即可；<br>fg部分：改state为FG前，要注意信号的阻塞以及flag的设置，同时，前台的job必须等待终止或停止（waitfg）</li>
+<li>打印错误信息时，注意<code>(job_ptr == NULL)</code>  必须在<code>  (job_ptr-&gt;state == UNDEF)</code>之前</li>
+<li>满足restart，发送<code>SIGCONT</code>即可，注意区分发送至单个进程还是整个工作（进程组）</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">do_bgfg</span><span class="params">(<span class="keyword">char</span> **argv)</span> </span></span><br><span class="line"><span class="function"></span>&#123;	</span><br><span class="line">	<span class="keyword">if</span> (argv[<span class="number">1</span>] == <span class="literal">NULL</span>)&#123;</span><br><span class="line">		<span class="built_in">printf</span>(<span class="string">&quot;%s command requires PID or %%jobid argument\n&quot;</span>, argv[<span class="number">0</span>]);</span><br><span class="line">		<span class="keyword">return</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="comment">//define argument, if argv[1] has value</span></span><br><span class="line">	<span class="class"><span class="keyword">struct</span> <span class="title">job_t</span> *<span class="title">job_ptr</span> =</span> <span class="literal">NULL</span>;</span><br><span class="line">	<span class="keyword">int</span> isjob;</span><br><span class="line">	<span class="keyword">int</span> bg = <span class="number">0</span>;</span><br><span class="line">	<span class="keyword">pid_t</span> jid, pid;</span><br><span class="line"></span><br><span class="line">	<span class="comment">//printf error message</span></span><br><span class="line">	<span class="keyword">if</span> (<span class="built_in">sscanf</span>(argv[<span class="number">1</span>], <span class="string">&quot;%d&quot;</span>, &amp;pid) &gt; <span class="number">0</span>)&#123;</span><br><span class="line">		isjob = <span class="number">0</span>;</span><br><span class="line">		job_ptr = getjobpid(jobs, pid);</span><br><span class="line">		<span class="comment">//printf error if state of job is undefine or tan90°(non-being)</span></span><br><span class="line">		<span class="comment">//Note: (job_ptr == NULL) Before (job_ptr-&gt;state == UNDEF)</span></span><br><span class="line">		<span class="keyword">if</span> ((job_ptr == <span class="literal">NULL</span>) || (job_ptr-&gt;state == UNDEF)) &#123;</span><br><span class="line">			<span class="built_in">printf</span>(<span class="string">&quot;(%d): No such process\n&quot;</span>, pid);</span><br><span class="line">			<span class="keyword">return</span>;</span><br><span class="line">		&#125;	</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">else</span> <span class="keyword">if</span> (<span class="built_in">sscanf</span>(argv[<span class="number">1</span>], <span class="string">&quot;%%%d&quot;</span>, &amp;jid) &gt; <span class="number">0</span>)&#123;</span><br><span class="line">		isjob = <span class="number">1</span>;</span><br><span class="line">		job_ptr = getjobjid(jobs, jid);</span><br><span class="line">		<span class="keyword">if</span> ((job_ptr == <span class="literal">NULL</span>) || (job_ptr-&gt;state == UNDEF)) &#123;</span><br><span class="line">			<span class="built_in">printf</span>(<span class="string">&quot;%%%d: No such job\n&quot;</span>, jid);</span><br><span class="line">			<span class="keyword">return</span>;</span><br><span class="line">		&#125;	</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">else</span> &#123;</span><br><span class="line">		<span class="built_in">printf</span>(<span class="string">&quot;%s: argument must be a PID or %%jobid\n&quot;</span>, argv[<span class="number">0</span>]);</span><br><span class="line">		<span class="keyword">return</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="keyword">if</span>(!<span class="built_in">strcmp</span>(argv[<span class="number">0</span>], <span class="string">&quot;bg&quot;</span>))</span><br><span class="line">		bg = <span class="number">1</span>;</span><br><span class="line">	<span class="comment">// bg command			</span></span><br><span class="line">	<span class="keyword">if</span> (bg)&#123;</span><br><span class="line">		<span class="keyword">if</span>(job_ptr-&gt;state == BG)&#123;</span><br><span class="line">			<span class="built_in">printf</span>(<span class="string">&quot;[%d] (%d) %s&quot;</span>, jid, job_ptr-&gt;pid, job_ptr-&gt;cmdline);	</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="comment">//restart</span></span><br><span class="line">		<span class="keyword">if</span>(job_ptr-&gt;state == ST)&#123;</span><br><span class="line">			<span class="keyword">if</span> (isjob)</span><br><span class="line">				kill(-(job_ptr-&gt;pid), SIGCONT);</span><br><span class="line">			<span class="keyword">else</span></span><br><span class="line">				kill((job_ptr-&gt;pid), SIGCONT);</span><br><span class="line">			job_ptr-&gt;state = BG;</span><br><span class="line">			<span class="built_in">printf</span>(<span class="string">&quot;[%d] (%d) %s&quot;</span>, jid, job_ptr-&gt;pid, job_ptr-&gt;cmdline);</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="comment">//fg command</span></span><br><span class="line">	<span class="keyword">else</span> &#123; </span><br><span class="line">			<span class="comment">//block all sig, after return or terminated in fg</span></span><br><span class="line">			<span class="keyword">sigset_t</span> mask_all;</span><br><span class="line">			sigfillset(&amp;mask_all);</span><br><span class="line">			sigprocmask(SIG_BLOCK, &amp;mask_all, <span class="literal">NULL</span>);</span><br><span class="line">			flag = <span class="number">0</span>; <span class="comment">//job running in foreground</span></span><br><span class="line">    </span><br><span class="line">			<span class="comment">//when &quot;fg %1 &quot;is typed a second time, will sents SIGCONT to restart job/process</span></span><br><span class="line">			<span class="keyword">if</span> (job_ptr -&gt; state == ST)&#123;</span><br><span class="line">				<span class="keyword">if</span> (isjob)</span><br><span class="line">					kill(-(job_ptr-&gt;pid), SIGCONT);</span><br><span class="line">				<span class="keyword">else</span></span><br><span class="line">					kill((job_ptr-&gt;pid), SIGCONT);</span><br><span class="line">			&#125;</span><br><span class="line">			job_ptr-&gt;state = FG;</span><br><span class="line">			waitfg(job_ptr-&gt;pid);</span><br><span class="line">			<span class="keyword">return</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="waitfg"><a href="#waitfg" class="headerlink" title="waitfg()"></a>waitfg()</h3><ul>
+<li>主要功能：Block until process pid is no longer the foreground process</li>
+<li><code>eval()</code>和<code>do_bgfg()</code>的foreground部分需要使用此函数</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">waitfg</span><span class="params">(<span class="keyword">pid_t</span> pid)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="keyword">sigset_t</span> empty;</span><br><span class="line">	sigemptyset(&amp;empty); <span class="comment">//an empty set</span></span><br><span class="line">	<span class="keyword">while</span> (!flag) <span class="comment">//flag == 0 =&gt; job running in foreground =&gt; !flag == 1</span></span><br><span class="line">		sigsuspend(&amp;empty); <span class="comment">//suspend, we must wait job terminated in foreground explicitly </span></span><br><span class="line">	sigprocmask(SIG_SETMASK, &amp;empty, <span class="literal">NULL</span>); <span class="comment">/* Unblock all sig */</span>	</span><br><span class="line">	<span class="keyword">return</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="builtin-cmd"><a href="#builtin-cmd" class="headerlink" title="builtin_cmd()"></a>builtin_cmd()</h3><ul>
+<li>主要功能：判断是不是内嵌指令（builtin_command），是就执行对应指令，否则返回<code>0</code></li>
+<li>trace02.txt - Process builtin quit command.<br>执行quit指令，该指令的作用是退出tsh程序，调用<code>exit(0)</code>即可。该指令是前台任务（trace03.txt - Run a foreground job.）</li>
+<li><code>strcmp()</code><strong>=&gt;</strong> <code>if equal, strcmp() return 0, so !strcmp() return 1</code></li>
+<li>trace05.txt - Process jobs builtin command.<br>执行jobs指令，该指令的作用是罗列所有工作，调用<code>listjobs()</code>即可。</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">builtin_cmd</span><span class="params">(<span class="keyword">char</span> **argv)</span> </span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(!<span class="built_in">strcmp</span>(argv[<span class="number">0</span>], <span class="string">&quot;quit&quot;</span>)) <span class="comment">// if equal, strcmp() return 0, so !strcmp() return 1</span></span><br><span class="line">        <span class="built_in">exit</span>(<span class="number">0</span>);</span><br><span class="line">    <span class="keyword">if</span>(!<span class="built_in">strcmp</span>(argv[<span class="number">0</span>], <span class="string">&quot;jobs&quot;</span>))&#123;</span><br><span class="line">        listjobs(jobs);</span><br><span class="line">        <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span>(!<span class="built_in">strcmp</span>(argv[<span class="number">0</span>], <span class="string">&quot;fg&quot;</span>) || !<span class="built_in">strcmp</span>(argv[<span class="number">0</span>], <span class="string">&quot;bg&quot;</span>))&#123;</span><br><span class="line">        do_bgfg(argv);</span><br><span class="line">        <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span>(!<span class="built_in">strcmp</span>(argv[<span class="number">0</span>], <span class="string">&quot;&amp;&quot;</span>)) <span class="comment">// ignore alone &#x27;&amp;&#x27;</span></span><br><span class="line">        <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;     <span class="comment">/* not a builtin command */</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="sigchld-handler"><a href="#sigchld-handler" class="headerlink" title="sigchld_handler()"></a>sigchld_handler()</h3><ul>
+<li><blockquote>
+<p>When each child terminates, the kernel notifies the parent by sending it a SIGCHLD signal. The parent catches the SIGCHLD, reaps one child, does some additional cleanup work (modeled by the sleep statement), and then returns.</p>
+</blockquote>
+<ul>
+<li>当任意child终止时，kernel（shell）就会发送<code>SIGCHLD</code>给parent，<code>sigchld_handler()</code>就要开始处理，开始回收zombie child</li>
+</ul>
+</li>
+<li><p>以下是教材内容：</p>
+<ul>
+<li><blockquote>
+<p>WNOHANG | WUNTRACED: Return immediately, with a return value of 0, if none of the children in the wait set has stopped or terminated, or with a return value equal to the PID of one of the stopped or terminated children.</p>
+</blockquote>
+</li>
+<li><blockquote>
+<ul>
+<li>WIFEXITED(status). Returns true if the child terminated normally, via a call to exit or a return.</li>
+<li>WIFSIGNALED(status). Returns true if the child process terminated because of a signal that <strong>was not caught</strong>.</li>
+<li>WTERMSIG(status). Returns the number of the signal that caused the child process to terminate. This status is only defined if WIFSIGNALED() returned true.</li>
+<li>WIFSTOPPED(status). Returns true if the child that caused the return is currently stopped.</li>
+<li>WSTOPSIG(status). Returns the number of the signal that caused the child to stop. This status is only defined if WIFSTOPPED() returned true.</li>
+</ul>
+</blockquote>
+</li>
+<li><p><code>WIFSIGNALED(status)</code>的描述出错了，应该是：Returns true if the child process terminated because of a signal that <strong>was caught</strong>.</p>
+</li>
+</ul>
+</li>
+<li><p>调用<code>waitpid()</code>等待child pid，而后回收zombie child（实验要求这里使用<code>if</code>判断），然后根据status打印信息，最后删除（即回收）这个child或者修改child的state为<code>ST</code>。（注意：使用jid来修改是无效，必须用地址）</p>
+</li>
+<li><p><code>if pid == fg_pid, job terminated or stopped in foreground </code><br>因为<code>WNOHANG | WUNTRACED: or with a return value equal to the PID of one of the stopped or terminated children.</code> </p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">sigchld_handler</span><span class="params">(<span class="keyword">int</span> sig)</span> </span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="keyword">int</span> olderrno = errno;</span><br><span class="line">	<span class="keyword">int</span> status;</span><br><span class="line">	<span class="keyword">pid_t</span> pid, fg_pid = fgpid(jobs); <span class="comment">//Note: only one job in fg</span></span><br><span class="line">	</span><br><span class="line">  <span class="keyword">if</span> ((pid = waitpid(<span class="number">-1</span>, &amp;status, WNOHANG | WUNTRACED)) &gt; <span class="number">0</span>) &#123; </span><br><span class="line">			<span class="keyword">if</span>(pid == fg_pid)</span><br><span class="line">				flag = <span class="number">1</span>;</span><br><span class="line">	    <span class="keyword">if</span> (WIFEXITED(status)) <span class="comment">//normally terminated (return/exit)</span></span><br><span class="line">	    	deletejob(jobs, pid);</span><br><span class="line">	    <span class="keyword">else</span> <span class="keyword">if</span> (WIFSIGNALED(status))&#123;  <span class="comment">//child terminated because SIGINT that was caught.</span></span><br><span class="line">				<span class="built_in">printf</span>(<span class="string">&quot;Job [%d] (%d) terminated by signal %d\n&quot;</span>, pid2jid(pid), pid, WTERMSIG(status));</span><br><span class="line">				deletejob(jobs, pid);</span><br><span class="line">	    &#125;</span><br><span class="line">    	<span class="keyword">else</span> <span class="keyword">if</span> (WIFSTOPPED(status))&#123;</span><br><span class="line">   			struct <span class="keyword">job_t</span> *job_ptr = getjobpid(jobs, pid);<span class="comment">//getjobpid() return address of job</span></span><br><span class="line">        job_ptr-&gt;state = ST; <span class="comment">//stopped the job   			</span></span><br><span class="line">			<span class="built_in">printf</span>(<span class="string">&quot;Job [%d] (%d) stopped by signal %d\n&quot;</span>, pid2jid(pid), pid, WSTOPSIG(status));</span><br><span class="line">    	&#125;          </span><br><span class="line"> &#125;</span><br><span class="line">    </span><br><span class="line">    errno = olderrno;</span><br><span class="line">    <span class="keyword">return</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+</ul>
+<h3 id="sigint-handler"><a href="#sigint-handler" class="headerlink" title="sigint_handler()"></a>sigint_handler()</h3><ul>
+<li>处理信号<code>SIGINT</code></li>
+<li><code>kill(pid, SIG)</code>是只发送信号给单个进程，<code>kill(-pgid, SIG)</code>是发送信号给整个进程组</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">sigint_handler</span><span class="params">(<span class="keyword">int</span> sig)</span> </span></span><br><span class="line"><span class="function"></span>&#123;	</span><br><span class="line">	<span class="keyword">int</span> olderrno = errno;</span><br><span class="line">	<span class="comment">//get pid from jobs in &#x27;fg&#x27;</span></span><br><span class="line">	<span class="keyword">pid_t</span> pgid = fgpid(jobs);  <span class="comment">//process ground in fg: fg_pid == pgid == pid != 0</span></span><br><span class="line">  </span><br><span class="line">	<span class="comment">//sent SIGINT to pgid in order to terminate the whole fg ground  </span></span><br><span class="line">	<span class="keyword">if</span> (pgid) &#123;</span><br><span class="line">		kill(-pgid, SIGINT); <span class="comment">//or call killpg(-pgid, SIGINT)</span></span><br><span class="line">	&#125;</span><br><span class="line">  errno = olderrno;</span><br><span class="line">  <span class="keyword">return</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="sigstp-handler"><a href="#sigstp-handler" class="headerlink" title="sigstp_handler()"></a>sigstp_handler()</h3><ul>
+<li>处理信号<code>SIGTSTP</code></li>
+</ul>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">sigtstp_handler</span><span class="params">(<span class="keyword">int</span> sig)</span> </span></span><br><span class="line"><span class="function"></span>&#123;	</span><br><span class="line">	<span class="keyword">int</span> olderrno = errno;</span><br><span class="line">	<span class="keyword">pid_t</span> pgid = fgpid(jobs);  <span class="comment">//process ground in fg: fg_pid == pgid == pid != 0</span></span><br><span class="line">  </span><br><span class="line">	<span class="comment">//sent SIGTSTP to pgid in order to stopped the whole fg ground </span></span><br><span class="line">	<span class="keyword">if</span> (pgid) &#123;</span><br><span class="line">		kill(-pgid, SIGTSTP); </span><br><span class="line">	&#125;</span><br><span class="line">  errno = olderrno;</span><br><span class="line">  <span class="keyword">return</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="Put-all-together"><a href="#Put-all-together" class="headerlink" title="Put all together"></a>Put all together</h2><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br><span class="line">181</span><br><span class="line">182</span><br><span class="line">183</span><br><span class="line">184</span><br><span class="line">185</span><br><span class="line">186</span><br><span class="line">187</span><br><span class="line">188</span><br><span class="line">189</span><br><span class="line">190</span><br><span class="line">191</span><br><span class="line">192</span><br><span class="line">193</span><br><span class="line">194</span><br><span class="line">195</span><br><span class="line">196</span><br><span class="line">197</span><br><span class="line">198</span><br><span class="line">199</span><br><span class="line">200</span><br><span class="line">201</span><br><span class="line">202</span><br><span class="line">203</span><br><span class="line">204</span><br><span class="line">205</span><br><span class="line">206</span><br><span class="line">207</span><br><span class="line">208</span><br><span class="line">209</span><br><span class="line">210</span><br><span class="line">211</span><br><span class="line">212</span><br><span class="line">213</span><br><span class="line">214</span><br><span class="line">215</span><br><span class="line">216</span><br><span class="line">217</span><br><span class="line">218</span><br><span class="line">219</span><br><span class="line">220</span><br><span class="line">221</span><br><span class="line">222</span><br><span class="line">223</span><br><span class="line">224</span><br><span class="line">225</span><br><span class="line">226</span><br><span class="line">227</span><br><span class="line">228</span><br><span class="line">229</span><br><span class="line">230</span><br><span class="line">231</span><br><span class="line">232</span><br><span class="line">233</span><br><span class="line">234</span><br><span class="line">235</span><br><span class="line">236</span><br><span class="line">237</span><br><span class="line">238</span><br><span class="line">239</span><br><span class="line">240</span><br><span class="line">241</span><br><span class="line">242</span><br><span class="line">243</span><br><span class="line">244</span><br><span class="line">245</span><br><span class="line">246</span><br><span class="line">247</span><br><span class="line">248</span><br><span class="line">249</span><br><span class="line">250</span><br><span class="line">251</span><br><span class="line">252</span><br><span class="line">253</span><br><span class="line">254</span><br><span class="line">255</span><br><span class="line">256</span><br><span class="line">257</span><br><span class="line">258</span><br><span class="line">259</span><br><span class="line">260</span><br><span class="line">261</span><br><span class="line">262</span><br><span class="line">263</span><br><span class="line">264</span><br><span class="line">265</span><br><span class="line">266</span><br><span class="line">267</span><br><span class="line">268</span><br><span class="line">269</span><br><span class="line">270</span><br><span class="line">271</span><br><span class="line">272</span><br><span class="line">273</span><br><span class="line">274</span><br><span class="line">275</span><br><span class="line">276</span><br><span class="line">277</span><br><span class="line">278</span><br><span class="line">279</span><br><span class="line">280</span><br><span class="line">281</span><br><span class="line">282</span><br><span class="line">283</span><br><span class="line">284</span><br><span class="line">285</span><br><span class="line">286</span><br><span class="line">287</span><br><span class="line">288</span><br><span class="line">289</span><br><span class="line">290</span><br><span class="line">291</span><br><span class="line">292</span><br><span class="line">293</span><br><span class="line">294</span><br><span class="line">295</span><br><span class="line">296</span><br><span class="line">297</span><br><span class="line">298</span><br><span class="line">299</span><br><span class="line">300</span><br><span class="line">301</span><br><span class="line">302</span><br><span class="line">303</span><br><span class="line">304</span><br><span class="line">305</span><br><span class="line">306</span><br><span class="line">307</span><br><span class="line">308</span><br><span class="line">309</span><br><span class="line">310</span><br><span class="line">311</span><br><span class="line">312</span><br><span class="line">313</span><br><span class="line">314</span><br><span class="line">315</span><br><span class="line">316</span><br><span class="line">317</span><br><span class="line">318</span><br><span class="line">319</span><br><span class="line">320</span><br><span class="line">321</span><br><span class="line">322</span><br><span class="line">323</span><br><span class="line">324</span><br><span class="line">325</span><br><span class="line">326</span><br><span class="line">327</span><br><span class="line">328</span><br><span class="line">329</span><br><span class="line">330</span><br><span class="line">331</span><br><span class="line">332</span><br><span class="line">333</span><br><span class="line">334</span><br><span class="line">335</span><br><span class="line">336</span><br><span class="line">337</span><br><span class="line">338</span><br><span class="line">339</span><br><span class="line">340</span><br><span class="line">341</span><br><span class="line">342</span><br><span class="line">343</span><br><span class="line">344</span><br><span class="line">345</span><br><span class="line">346</span><br><span class="line">347</span><br><span class="line">348</span><br><span class="line">349</span><br><span class="line">350</span><br><span class="line">351</span><br><span class="line">352</span><br><span class="line">353</span><br><span class="line">354</span><br><span class="line">355</span><br><span class="line">356</span><br><span class="line">357</span><br><span class="line">358</span><br><span class="line">359</span><br><span class="line">360</span><br><span class="line">361</span><br><span class="line">362</span><br><span class="line">363</span><br><span class="line">364</span><br><span class="line">365</span><br><span class="line">366</span><br><span class="line">367</span><br><span class="line">368</span><br><span class="line">369</span><br><span class="line">370</span><br><span class="line">371</span><br><span class="line">372</span><br><span class="line">373</span><br><span class="line">374</span><br><span class="line">375</span><br><span class="line">376</span><br><span class="line">377</span><br><span class="line">378</span><br><span class="line">379</span><br><span class="line">380</span><br><span class="line">381</span><br><span class="line">382</span><br><span class="line">383</span><br><span class="line">384</span><br><span class="line">385</span><br><span class="line">386</span><br><span class="line">387</span><br><span class="line">388</span><br><span class="line">389</span><br><span class="line">390</span><br><span class="line">391</span><br><span class="line">392</span><br><span class="line">393</span><br><span class="line">394</span><br><span class="line">395</span><br><span class="line">396</span><br><span class="line">397</span><br><span class="line">398</span><br><span class="line">399</span><br><span class="line">400</span><br><span class="line">401</span><br><span class="line">402</span><br><span class="line">403</span><br><span class="line">404</span><br><span class="line">405</span><br><span class="line">406</span><br><span class="line">407</span><br><span class="line">408</span><br><span class="line">409</span><br><span class="line">410</span><br><span class="line">411</span><br><span class="line">412</span><br><span class="line">413</span><br><span class="line">414</span><br><span class="line">415</span><br><span class="line">416</span><br><span class="line">417</span><br><span class="line">418</span><br><span class="line">419</span><br><span class="line">420</span><br><span class="line">421</span><br><span class="line">422</span><br><span class="line">423</span><br><span class="line">424</span><br><span class="line">425</span><br><span class="line">426</span><br><span class="line">427</span><br><span class="line">428</span><br><span class="line">429</span><br><span class="line">430</span><br><span class="line">431</span><br><span class="line">432</span><br><span class="line">433</span><br><span class="line">434</span><br><span class="line">435</span><br><span class="line">436</span><br><span class="line">437</span><br><span class="line">438</span><br><span class="line">439</span><br><span class="line">440</span><br><span class="line">441</span><br><span class="line">442</span><br><span class="line">443</span><br><span class="line">444</span><br><span class="line">445</span><br><span class="line">446</span><br><span class="line">447</span><br><span class="line">448</span><br><span class="line">449</span><br><span class="line">450</span><br><span class="line">451</span><br><span class="line">452</span><br><span class="line">453</span><br><span class="line">454</span><br><span class="line">455</span><br><span class="line">456</span><br><span class="line">457</span><br><span class="line">458</span><br><span class="line">459</span><br><span class="line">460</span><br><span class="line">461</span><br><span class="line">462</span><br><span class="line">463</span><br><span class="line">464</span><br><span class="line">465</span><br><span class="line">466</span><br><span class="line">467</span><br><span class="line">468</span><br><span class="line">469</span><br><span class="line">470</span><br><span class="line">471</span><br><span class="line">472</span><br><span class="line">473</span><br><span class="line">474</span><br><span class="line">475</span><br><span class="line">476</span><br><span class="line">477</span><br><span class="line">478</span><br><span class="line">479</span><br><span class="line">480</span><br><span class="line">481</span><br><span class="line">482</span><br><span class="line">483</span><br><span class="line">484</span><br><span class="line">485</span><br><span class="line">486</span><br><span class="line">487</span><br><span class="line">488</span><br><span class="line">489</span><br><span class="line">490</span><br><span class="line">491</span><br><span class="line">492</span><br><span class="line">493</span><br><span class="line">494</span><br><span class="line">495</span><br><span class="line">496</span><br><span class="line">497</span><br><span class="line">498</span><br><span class="line">499</span><br><span class="line">500</span><br><span class="line">501</span><br><span class="line">502</span><br><span class="line">503</span><br><span class="line">504</span><br><span class="line">505</span><br><span class="line">506</span><br><span class="line">507</span><br><span class="line">508</span><br><span class="line">509</span><br><span class="line">510</span><br><span class="line">511</span><br><span class="line">512</span><br><span class="line">513</span><br><span class="line">514</span><br><span class="line">515</span><br><span class="line">516</span><br><span class="line">517</span><br><span class="line">518</span><br><span class="line">519</span><br><span class="line">520</span><br><span class="line">521</span><br><span class="line">522</span><br><span class="line">523</span><br><span class="line">524</span><br><span class="line">525</span><br><span class="line">526</span><br><span class="line">527</span><br><span class="line">528</span><br><span class="line">529</span><br><span class="line">530</span><br><span class="line">531</span><br><span class="line">532</span><br><span class="line">533</span><br><span class="line">534</span><br><span class="line">535</span><br><span class="line">536</span><br><span class="line">537</span><br><span class="line">538</span><br><span class="line">539</span><br><span class="line">540</span><br><span class="line">541</span><br><span class="line">542</span><br><span class="line">543</span><br><span class="line">544</span><br><span class="line">545</span><br><span class="line">546</span><br><span class="line">547</span><br><span class="line">548</span><br><span class="line">549</span><br><span class="line">550</span><br><span class="line">551</span><br><span class="line">552</span><br><span class="line">553</span><br><span class="line">554</span><br><span class="line">555</span><br><span class="line">556</span><br><span class="line">557</span><br><span class="line">558</span><br><span class="line">559</span><br><span class="line">560</span><br><span class="line">561</span><br><span class="line">562</span><br><span class="line">563</span><br><span class="line">564</span><br><span class="line">565</span><br><span class="line">566</span><br><span class="line">567</span><br><span class="line">568</span><br><span class="line">569</span><br><span class="line">570</span><br><span class="line">571</span><br><span class="line">572</span><br><span class="line">573</span><br><span class="line">574</span><br><span class="line">575</span><br><span class="line">576</span><br><span class="line">577</span><br><span class="line">578</span><br><span class="line">579</span><br><span class="line">580</span><br><span class="line">581</span><br><span class="line">582</span><br><span class="line">583</span><br><span class="line">584</span><br><span class="line">585</span><br><span class="line">586</span><br><span class="line">587</span><br><span class="line">588</span><br><span class="line">589</span><br><span class="line">590</span><br><span class="line">591</span><br><span class="line">592</span><br><span class="line">593</span><br><span class="line">594</span><br><span class="line">595</span><br><span class="line">596</span><br><span class="line">597</span><br><span class="line">598</span><br><span class="line">599</span><br><span class="line">600</span><br><span class="line">601</span><br><span class="line">602</span><br><span class="line">603</span><br><span class="line">604</span><br><span class="line">605</span><br><span class="line">606</span><br><span class="line">607</span><br><span class="line">608</span><br><span class="line">609</span><br><span class="line">610</span><br><span class="line">611</span><br><span class="line">612</span><br><span class="line">613</span><br><span class="line">614</span><br><span class="line">615</span><br><span class="line">616</span><br><span class="line">617</span><br><span class="line">618</span><br><span class="line">619</span><br><span class="line">620</span><br><span class="line">621</span><br><span class="line">622</span><br><span class="line">623</span><br><span class="line">624</span><br><span class="line">625</span><br><span class="line">626</span><br><span class="line">627</span><br><span class="line">628</span><br><span class="line">629</span><br><span class="line">630</span><br><span class="line">631</span><br><span class="line">632</span><br><span class="line">633</span><br><span class="line">634</span><br><span class="line">635</span><br><span class="line">636</span><br><span class="line">637</span><br><span class="line">638</span><br><span class="line">639</span><br><span class="line">640</span><br><span class="line">641</span><br><span class="line">642</span><br><span class="line">643</span><br><span class="line">644</span><br><span class="line">645</span><br><span class="line">646</span><br><span class="line">647</span><br><span class="line">648</span><br><span class="line">649</span><br><span class="line">650</span><br><span class="line">651</span><br><span class="line">652</span><br><span class="line">653</span><br><span class="line">654</span><br><span class="line">655</span><br><span class="line">656</span><br><span class="line">657</span><br><span class="line">658</span><br><span class="line">659</span><br><span class="line">660</span><br><span class="line">661</span><br><span class="line">662</span><br><span class="line">663</span><br><span class="line">664</span><br><span class="line">665</span><br><span class="line">666</span><br><span class="line">667</span><br><span class="line">668</span><br><span class="line">669</span><br><span class="line">670</span><br><span class="line">671</span><br><span class="line">672</span><br><span class="line">673</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/* </span></span><br><span class="line"><span class="comment"> * tsh - A tiny shell program with job control</span></span><br><span class="line"><span class="comment"> * </span></span><br><span class="line"><span class="comment"> * &lt;duile programme&gt;</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;unistd.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;string.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;ctype.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;signal.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/types.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/wait.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;errno.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="comment">/* Misc manifest constants */</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> MAXLINE    1024   <span class="comment">/* max line size */</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> MAXARGS     128   <span class="comment">/* max args on a command line */</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> MAXJOBS      16   <span class="comment">/* max jobs at any point in time */</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> MAXJID    1&lt;&lt;16   <span class="comment">/* max job ID */</span></span></span><br><span class="line"></span><br><span class="line"><span class="comment">/* Job states */</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> UNDEF 0 <span class="comment">/* undefined */</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> FG 1    <span class="comment">/* running in foreground */</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> BG 2    <span class="comment">/* running in background */</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> ST 3    <span class="comment">/* stopped */</span></span></span><br><span class="line"></span><br><span class="line"><span class="comment">/* </span></span><br><span class="line"><span class="comment"> * Jobs states: FG (foreground), BG (background), ST (stopped)</span></span><br><span class="line"><span class="comment"> * Job state transitions and enabling actions:</span></span><br><span class="line"><span class="comment"> *     FG -&gt; ST  : ctrl-z</span></span><br><span class="line"><span class="comment"> *     ST -&gt; FG  : fg command</span></span><br><span class="line"><span class="comment"> *     ST -&gt; BG  : bg command</span></span><br><span class="line"><span class="comment"> *     BG -&gt; FG  : fg command</span></span><br><span class="line"><span class="comment"> * At most 1 job can be in the FG state.</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"></span><br><span class="line"><span class="comment">/* Global variables */</span></span><br><span class="line"><span class="keyword">extern</span> <span class="keyword">char</span> **environ;      <span class="comment">/* defined in libc */</span></span><br><span class="line"><span class="keyword">char</span> prompt[] = <span class="string">&quot;tsh&gt; &quot;</span>;    <span class="comment">/* command line prompt (DO NOT CHANGE) */</span></span><br><span class="line"><span class="keyword">int</span> verbose = <span class="number">0</span>;            <span class="comment">/* if true, print additional output */</span></span><br><span class="line"><span class="keyword">int</span> nextjid = <span class="number">1</span>;            <span class="comment">/* next job ID to allocate */</span></span><br><span class="line"><span class="keyword">char</span> sbuf[MAXLINE];         <span class="comment">/* for composing sprintf messages */</span></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">job_t</span> &#123;</span>              <span class="comment">/* The job struct */</span></span><br><span class="line">    <span class="keyword">pid_t</span> pid;              <span class="comment">/* job PID */</span></span><br><span class="line">    <span class="keyword">int</span> jid;                <span class="comment">/* job ID [1, 2, ...] */</span></span><br><span class="line">    <span class="keyword">int</span> state;              <span class="comment">/* UNDEF, BG, FG, or ST */</span></span><br><span class="line">    <span class="keyword">char</span> cmdline[MAXLINE];  <span class="comment">/* command line */</span></span><br><span class="line">&#125;;</span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">job_t</span> <span class="title">jobs</span>[<span class="title">MAXJOBS</span>];</span> <span class="comment">/* The job list */</span></span><br><span class="line"><span class="keyword">volatile</span>  <span class="keyword">sig_atomic_t</span> flag; <span class="comment">/* equal 1 =&gt; jobs terminated in fg; equal 0 =&gt; jobs running in fg */</span></span><br><span class="line"><span class="comment">/* End global variables */</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">/* Function prototypes */</span></span><br><span class="line"></span><br><span class="line"><span class="comment">/* Here are the functions that you will implement */</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">eval</span><span class="params">(<span class="keyword">char</span> *cmdline)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">builtin_cmd</span><span class="params">(<span class="keyword">char</span> **argv)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">do_bgfg</span><span class="params">(<span class="keyword">char</span> **argv)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">waitfg</span><span class="params">(<span class="keyword">pid_t</span> pid)</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">sigchld_handler</span><span class="params">(<span class="keyword">int</span> sig)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">sigtstp_handler</span><span class="params">(<span class="keyword">int</span> sig)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">sigint_handler</span><span class="params">(<span class="keyword">int</span> sig)</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">/* Here are helper routines that we&#x27;ve provided for you */</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">parseline</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span> *cmdline, <span class="keyword">char</span> **argv)</span></span>; </span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">sigquit_handler</span><span class="params">(<span class="keyword">int</span> sig)</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">clearjob</span><span class="params">(struct <span class="keyword">job_t</span> *job)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">initjobs</span><span class="params">(struct <span class="keyword">job_t</span> *jobs)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">maxjid</span><span class="params">(struct <span class="keyword">job_t</span> *jobs)</span></span>; </span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">addjob</span><span class="params">(struct <span class="keyword">job_t</span> *jobs, <span class="keyword">pid_t</span> pid, <span class="keyword">int</span> state, <span class="keyword">char</span> *cmdline)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">deletejob</span><span class="params">(struct <span class="keyword">job_t</span> *jobs, <span class="keyword">pid_t</span> pid)</span></span>; </span><br><span class="line"><span class="function"><span class="keyword">pid_t</span> <span class="title">fgpid</span><span class="params">(struct <span class="keyword">job_t</span> *jobs)</span></span>;</span><br><span class="line"><span class="function">struct <span class="keyword">job_t</span> *<span class="title">getjobpid</span><span class="params">(struct <span class="keyword">job_t</span> *jobs, <span class="keyword">pid_t</span> pid)</span></span>;</span><br><span class="line"><span class="function">struct <span class="keyword">job_t</span> *<span class="title">getjobjid</span><span class="params">(struct <span class="keyword">job_t</span> *jobs, <span class="keyword">int</span> jid)</span></span>; </span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">pid2jid</span><span class="params">(<span class="keyword">pid_t</span> pid)</span></span>; </span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">listjobs</span><span class="params">(struct <span class="keyword">job_t</span> *jobs)</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">usage</span><span class="params">(<span class="keyword">void</span>)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">unix_error</span><span class="params">(<span class="keyword">char</span> *msg)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">app_error</span><span class="params">(<span class="keyword">char</span> *msg)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">typedef</span> <span class="keyword">void</span> <span class="title">handler_t</span><span class="params">(<span class="keyword">int</span>)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">handler_t</span> *<span class="title">Signal</span><span class="params">(<span class="keyword">int</span> signum, <span class="keyword">handler_t</span> *handler)</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment"> * main - The shell&#x27;s main routine </span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">int</span> argc, <span class="keyword">char</span> **argv)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">char</span> c;</span><br><span class="line">    <span class="keyword">char</span> cmdline[MAXLINE];</span><br><span class="line">    <span class="keyword">int</span> emit_prompt = <span class="number">1</span>; <span class="comment">/* emit prompt (default) */</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">/* Redirect stderr to stdout (so that driver will get all output</span></span><br><span class="line"><span class="comment">     * on the pipe connected to stdout) */</span></span><br><span class="line">    dup2(<span class="number">1</span>, <span class="number">2</span>);</span><br><span class="line"></span><br><span class="line">    <span class="comment">/* Parse the command line */</span></span><br><span class="line">    <span class="keyword">while</span> ((c = getopt(argc, argv, <span class="string">&quot;hvp&quot;</span>)) != EOF) &#123;</span><br><span class="line">        <span class="keyword">switch</span> (c) &#123;</span><br><span class="line">        <span class="keyword">case</span> <span class="string">&#x27;h&#x27;</span>:             <span class="comment">/* print help message */</span></span><br><span class="line">            usage();</span><br><span class="line">        <span class="keyword">break</span>;</span><br><span class="line">        <span class="keyword">case</span> <span class="string">&#x27;v&#x27;</span>:             <span class="comment">/* emit additional diagnostic info */</span></span><br><span class="line">            verbose = <span class="number">1</span>;</span><br><span class="line">        <span class="keyword">break</span>;</span><br><span class="line">        <span class="keyword">case</span> <span class="string">&#x27;p&#x27;</span>:             <span class="comment">/* don&#x27;t print a prompt */</span></span><br><span class="line">            emit_prompt = <span class="number">0</span>;  <span class="comment">/* handy for automatic testing */</span></span><br><span class="line">        <span class="keyword">break</span>;</span><br><span class="line">        <span class="keyword">default</span>:</span><br><span class="line">            usage();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/* Install the signal handlers */</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">/* These are the ones you will need to implement */</span></span><br><span class="line">    Signal(SIGINT,  sigint_handler);   <span class="comment">/* ctrl-c */</span></span><br><span class="line">    Signal(SIGTSTP, sigtstp_handler);  <span class="comment">/* ctrl-z */</span></span><br><span class="line">    Signal(SIGCHLD, sigchld_handler);  <span class="comment">/* Terminated or stopped child */</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">/* This one provides a clean way to kill the shell */</span></span><br><span class="line">    Signal(SIGQUIT, sigquit_handler); </span><br><span class="line"></span><br><span class="line">    <span class="comment">/* Initialize the job list */</span></span><br><span class="line">    initjobs(jobs);</span><br><span class="line"></span><br><span class="line">    <span class="comment">/* Execute the shell&#x27;s read/eval loop */</span></span><br><span class="line">    <span class="keyword">while</span> (<span class="number">1</span>) &#123;</span><br><span class="line">        <span class="comment">/* Read command line */</span></span><br><span class="line">        <span class="keyword">if</span> (emit_prompt) &#123;</span><br><span class="line">            <span class="built_in">printf</span>(<span class="string">&quot;%s&quot;</span>, prompt);</span><br><span class="line">            fflush(<span class="built_in">stdout</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span> ((fgets(cmdline, MAXLINE, <span class="built_in">stdin</span>) == <span class="literal">NULL</span>) &amp;&amp; ferror(<span class="built_in">stdin</span>))</span><br><span class="line">            app_error(<span class="string">&quot;fgets error&quot;</span>);</span><br><span class="line">        <span class="keyword">if</span> (feof(<span class="built_in">stdin</span>)) &#123; <span class="comment">/* End of file (ctrl-d) */</span></span><br><span class="line">            fflush(<span class="built_in">stdout</span>);</span><br><span class="line">            <span class="built_in">exit</span>(<span class="number">0</span>);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="comment">/* Evaluate the command line */</span></span><br><span class="line">        eval(cmdline);</span><br><span class="line">        fflush(<span class="built_in">stdout</span>);</span><br><span class="line">        fflush(<span class="built_in">stdout</span>);</span><br><span class="line">    &#125; </span><br><span class="line"></span><br><span class="line">    <span class="built_in">exit</span>(<span class="number">0</span>); <span class="comment">/* control never reaches here */</span></span><br><span class="line">&#125;</span><br><span class="line">  </span><br><span class="line"><span class="comment">/* </span></span><br><span class="line"><span class="comment"> * eval - Evaluate the command line that the user has just typed in</span></span><br><span class="line"><span class="comment"> * </span></span><br><span class="line"><span class="comment"> * If the user has requested a built-in command (quit, jobs, bg or fg)</span></span><br><span class="line"><span class="comment"> * then execute it immediately. Otherwise, fork a child process and</span></span><br><span class="line"><span class="comment"> * run the job in the context of the child. If the job is running in</span></span><br><span class="line"><span class="comment"> * the foreground, wait for it to terminate and then return.  Note:</span></span><br><span class="line"><span class="comment"> * each child process must have a unique process group ID so that our</span></span><br><span class="line"><span class="comment"> * background children don&#x27;t receive SIGINT (SIGTSTP) from the kernel</span></span><br><span class="line"><span class="comment"> * when we type ctrl-c (ctrl-z) at the keyboard.  </span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">eval</span><span class="params">(<span class="keyword">char</span> *cmdline)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">char</span> *argv[MAXARGS];</span><br><span class="line">    <span class="keyword">char</span> buf[MAXLINE];</span><br><span class="line">    <span class="keyword">int</span> bg;   </span><br><span class="line">    <span class="keyword">pid_t</span> pid;</span><br><span class="line">	<span class="keyword">sigset_t</span> mask_all, mask_one, prev;</span><br><span class="line">	</span><br><span class="line">	sigfillset(&amp;mask_all); <span class="comment">//fill all sigs to mask</span></span><br><span class="line">	sigemptyset(&amp;mask_one);</span><br><span class="line">	sigaddset(&amp;mask_one, SIGCHLD); <span class="comment">//mask_one has one sig: SIGCHLD</span></span><br><span class="line">	<span class="comment">//initjobs(jobs); already use in main(), recalled will empty new lists of jobs</span></span><br><span class="line"></span><br><span class="line">    <span class="built_in">strcpy</span>(buf, cmdline);</span><br><span class="line">    bg = parseline(buf, argv); <span class="comment">//return true, if it is background </span></span><br><span class="line">    <span class="keyword">if</span>(argv[<span class="number">0</span>] == <span class="literal">NULL</span>) <span class="comment">//if not any cmd</span></span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    <span class="comment">//exeluate buliltin_cmd, if not buliltin_cmd(filepath, ./exe and so on), shell will create a child process and run it</span></span><br><span class="line">    <span class="keyword">if</span>(!builtin_cmd(argv)) &#123; </span><br><span class="line">    	sigprocmask(SIG_BLOCK, &amp;mask_one, &amp;prev); <span class="comment">//block SIGCHLD to avoid race</span></span><br><span class="line">        <span class="keyword">if</span>((pid = fork()) == <span class="number">0</span>)&#123; <span class="comment">//create a child process</span></span><br><span class="line">        	setpgid(<span class="number">0</span>, <span class="number">0</span>); <span class="comment">//or call setpgrp()</span></span><br><span class="line">        	sigprocmask(SIG_SETMASK, &amp;prev, <span class="literal">NULL</span>); <span class="comment">//unblock SIGCHLD</span></span><br><span class="line">            <span class="keyword">if</span>(execve(argv[<span class="number">0</span>], argv, environ) &lt; <span class="number">0</span>) &#123; <span class="comment">//run it and if it can&#x27;t run</span></span><br><span class="line">                <span class="built_in">printf</span>(<span class="string">&quot;%s: Command not found.\n&quot;</span>, argv[<span class="number">0</span>]);</span><br><span class="line">                <span class="built_in">exit</span>(<span class="number">0</span>);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">     	</span><br><span class="line">     	<span class="comment">//before add/delete job, we must block all sigs</span></span><br><span class="line">     	sigprocmask(SIG_BLOCK, &amp;mask_all, <span class="literal">NULL</span>);  <span class="comment">/* Parent: block all sigs */</span>   </span><br><span class="line">     	</span><br><span class="line">     	<span class="comment">//background: </span></span><br><span class="line">    	<span class="keyword">if</span>(bg) &#123;</span><br><span class="line">     		addjob(jobs, pid, BG, cmdline); <span class="comment">// add job to jobs(list) in background</span></span><br><span class="line">     		sigprocmask(SIG_SETMASK, &amp;prev, <span class="literal">NULL</span>); <span class="comment">/* Unblock all sig */</span></span><br><span class="line">     		<span class="comment">// get jid by pid</span></span><br><span class="line">     		<span class="built_in">printf</span>(<span class="string">&quot;[%d] (%d) %s&quot;</span>, pid2jid(pid), pid, cmdline);      	</span><br><span class="line">     	&#125;</span><br><span class="line">     	</span><br><span class="line">     	<span class="comment">//foreground: If the job is running in the foreground, wait for it to terminate and then return.</span></span><br><span class="line">     	<span class="keyword">else</span> &#123; </span><br><span class="line">    		flag = <span class="number">0</span>; <span class="comment">//job running in foreground</span></span><br><span class="line">     		addjob(jobs, pid, FG, cmdline);</span><br><span class="line">     		<span class="comment">//Still block until process pid is no longer the foreground process</span></span><br><span class="line">     		waitfg(pid);</span><br><span class="line">     	&#125;</span><br><span class="line">   &#125;</span><br><span class="line">   <span class="keyword">return</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/* </span></span><br><span class="line"><span class="comment"> * parseline - Parse the command line and build the argv array.</span></span><br><span class="line"><span class="comment"> * </span></span><br><span class="line"><span class="comment"> * Characters enclosed in single quotes are treated as a single</span></span><br><span class="line"><span class="comment"> * argument.  Return true if the user has requested a BG job, false if</span></span><br><span class="line"><span class="comment"> * the user has requested a FG job.  </span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">parseline</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span> *cmdline, <span class="keyword">char</span> **argv)</span> </span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">static</span> <span class="keyword">char</span> <span class="built_in">array</span>[MAXLINE]; <span class="comment">/* holds local copy of command line */</span></span><br><span class="line">    <span class="keyword">char</span> *buf = <span class="built_in">array</span>;          <span class="comment">/* ptr that traverses command line */</span></span><br><span class="line">    <span class="keyword">char</span> *delim;                <span class="comment">/* points to first space delimiter */</span></span><br><span class="line">    <span class="keyword">int</span> argc;                   <span class="comment">/* number of args */</span></span><br><span class="line">    <span class="keyword">int</span> bg;                     <span class="comment">/* background job? */</span></span><br><span class="line"></span><br><span class="line">    <span class="built_in">strcpy</span>(buf, cmdline);</span><br><span class="line">    buf[<span class="built_in">strlen</span>(buf)<span class="number">-1</span>] = <span class="string">&#x27; &#x27;</span>;  <span class="comment">/* replace trailing &#x27;\n&#x27; with space */</span></span><br><span class="line">    <span class="keyword">while</span> (*buf &amp;&amp; (*buf == <span class="string">&#x27; &#x27;</span>)) <span class="comment">/* ignore leading spaces */</span></span><br><span class="line">		buf++;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/* Build the argv list */</span></span><br><span class="line">    argc = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">if</span> (*buf == <span class="string">&#x27;\&#x27;&#x27;</span>) &#123;</span><br><span class="line">		buf++;</span><br><span class="line">		delim = <span class="built_in">strchr</span>(buf, <span class="string">&#x27;\&#x27;&#x27;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span> &#123;</span><br><span class="line">		delim = <span class="built_in">strchr</span>(buf, <span class="string">&#x27; &#x27;</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">while</span> (delim) &#123;</span><br><span class="line">		argv[argc++] = buf;</span><br><span class="line">		*delim = <span class="string">&#x27;\0&#x27;</span>;</span><br><span class="line">		buf = delim + <span class="number">1</span>;</span><br><span class="line">		<span class="keyword">while</span> (*buf &amp;&amp; (*buf == <span class="string">&#x27; &#x27;</span>)) <span class="comment">/* ignore spaces */</span></span><br><span class="line">	       	buf++;</span><br><span class="line"></span><br><span class="line">		<span class="keyword">if</span> (*buf == <span class="string">&#x27;\&#x27;&#x27;</span>) &#123;</span><br><span class="line">	    	buf++;</span><br><span class="line">	    	delim = <span class="built_in">strchr</span>(buf, <span class="string">&#x27;\&#x27;&#x27;</span>);</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">else</span> &#123;</span><br><span class="line">	    	delim = <span class="built_in">strchr</span>(buf, <span class="string">&#x27; &#x27;</span>);</span><br><span class="line">		&#125;</span><br><span class="line">    &#125;</span><br><span class="line">    argv[argc] = <span class="literal">NULL</span>;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">if</span> (argc == <span class="number">0</span>)  <span class="comment">/* ignore blank line */</span></span><br><span class="line">		<span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/* should the job run in the background? */</span></span><br><span class="line">    <span class="keyword">if</span> ((bg = (*argv[argc<span class="number">-1</span>] == <span class="string">&#x27;&amp;&#x27;</span>)) != <span class="number">0</span>) &#123;</span><br><span class="line">		argv[--argc] = <span class="literal">NULL</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> bg;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/* </span></span><br><span class="line"><span class="comment"> * builtin_cmd - If the user has typed a built-in command then execute</span></span><br><span class="line"><span class="comment"> *    it immediately.  </span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">builtin_cmd</span><span class="params">(<span class="keyword">char</span> **argv)</span> </span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(!<span class="built_in">strcmp</span>(argv[<span class="number">0</span>], <span class="string">&quot;quit&quot;</span>)) <span class="comment">// if equal, strcmp() return 0, so !strcmp() return 1</span></span><br><span class="line">        <span class="built_in">exit</span>(<span class="number">0</span>);</span><br><span class="line">    <span class="keyword">if</span>(!<span class="built_in">strcmp</span>(argv[<span class="number">0</span>], <span class="string">&quot;jobs&quot;</span>))&#123;</span><br><span class="line">        listjobs(jobs);</span><br><span class="line">        <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span>(!<span class="built_in">strcmp</span>(argv[<span class="number">0</span>], <span class="string">&quot;fg&quot;</span>) || !<span class="built_in">strcmp</span>(argv[<span class="number">0</span>], <span class="string">&quot;bg&quot;</span>))&#123;</span><br><span class="line">        do_bgfg(argv);</span><br><span class="line">        <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span>(!<span class="built_in">strcmp</span>(argv[<span class="number">0</span>], <span class="string">&quot;&amp;&quot;</span>)) <span class="comment">// ignore alone &#x27;&amp;&#x27;</span></span><br><span class="line">        <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;     <span class="comment">/* not a builtin command */</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/* </span></span><br><span class="line"><span class="comment"> * do_bgfg - Execute the builtin bg and fg commands</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">do_bgfg</span><span class="params">(<span class="keyword">char</span> **argv)</span> </span></span><br><span class="line"><span class="function"></span>&#123;	</span><br><span class="line">	<span class="keyword">if</span> (argv[<span class="number">1</span>] == <span class="literal">NULL</span>)&#123;</span><br><span class="line">		<span class="built_in">printf</span>(<span class="string">&quot;%s command requires PID or %%jobid argument\n&quot;</span>, argv[<span class="number">0</span>]);</span><br><span class="line">		<span class="keyword">return</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="comment">//define argument, if argv[1] has value</span></span><br><span class="line">	<span class="class"><span class="keyword">struct</span> <span class="title">job_t</span> *<span class="title">job_ptr</span> =</span> <span class="literal">NULL</span>;</span><br><span class="line">	<span class="keyword">int</span> isjob;</span><br><span class="line">	<span class="keyword">int</span> bg = <span class="number">0</span>;</span><br><span class="line">	<span class="keyword">pid_t</span> jid, pid;</span><br><span class="line"></span><br><span class="line">	<span class="comment">//printf error message</span></span><br><span class="line">	<span class="keyword">if</span> (<span class="built_in">sscanf</span>(argv[<span class="number">1</span>], <span class="string">&quot;%d&quot;</span>, &amp;pid) &gt; <span class="number">0</span>)&#123;</span><br><span class="line">		isjob = <span class="number">0</span>;</span><br><span class="line">		job_ptr = getjobpid(jobs, pid);</span><br><span class="line">		<span class="comment">//printf error if state of job is undefine or tan90°(non-being)</span></span><br><span class="line">		<span class="comment">//Note: (job_ptr == NULL) Before (job_ptr-&gt;state == UNDEF)</span></span><br><span class="line">		<span class="keyword">if</span> ((job_ptr == <span class="literal">NULL</span>) || (job_ptr-&gt;state == UNDEF)) &#123;</span><br><span class="line">			<span class="built_in">printf</span>(<span class="string">&quot;(%d): No such process\n&quot;</span>, pid);</span><br><span class="line">			<span class="keyword">return</span>;</span><br><span class="line">		&#125;	</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">else</span> <span class="keyword">if</span> (<span class="built_in">sscanf</span>(argv[<span class="number">1</span>], <span class="string">&quot;%%%d&quot;</span>, &amp;jid) &gt; <span class="number">0</span>)&#123;</span><br><span class="line">		isjob = <span class="number">1</span>;</span><br><span class="line">		job_ptr = getjobjid(jobs, jid);</span><br><span class="line">		<span class="keyword">if</span> ((job_ptr == <span class="literal">NULL</span>) || (job_ptr-&gt;state == UNDEF)) &#123;</span><br><span class="line">			<span class="built_in">printf</span>(<span class="string">&quot;%%%d: No such job\n&quot;</span>, jid);</span><br><span class="line">			<span class="keyword">return</span>;</span><br><span class="line">		&#125;	</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">else</span> &#123;</span><br><span class="line">		<span class="built_in">printf</span>(<span class="string">&quot;%s: argument must be a PID or %%jobid\n&quot;</span>, argv[<span class="number">0</span>]);</span><br><span class="line">		<span class="keyword">return</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="keyword">if</span>(!<span class="built_in">strcmp</span>(argv[<span class="number">0</span>], <span class="string">&quot;bg&quot;</span>))</span><br><span class="line">		bg = <span class="number">1</span>;</span><br><span class="line">	<span class="comment">// bg command			</span></span><br><span class="line">	<span class="keyword">if</span> (bg)&#123;</span><br><span class="line">		<span class="keyword">if</span>(job_ptr-&gt;state == BG)&#123;</span><br><span class="line">			<span class="built_in">printf</span>(<span class="string">&quot;[%d] (%d) %s&quot;</span>, jid, job_ptr-&gt;pid, job_ptr-&gt;cmdline);	</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="comment">//restart</span></span><br><span class="line">		<span class="keyword">if</span>(job_ptr-&gt;state == ST)&#123;</span><br><span class="line">			<span class="keyword">if</span> (isjob)</span><br><span class="line">				kill(-(job_ptr-&gt;pid), SIGCONT);</span><br><span class="line">			<span class="keyword">else</span></span><br><span class="line">				kill((job_ptr-&gt;pid), SIGCONT);</span><br><span class="line">			job_ptr-&gt;state = BG;</span><br><span class="line">			<span class="built_in">printf</span>(<span class="string">&quot;[%d] (%d) %s&quot;</span>, jid, job_ptr-&gt;pid, job_ptr-&gt;cmdline);</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="comment">//fg command</span></span><br><span class="line">	<span class="keyword">else</span> &#123; </span><br><span class="line">			<span class="comment">//block all sig, after return or terminated in fg</span></span><br><span class="line">			<span class="keyword">sigset_t</span> mask_all;</span><br><span class="line">			sigfillset(&amp;mask_all);</span><br><span class="line">			sigprocmask(SIG_BLOCK, &amp;mask_all, <span class="literal">NULL</span>);</span><br><span class="line">			flag = <span class="number">0</span>; <span class="comment">//job running in foreground</span></span><br><span class="line">    </span><br><span class="line">			<span class="comment">//when &quot;fg %1 &quot;is typed a second time, will sents SIGCONT to restart job/process</span></span><br><span class="line">			<span class="keyword">if</span> (job_ptr -&gt; state == ST)&#123;</span><br><span class="line">				<span class="keyword">if</span> (isjob)</span><br><span class="line">					kill(-(job_ptr-&gt;pid), SIGCONT);</span><br><span class="line">				<span class="keyword">else</span></span><br><span class="line">					kill((job_ptr-&gt;pid), SIGCONT);</span><br><span class="line">			&#125;</span><br><span class="line">			job_ptr-&gt;state = FG;</span><br><span class="line">			waitfg(job_ptr-&gt;pid);</span><br><span class="line">			<span class="keyword">return</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">/* </span></span><br><span class="line"><span class="comment"> * waitfg - Block until process pid is no longer the foreground process</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">waitfg</span><span class="params">(<span class="keyword">pid_t</span> pid)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="keyword">sigset_t</span> empty;</span><br><span class="line">	sigemptyset(&amp;empty); <span class="comment">//an empty set</span></span><br><span class="line">	<span class="keyword">while</span> (!flag) <span class="comment">//flag == 0 =&gt; job running in foreground =&gt; !flag == 1</span></span><br><span class="line">		sigsuspend(&amp;empty); <span class="comment">//suspend, we must wait job terminated in foreground explicitly </span></span><br><span class="line">	sigprocmask(SIG_SETMASK, &amp;empty, <span class="literal">NULL</span>); <span class="comment">/* Unblock all sig */</span>	</span><br><span class="line">	<span class="keyword">return</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/*****************</span></span><br><span class="line"><span class="comment"> * Signal handlers</span></span><br><span class="line"><span class="comment"> *****************/</span></span><br><span class="line"></span><br><span class="line"><span class="comment">/* </span></span><br><span class="line"><span class="comment"> * sigchld_handler - The kernel sends a SIGCHLD to the shell whenever</span></span><br><span class="line"><span class="comment"> *     a child job terminates (becomes a zombie), or stops because it</span></span><br><span class="line"><span class="comment"> *     received a SIGSTOP or SIGTSTP signal. The handler reaps all</span></span><br><span class="line"><span class="comment"> *     available zombie children, but doesn&#x27;t wait for any other</span></span><br><span class="line"><span class="comment"> *     currently running children to terminate.  </span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">sigchld_handler</span><span class="params">(<span class="keyword">int</span> sig)</span> </span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="keyword">int</span> olderrno = errno;</span><br><span class="line">	<span class="keyword">int</span> status;</span><br><span class="line">	<span class="keyword">pid_t</span> pid, fg_pid = fgpid(jobs); <span class="comment">//Note: only one job in fg</span></span><br><span class="line">	</span><br><span class="line">  	<span class="keyword">if</span> ((pid = waitpid(<span class="number">-1</span>, &amp;status, WNOHANG | WUNTRACED)) &gt; <span class="number">0</span>) &#123; </span><br><span class="line">		<span class="keyword">if</span>(pid == fg_pid)</span><br><span class="line">			flag = <span class="number">1</span>;</span><br><span class="line">	    <span class="keyword">if</span> (WIFEXITED(status)) <span class="comment">//normally terminated (return/exit)</span></span><br><span class="line">	    	deletejob(jobs, pid);</span><br><span class="line">	    <span class="keyword">else</span> <span class="keyword">if</span> (WIFSIGNALED(status))&#123;  <span class="comment">//child terminated because SIGINT that was caught.</span></span><br><span class="line">			<span class="built_in">printf</span>(<span class="string">&quot;Job [%d] (%d) terminated by signal %d\n&quot;</span>, pid2jid(pid), pid, WTERMSIG(status));</span><br><span class="line">			deletejob(jobs, pid);</span><br><span class="line">	    &#125;</span><br><span class="line">    	<span class="keyword">else</span> <span class="keyword">if</span> (WIFSTOPPED(status))&#123;</span><br><span class="line">   			struct <span class="keyword">job_t</span> *job_ptr = getjobpid(jobs, pid);<span class="comment">//getjobpid() return address of job</span></span><br><span class="line">        	job_ptr-&gt;state = ST; <span class="comment">//stopped the job   			</span></span><br><span class="line">			<span class="built_in">printf</span>(<span class="string">&quot;Job [%d] (%d) stopped by signal %d\n&quot;</span>, pid2jid(pid), pid, WSTOPSIG(status));</span><br><span class="line">    	&#125;          </span><br><span class="line"> 	&#125;</span><br><span class="line">    </span><br><span class="line">    errno = olderrno;</span><br><span class="line">    <span class="keyword">return</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">/* </span></span><br><span class="line"><span class="comment"> * sigint_handler - The kernel sends a SIGINT to the shell whenver the</span></span><br><span class="line"><span class="comment"> *    user types ctrl-c at the keyboard.  Catch it and send it along</span></span><br><span class="line"><span class="comment"> *    to the foreground job.  </span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">sigint_handler</span><span class="params">(<span class="keyword">int</span> sig)</span> </span></span><br><span class="line"><span class="function"></span>&#123;	</span><br><span class="line">	<span class="keyword">int</span> olderrno = errno;</span><br><span class="line">	<span class="comment">//get pid from jobs in &#x27;fg&#x27;</span></span><br><span class="line">	<span class="keyword">pid_t</span> pgid = fgpid(jobs);  <span class="comment">//process ground in fg: fg_pid == pgid == pid != 0</span></span><br><span class="line">  </span><br><span class="line">	<span class="comment">//sent SIGINT to pgid in order to terminate the whole fg ground  </span></span><br><span class="line">	<span class="keyword">if</span> (pgid) &#123;</span><br><span class="line">		kill(-pgid, SIGINT); <span class="comment">//or call killpg(-pgid, SIGINT)</span></span><br><span class="line">	&#125;</span><br><span class="line">  errno = olderrno;</span><br><span class="line">  <span class="keyword">return</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment"> * sigtstp_handler - The kernel sends a SIGTSTP to the shell whenever</span></span><br><span class="line"><span class="comment"> *     the user types ctrl-z at the keyboard. Catch it and suspend the</span></span><br><span class="line"><span class="comment"> *     foreground job by sending it a SIGTSTP.  </span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">sigtstp_handler</span><span class="params">(<span class="keyword">int</span> sig)</span> </span></span><br><span class="line"><span class="function"></span>&#123;	</span><br><span class="line">	<span class="keyword">int</span> olderrno = errno;</span><br><span class="line">	<span class="keyword">pid_t</span> pgid = fgpid(jobs);  <span class="comment">//process ground in fg: fg_pid == pgid == pid != 0</span></span><br><span class="line">  </span><br><span class="line">	<span class="comment">//sent SIGTSTP to pgid in order to stopped the whole fg ground </span></span><br><span class="line">	<span class="keyword">if</span> (pgid) &#123;</span><br><span class="line">		kill(-pgid, SIGTSTP); </span><br><span class="line">	&#125;</span><br><span class="line">  errno = olderrno;</span><br><span class="line">  <span class="keyword">return</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/*********************</span></span><br><span class="line"><span class="comment"> * End signal handlers</span></span><br><span class="line"><span class="comment"> *********************/</span></span><br><span class="line"></span><br><span class="line"><span class="comment">/***********************************************</span></span><br><span class="line"><span class="comment"> * Helper routines that manipulate the job list</span></span><br><span class="line"><span class="comment"> **********************************************/</span></span><br><span class="line"></span><br><span class="line"><span class="comment">/* clearjob - Clear the entries in a job struct */</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">clearjob</span><span class="params">(struct <span class="keyword">job_t</span> *job)</span> </span>&#123;</span><br><span class="line">    job-&gt;pid = <span class="number">0</span>;</span><br><span class="line">    job-&gt;jid = <span class="number">0</span>;</span><br><span class="line">    job-&gt;state = UNDEF;</span><br><span class="line">    job-&gt;cmdline[<span class="number">0</span>] = <span class="string">&#x27;\0&#x27;</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/* initjobs - Initialize the job list */</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">initjobs</span><span class="params">(struct <span class="keyword">job_t</span> *jobs)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">int</span> i;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> (i = <span class="number">0</span>; i &lt; MAXJOBS; i++)</span><br><span class="line">	clearjob(&amp;jobs[i]);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/* maxjid - Returns largest allocated job ID */</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">maxjid</span><span class="params">(struct <span class="keyword">job_t</span> *jobs)</span> </span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> i, max=<span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> (i = <span class="number">0</span>; i &lt; MAXJOBS; i++)</span><br><span class="line">	<span class="keyword">if</span> (jobs[i].jid &gt; max)</span><br><span class="line">	    max = jobs[i].jid;</span><br><span class="line">    <span class="keyword">return</span> max;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/* addjob - Add a job to the job list */</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">addjob</span><span class="params">(struct <span class="keyword">job_t</span> *jobs, <span class="keyword">pid_t</span> pid, <span class="keyword">int</span> state, <span class="keyword">char</span> *cmdline)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">int</span> i;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">if</span> (pid &lt; <span class="number">1</span>)</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> (i = <span class="number">0</span>; i &lt; MAXJOBS; i++) &#123;</span><br><span class="line">	<span class="keyword">if</span> (jobs[i].pid == <span class="number">0</span>) &#123;</span><br><span class="line">	    jobs[i].pid = pid;</span><br><span class="line">	    jobs[i].state = state;</span><br><span class="line">	    jobs[i].jid = nextjid++;</span><br><span class="line">	    <span class="keyword">if</span> (nextjid &gt; MAXJOBS)</span><br><span class="line">			nextjid = <span class="number">1</span>;</span><br><span class="line">	    <span class="built_in">strcpy</span>(jobs[i].cmdline, cmdline);</span><br><span class="line">  	    <span class="keyword">if</span>(verbose)&#123;</span><br><span class="line">	        <span class="built_in">printf</span>(<span class="string">&quot;Added job [%d] %d %s\n&quot;</span>, jobs[i].jid, jobs[i].pid, jobs[i].cmdline);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">	&#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;Tried to create too many jobs\n&quot;</span>);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/* deletejob - Delete a job whose PID=pid from the job list */</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">deletejob</span><span class="params">(struct <span class="keyword">job_t</span> *jobs, <span class="keyword">pid_t</span> pid)</span> </span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> i;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (pid &lt; <span class="number">1</span>)</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> (i = <span class="number">0</span>; i &lt; MAXJOBS; i++) &#123;</span><br><span class="line">	<span class="keyword">if</span> (jobs[i].pid == pid) &#123;</span><br><span class="line">	    clearjob(&amp;jobs[i]);</span><br><span class="line">	    nextjid = maxjid(jobs)+<span class="number">1</span>;</span><br><span class="line">	    <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">	&#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/* fgpid - Return PID of current foreground job, 0 if no such job */</span></span><br><span class="line"><span class="function"><span class="keyword">pid_t</span> <span class="title">fgpid</span><span class="params">(struct <span class="keyword">job_t</span> *jobs)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">int</span> i;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> (i = <span class="number">0</span>; i &lt; MAXJOBS; i++)</span><br><span class="line">	<span class="keyword">if</span> (jobs[i].state == FG)</span><br><span class="line">	    <span class="keyword">return</span> jobs[i].pid;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/* getjobpid  - Find a job (by PID) on the job list */</span></span><br><span class="line"><span class="function">struct <span class="keyword">job_t</span> *<span class="title">getjobpid</span><span class="params">(struct <span class="keyword">job_t</span> *jobs, <span class="keyword">pid_t</span> pid)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">int</span> i;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (pid &lt; <span class="number">1</span>)</span><br><span class="line">	<span class="keyword">return</span> <span class="literal">NULL</span>;</span><br><span class="line">    <span class="keyword">for</span> (i = <span class="number">0</span>; i &lt; MAXJOBS; i++)</span><br><span class="line">	<span class="keyword">if</span> (jobs[i].pid == pid)</span><br><span class="line">	    <span class="keyword">return</span> &amp;jobs[i];</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">NULL</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/* getjobjid  - Find a job (by JID) on the job list */</span></span><br><span class="line"><span class="function">struct <span class="keyword">job_t</span> *<span class="title">getjobjid</span><span class="params">(struct <span class="keyword">job_t</span> *jobs, <span class="keyword">int</span> jid)</span> </span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> i;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (jid &lt; <span class="number">1</span>)</span><br><span class="line">	<span class="keyword">return</span> <span class="literal">NULL</span>;</span><br><span class="line">    <span class="keyword">for</span> (i = <span class="number">0</span>; i &lt; MAXJOBS; i++)</span><br><span class="line">	<span class="keyword">if</span> (jobs[i].jid == jid)</span><br><span class="line">	    <span class="keyword">return</span> &amp;jobs[i];</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">NULL</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/* pid2jid - Map process ID to job ID */</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">pid2jid</span><span class="params">(<span class="keyword">pid_t</span> pid)</span> </span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> i;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (pid &lt; <span class="number">1</span>)</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span> (i = <span class="number">0</span>; i &lt; MAXJOBS; i++)</span><br><span class="line">	<span class="keyword">if</span> (jobs[i].pid == pid) &#123;</span><br><span class="line">            <span class="keyword">return</span> jobs[i].jid;</span><br><span class="line">        &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/* listjobs - Print the job list */</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">listjobs</span><span class="params">(struct <span class="keyword">job_t</span> *jobs)</span> </span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> i;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">for</span> (i = <span class="number">0</span>; i &lt; MAXJOBS; i++) &#123;</span><br><span class="line">	<span class="keyword">if</span> (jobs[i].pid != <span class="number">0</span>) &#123;</span><br><span class="line">	    <span class="built_in">printf</span>(<span class="string">&quot;[%d] (%d) &quot;</span>, jobs[i].jid, jobs[i].pid);</span><br><span class="line">	    <span class="keyword">switch</span> (jobs[i].state) &#123;</span><br><span class="line">		<span class="keyword">case</span> BG: </span><br><span class="line">		    <span class="built_in">printf</span>(<span class="string">&quot;Running &quot;</span>);</span><br><span class="line">		    <span class="keyword">break</span>;</span><br><span class="line">		<span class="keyword">case</span> FG: </span><br><span class="line">		    <span class="built_in">printf</span>(<span class="string">&quot;Foreground &quot;</span>);</span><br><span class="line">		    <span class="keyword">break</span>;</span><br><span class="line">		<span class="keyword">case</span> ST: </span><br><span class="line">		    <span class="built_in">printf</span>(<span class="string">&quot;Stopped &quot;</span>);</span><br><span class="line">		    <span class="keyword">break</span>;</span><br><span class="line">	    <span class="keyword">default</span>:</span><br><span class="line">		    <span class="built_in">printf</span>(<span class="string">&quot;listjobs: Internal error: job[%d].state=%d &quot;</span>, </span><br><span class="line">			   i, jobs[i].state);</span><br><span class="line">	    &#125;</span><br><span class="line">	    <span class="built_in">printf</span>(<span class="string">&quot;%s&quot;</span>, jobs[i].cmdline);</span><br><span class="line">	&#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">/******************************</span></span><br><span class="line"><span class="comment"> * end job list helper routines</span></span><br><span class="line"><span class="comment"> ******************************/</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">/***********************</span></span><br><span class="line"><span class="comment"> * Other helper routines</span></span><br><span class="line"><span class="comment"> ***********************/</span></span><br><span class="line"></span><br><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment"> * usage - print a help message</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">usage</span><span class="params">(<span class="keyword">void</span>)</span> </span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;Usage: shell [-hvp]\n&quot;</span>);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;   -h   print this message\n&quot;</span>);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;   -v   print additional diagnostic information\n&quot;</span>);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;   -p   do not emit a command prompt\n&quot;</span>);</span><br><span class="line">    <span class="built_in">exit</span>(<span class="number">1</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment"> * unix_error - unix-style error routine</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">unix_error</span><span class="params">(<span class="keyword">char</span> *msg)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="built_in">fprintf</span>(<span class="built_in">stdout</span>, <span class="string">&quot;%s: %s\n&quot;</span>, msg, strerror(errno));</span><br><span class="line">    <span class="built_in">exit</span>(<span class="number">1</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment"> * app_error - application-style error routine</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">app_error</span><span class="params">(<span class="keyword">char</span> *msg)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="built_in">fprintf</span>(<span class="built_in">stdout</span>, <span class="string">&quot;%s\n&quot;</span>, msg);</span><br><span class="line">    <span class="built_in">exit</span>(<span class="number">1</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment"> * Signal - wrapper for the sigaction function</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="keyword">handler_t</span> *<span class="title">Signal</span><span class="params">(<span class="keyword">int</span> signum, <span class="keyword">handler_t</span> *handler)</span> </span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">sigaction</span> <span class="title">action</span>, <span class="title">old_action</span>;</span></span><br><span class="line"></span><br><span class="line">    action.sa_handler = handler;  </span><br><span class="line">    sigemptyset(&amp;action.sa_mask); <span class="comment">/* block sigs of type being handled */</span></span><br><span class="line">    action.sa_flags = SA_RESTART; <span class="comment">/* restart syscalls if possible */</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (sigaction(signum, &amp;action, &amp;old_action) &lt; <span class="number">0</span>)</span><br><span class="line">	unix_error(<span class="string">&quot;Signal error&quot;</span>);</span><br><span class="line">    <span class="keyword">return</span> (old_action.sa_handler);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment"> * sigquit_handler - The driver program can gracefully terminate the</span></span><br><span class="line"><span class="comment"> *    child shell by sending it a SIGQUIT signal.</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">sigquit_handler</span><span class="params">(<span class="keyword">int</span> sig)</span> </span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;Terminating after receipt of SIGQUIT signal\n&quot;</span>);</span><br><span class="line">    <span class="built_in">exit</span>(<span class="number">1</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="trace15-amp-16"><a href="#trace15-amp-16" class="headerlink" title="trace15 &amp; 16"></a>trace15 &amp; 16</h3><p><img src="https://s2.loli.net/2022/04/22/QAhPWvRwbjGVcqF.png"></p>
+<p><img src="https://s2.loli.net/2022/04/22/lnNPrOUifh7E1xy.png"></p>
+<h2 id="Conclusion"><a href="#Conclusion" class="headerlink" title="Conclusion"></a>Conclusion</h2><ul>
+<li>完成日期：<em>22.1.25</em></li>
+<li>有效时间大概12小时，除了24号是下午晚上都在电脑前，其他时间都是中午，因为晚上要学c++，24号debug完毕，25号把博客写完</li>
+<li>本实验和教材关系极大，所以主要是理解难度大（进程，异常，信号）</li>
+<li>c语言果然是用来和底层交流的最好语言</li>
+<li>要快点学完c++，然后用在算法上！</li>
+<li>《枕边童话》很好听，晚上可以看《开端》结局了！（英文名叫<em>reset</em>，restart？发送<code>SIGCONT</code>?）</li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/c/" rel="tag"># c</a>
+              <a href="/tags/csapp-lab/" rel="tag"># csapp_lab</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2022/02/08/CSAPP/CSAPP-MallocLab/" rel="prev" title="MallocLab">
+      <i class="fa fa-chevron-left"></i> MallocLab
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2022/02/22/Leetcode/Leetcode/" rel="next" title="Leetcode">
+      Leetcode <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+    <div class="comments" id="valine-comments"></div>
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#TshLab"><span class="nav-number">1.</span> <span class="nav-text">TshLab</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Preknowledge"><span class="nav-number">1.1.</span> <span class="nav-text">Preknowledge</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Functions"><span class="nav-number">1.2.</span> <span class="nav-text">Functions</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Attention"><span class="nav-number">1.2.1.</span> <span class="nav-text">Attention</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#eval"><span class="nav-number">1.2.2.</span> <span class="nav-text">eval()</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#do-bgfg"><span class="nav-number">1.2.3.</span> <span class="nav-text">do_bgfg()</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#waitfg"><span class="nav-number">1.2.4.</span> <span class="nav-text">waitfg()</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#builtin-cmd"><span class="nav-number">1.2.5.</span> <span class="nav-text">builtin_cmd()</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#sigchld-handler"><span class="nav-number">1.2.6.</span> <span class="nav-text">sigchld_handler()</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#sigint-handler"><span class="nav-number">1.2.7.</span> <span class="nav-text">sigint_handler()</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#sigstp-handler"><span class="nav-number">1.2.8.</span> <span class="nav-text">sigstp_handler()</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Put-all-together"><span class="nav-number">1.3.</span> <span class="nav-text">Put all together</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#trace15-amp-16"><span class="nav-number">1.3.1.</span> <span class="nav-text">trace15 &amp; 16</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Conclusion"><span class="nav-number">1.4.</span> <span class="nav-text">Conclusion</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Huang Jinhong</p>
+  <div class="site-description" itemprop="description">“我们来到这世上是为的是看太阳”</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">21</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">7</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/duilec" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;duilec" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://www.cnblogs.com/duile" title="博客园 → https:&#x2F;&#x2F;www.cnblogs.com&#x2F;duile" rel="noopener" target="_blank"><i class="fab fa-cnblog fa-fw"></i>博客园</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Huang Jinhong</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> 强力驱动
+  </div>
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+<script>
+  (function() {
+    function leancloudSelector(url) {
+      url = encodeURI(url);
+      return document.getElementById(url).querySelector('.leancloud-visitors-count');
+    }
+
+    function addCount(Counter) {
+      var visitors = document.querySelector('.leancloud_visitors');
+      var url = decodeURI(visitors.id);
+      var title = visitors.dataset.flagTitle;
+
+      Counter('get', '/classes/Counter?where=' + encodeURIComponent(JSON.stringify({ url })))
+        .then(response => response.json())
+        .then(({ results }) => {
+          if (results.length > 0) {
+            var counter = results[0];
+            leancloudSelector(url).innerText = counter.time + 1;
+            Counter('put', '/classes/Counter/' + counter.objectId, { time: { '__op': 'Increment', 'amount': 1 } })
+              .catch(error => {
+                console.error('Failed to save visitor count', error);
+              });
+          } else {
+              leancloudSelector(url).innerText = 'Counter not initialized! More info at console err msg.';
+              console.error('ATTENTION! LeanCloud counter has security bug, see how to solve it here: https://github.com/theme-next/hexo-leancloud-counter-security. \n However, you can still use LeanCloud without security, by setting `security` option to `false`.');
+            
+          }
+        })
+        .catch(error => {
+          console.error('LeanCloud Counter Error', error);
+        });
+    }
+
+    function showTime(Counter) {
+      var visitors = document.querySelectorAll('.leancloud_visitors');
+      var entries = [...visitors].map(element => {
+        return decodeURI(element.id);
+      });
+
+      Counter('get', '/classes/Counter?where=' + encodeURIComponent(JSON.stringify({ url: { '$in': entries } })))
+        .then(response => response.json())
+        .then(({ results }) => {
+          for (let url of entries) {
+            let target = results.find(item => item.url === url);
+            leancloudSelector(url).innerText = target ? target.time : 0;
+          }
+        })
+        .catch(error => {
+          console.error('LeanCloud Counter Error', error);
+        });
+    }
+
+    let { app_id, app_key, server_url } = {"enable":true,"app_id":"fflLscOo9DyB8Fx8ubGOzkl5-MdYXbMMI","app_key":"RrGHmVsgcizeqfrfsKcX4Sko","server_url":null,"security":true};
+    function fetchData(api_server) {
+      var Counter = (method, url, data) => {
+        return fetch(`${api_server}/1.1${url}`, {
+          method,
+          headers: {
+            'X-LC-Id'     : app_id,
+            'X-LC-Key'    : app_key,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(data)
+        });
+      };
+      if (CONFIG.page.isPost) {
+        if (CONFIG.hostname !== location.hostname) return;
+        addCount(Counter);
+      } else if (document.querySelectorAll('.post-title-link').length >= 1) {
+        showTime(Counter);
+      }
+    }
+
+    let api_server = app_id.slice(-9) !== '-MdYXbMMI' ? server_url : `https://${app_id.slice(0, 8).toLowerCase()}.api.lncldglobal.com`;
+
+    if (api_server) {
+      fetchData(api_server);
+    } else {
+      fetch('https://app-router.leancloud.cn/2/route?appId=' + app_id)
+        .then(response => response.json())
+        .then(({ api_server }) => {
+          fetchData('https://' + api_server);
+        });
+    }
+  })();
+</script>
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+
+<script>
+NexT.utils.loadComments(document.querySelector('#valine-comments'), () => {
+  NexT.utils.getScript('//unpkg.com/valine/dist/Valine.min.js', () => {
+    var GUEST = ['nick', 'mail', 'link'];
+    var guest = 'nick,mail,link';
+    guest = guest.split(',').filter(item => {
+      return GUEST.includes(item);
+    });
+    new Valine({
+      el         : '#valine-comments',
+      verify     : false,
+      notify     : false,
+      appId      : 'fflLscOo9DyB8Fx8ubGOzkl5-MdYXbMMI',
+      appKey     : 'RrGHmVsgcizeqfrfsKcX4Sko',
+      placeholder: "发表评论",
+      avatar     : 'mm',
+      meta       : guest,
+      pageSize   : '10' || 10,
+      visitor    : false,
+      lang       : '' || 'zh-cn',
+      path       : location.pathname,
+      recordIP   : false,
+      serverURLs : ''
+    });
+  }, window.Valine);
+});
+</script>
+
+</body>
+</html>

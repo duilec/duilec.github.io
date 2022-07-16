@@ -1,0 +1,747 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"example.com","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="开始日期：22.2.24 操作系统：Ubuntu20.0.4 Link：Lab Utilities">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Lab Utilities">
+<meta property="og:url" content="http://example.com/2022/03/08/MIT6.S081-Lab/MIT6.S081-Lab%20Utilities%20%20(copy)/index.html">
+<meta property="og:site_name" content="Memory Dot">
+<meta property="og:description" content="开始日期：22.2.24 操作系统：Ubuntu20.0.4 Link：Lab Utilities">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://s2.loli.net/2022/04/22/sN5JbYDy16PfQpZ.png">
+<meta property="og:image" content="https://s2.loli.net/2022/04/22/oQtnyiACRdIsFMx.png">
+<meta property="article:published_time" content="2022-03-08T02:53:43.000Z">
+<meta property="article:modified_time" content="2022-04-22T06:16:22.936Z">
+<meta property="article:author" content="Huang Jinhong">
+<meta property="article:tag" content="c">
+<meta property="article:tag" content="OS">
+<meta property="article:tag" content="xv6">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://s2.loli.net/2022/04/22/sN5JbYDy16PfQpZ.png">
+
+<link rel="canonical" href="http://example.com/2022/03/08/MIT6.S081-Lab/MIT6.S081-Lab%20Utilities%20%20(copy)/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>Lab Utilities | Memory Dot</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Memory Dot</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/03/08/MIT6.S081-Lab/MIT6.S081-Lab%20Utilities%20%20(copy)/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Huang Jinhong">
+      <meta itemprop="description" content="“我们来到这世上是为的是看太阳”">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Memory Dot">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Lab Utilities
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2022-03-08 10:53:43" itemprop="dateCreated datePublished" datetime="2022-03-08T10:53:43+08:00">2022-03-08</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2022-04-22 14:16:22" itemprop="dateModified" datetime="2022-04-22T14:16:22+08:00">2022-04-22</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/MIT6-S081-Lab/" itemprop="url" rel="index"><span itemprop="name">MIT6.S081-Lab</span></a>
+                </span>
+            </span>
+
+          
+            <span id="/2022/03/08/MIT6.S081-Lab/MIT6.S081-Lab%20Utilities%20%20(copy)/" class="post-meta-item leancloud_visitors" data-flag-title="Lab Utilities" title="阅读次数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span class="leancloud-visitors-count"></span>
+            </span>
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine：</span>
+    
+    <a title="valine" href="/2022/03/08/MIT6.S081-Lab/MIT6.S081-Lab%20Utilities%20%20(copy)/#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/2022/03/08/MIT6.S081-Lab/MIT6.S081-Lab%20Utilities%20%20(copy)/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>开始日期：<em>22.2.24</em></p>
+<p>操作系统：<strong>Ubuntu20.0.4</strong></p>
+<p>Link：<a target="_blank" rel="noopener" href="https://pdos.csail.mit.edu/6.S081/2021/labs/util.html">Lab Utilities</a></p>
+<span id="more"></span> 
+
+<h1 id="Lab-Utilities"><a href="#Lab-Utilities" class="headerlink" title="Lab Utilities"></a>Lab Utilities</h1><h2 id="环境配置"><a href="#环境配置" class="headerlink" title="环境配置"></a>环境配置</h2><p>每次的环境配置都是一段折磨又快乐的时光，这个实验的环境配置主要参考<a target="_blank" rel="noopener" href="https://tarplkpqsm.feishu.cn/docs/doccnxrUYjtjuoNnAyxwajplSyf">搭建MIT6.S081的实验环境</a><br>没有很复杂，再参考一下<a target="_blank" rel="noopener" href="https://pdos.csail.mit.edu/6.S081/2021/tools.html">官网</a>对Ubuntu的描述即可。</p>
+<h2 id="实验内容"><a href="#实验内容" class="headerlink" title="实验内容"></a>实验内容</h2><h3 id="在实验之前"><a href="#在实验之前" class="headerlink" title="在实验之前"></a>在实验之前</h3><ul>
+<li>可以参考<a target="_blank" rel="noopener" href="http://xv6.dgs.zone/labs/requirements/summary.html">实验内容翻译</a>来阅读</li>
+<li>需要阅读参考书的<a target="_blank" rel="noopener" href="https://pdos.csail.mit.edu/6.S081/2021/xv6/book-riscv-rev2.pdf">Chapter 1 </a></li>
+<li>该课程在学完<a target="_blank" rel="noopener" href="http://csapp.cs.cmu.edu/3e/labs.html">CS:APP3e</a>之后来，会比较流畅，许多前置知识已经了解了</li>
+<li>可能需要事先了解的<strong>UINX（系统）函数</strong><ul>
+<li>fork()</li>
+<li>wait()</li>
+<li><a target="_blank" rel="noopener" href="http://c.biancheng.net/linux/xargs.html">xargs()</a></li>
+</ul>
+</li>
+</ul>
+<h3 id="lab-Boot-xv6-easy"><a href="#lab-Boot-xv6-easy" class="headerlink" title="lab Boot xv6 (easy)"></a>lab Boot xv6 (<a target="_blank" rel="noopener" href="https://pdos.csail.mit.edu/6.S081/2021/labs/guidance.html">easy</a>)</h3><ul>
+<li><p>参照着启动xv6就可以了，实验环境搭建完之后没啥难度</p>
+</li>
+<li><p>注意clone下来的<code>xv6-labs-2021</code>文件夹存放在<strong>用户文件夹</strong>当中，一般就在桌面的左上角</p>
+</li>
+<li><blockquote>
+<p>To quit qemu type: Ctrl-a x.</p>
+</blockquote>
+<ul>
+<li>关闭qemu的方式是：先同时按ctrl+a，然后按x </li>
+</ul>
+</li>
+</ul>
+<h3 id="sleep-easy"><a href="#sleep-easy" class="headerlink" title="sleep (easy)"></a>sleep (<a target="_blank" rel="noopener" href="https://pdos.csail.mit.edu/6.S081/2021/labs/guidance.html">easy</a>)</h3><ul>
+<li><p>功能：使shell睡眠</p>
+</li>
+<li><p>对照<em>hints</em>来写即可，但可能一开始不熟悉这种方式，写起来有点迷惑是很正常的，慢慢搞，搞得下来的</p>
+</li>
+<li><p>本题很简单，调用系统函数<code>sleep()</code>即可，但要注意：</p>
+<ul>
+<li>传入的指针数组<code>*argv[]</code>存储的是<code>char</code>类型，需要用 <code>atoi()</code>把<code>char</code>转换为<code>int</code></li>
+</ul>
+</li>
+<li><p>参考代码：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&quot;kernel/types.h&quot;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&quot;kernel/stat.h&quot;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&quot;user/user.h&quot;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">int</span> agrc, <span class="keyword">char</span>* agrv[])</span></span>&#123;</span><br><span class="line">	<span class="comment">/* argc is the number of command, argv[] store the context of parameters */</span></span><br><span class="line">	<span class="keyword">if</span>(agrc == <span class="number">1</span>)&#123;</span><br><span class="line">		<span class="built_in">printf</span>(<span class="string">&quot;Please enter parameter of int&quot;</span>);</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">else</span> &#123;</span><br><span class="line">		<span class="keyword">int</span> time = atoi(agrv[<span class="number">1</span>]);</span><br><span class="line">		sleep(time);</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="built_in">exit</span>(<span class="number">0</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+</ul>
+<h3 id="pingpong-easy"><a href="#pingpong-easy" class="headerlink" title="pingpong (easy)"></a>pingpong (<a target="_blank" rel="noopener" href="https://pdos.csail.mit.edu/6.S081/2021/labs/guidance.html">easy</a>)</h3><ul>
+<li><p>功能：父子程序通过管道传递信息</p>
+</li>
+<li><p>这里开始涉及到<strong>pipe</strong>（管道）的知识了，笔者一开始也是比较迷糊，但实际上理解之后就容易了</p>
+<ul>
+<li><p>调用<code>pipe()</code>函数即可建立管道，但注意要提前定义一个存放两个int元素的数组<br>  用来存放fd(file descriptor， 文件描述符)</p>
+</li>
+<li><p>这个管道是以<strong>半双工</strong>的方式进行交流的，以防止出意外，也就是说，在使用管道读之前，得关闭写端；在使用管道写之前，得关闭读端。</p>
+<blockquote>
+<p>The fact that read blocks until it is impossible for new data to arrive is one reason that it’s important for the child to close the write end of the pipe before executing wc above: if one of wc ’s file descriptors referred to the write end of the pipe, wc would never see end-of-file.<br><em>BOOK-RISCV-REV2 Chapter 1</em></p>
+</blockquote>
+<ul>
+<li><p>这里建立了两个通道，一个是child的，一个是parent的</p>
+<ul>
+<li>对于child，读写之前需要关闭父管道的写端，子管道的读端</li>
+<li>对于parent，读写之前需要关闭父管道的读端，子管道的写端</li>
+</ul>
+</li>
+<li><p>灵魂图示<br><img src="https://s2.loli.net/2022/04/22/sN5JbYDy16PfQpZ.png"></p>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>参考代码</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/* Half-duplex Communication */</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&quot;kernel/types.h&quot;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&quot;kernel/stat.h&quot;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&quot;user/user.h&quot;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">int</span> argc, <span class="keyword">char</span>* argv[])</span></span>&#123;</span><br><span class="line">	</span><br><span class="line">	<span class="keyword">int</span> child_pfd[<span class="number">2</span>];</span><br><span class="line">	<span class="keyword">int</span> parent_pfd[<span class="number">2</span>];</span><br><span class="line">	<span class="keyword">char</span> buf[<span class="number">4</span>]; <span class="comment">/* &quot;ping&quot;or&quot;pong&quot; have 4 char */</span></span><br><span class="line">	</span><br><span class="line">	pipe(child_pfd);</span><br><span class="line">	pipe(parent_pfd);</span><br><span class="line">	</span><br><span class="line">	<span class="comment">/* child */</span></span><br><span class="line">	<span class="keyword">if</span>(fork() == <span class="number">0</span>)&#123;</span><br><span class="line">		<span class="keyword">int</span> child_pid = getpid();</span><br><span class="line">		</span><br><span class="line">		<span class="comment">/* close write of parent and read of child */</span></span><br><span class="line">		close(parent_pfd[<span class="number">1</span>]);</span><br><span class="line">		close(child_pfd[<span class="number">0</span>]);</span><br><span class="line">		</span><br><span class="line">		<span class="comment">/*2: received &quot;ping&quot; then child print */</span></span><br><span class="line">		read(parent_pfd[<span class="number">0</span>], buf, <span class="keyword">sizeof</span>(buf));</span><br><span class="line">		<span class="built_in">printf</span>(<span class="string">&quot;%d: received %s\n&quot;</span>, child_pid, buf);</span><br><span class="line">		</span><br><span class="line">		<span class="comment">/*3: write 4 bytes to parent */</span></span><br><span class="line">		write(child_pfd[<span class="number">1</span>], <span class="string">&quot;pong&quot;</span>, <span class="keyword">sizeof</span>(buf));</span><br><span class="line">		</span><br><span class="line">		<span class="built_in">exit</span>(<span class="number">0</span>);</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="comment">/* parent */</span></span><br><span class="line">	<span class="keyword">else</span>&#123;</span><br><span class="line">		<span class="keyword">int</span> parent_pid = getpid();</span><br><span class="line">		</span><br><span class="line">		<span class="comment">/* close read of parent and write of child */</span></span><br><span class="line">		close(parent_pfd[<span class="number">0</span>]);</span><br><span class="line">		close(child_pfd[<span class="number">1</span>]);</span><br><span class="line">		</span><br><span class="line">		<span class="comment">/*1: sent 4 bytes to child */</span></span><br><span class="line">		write(parent_pfd[<span class="number">1</span>], <span class="string">&quot;ping&quot;</span>, <span class="keyword">sizeof</span>(buf));</span><br><span class="line">		</span><br><span class="line">		<span class="comment">/*4: received &quot;pong&quot; then parent print */</span></span><br><span class="line">		read(child_pfd[<span class="number">0</span>], buf, <span class="keyword">sizeof</span>(buf));</span><br><span class="line">		<span class="built_in">printf</span>(<span class="string">&quot;%d: received %s\n&quot;</span>, parent_pid, buf);</span><br><span class="line">		</span><br><span class="line">		wait(<span class="number">0</span>);</span><br><span class="line">		<span class="built_in">exit</span>(<span class="number">0</span>);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+</ul>
+<h3 id="primes-moderate-hard"><a href="#primes-moderate-hard" class="headerlink" title="primes (moderate)/(hard)"></a>primes (<a target="_blank" rel="noopener" href="https://pdos.csail.mit.edu/6.S081/2021/labs/guidance.html">moderate</a>)/(<a target="_blank" rel="noopener" href="https://pdos.csail.mit.edu/6.S081/2021/labs/guidance.html">hard</a>)</h3><ul>
+<li><p>给一个<code>2 ~ 35</code>的数组，输出其中的所有素数（限制：必须使用通道）</p>
+</li>
+<li><p>这道题使用迭代，难度比较大</p>
+<ul>
+<li>在子程序，孙程序，曾孙程序…中迭代，不断地<em>filter</em>（过滤），每次过滤的结果可能是素数，也可能不是，但到最后一次的结果一定是素数。</li>
+<li>每次的<code>numbers</code>（结果）会传递给子程序用来继续过滤，但每次我们只打印一个<code>prime</code></li>
+<li>注意每次完成读操作之后，要关闭读端</li>
+</ul>
+</li>
+<li><p>参考代码</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&quot;kernel/types.h&quot;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&quot;kernel/stat.h&quot;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&quot;user/user.h&quot;</span></span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> LIMIT 35</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> INT_SIZE 4</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> READ 0</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> WRITE 1</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> NUMBERLIMIT 34  <span class="comment">/* real limit of number is (35 - 2 + 1) = 34 */</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> UNPRIME 0       <span class="comment">/* 0 is not prime */</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">print_and_filter_primes</span><span class="params">(<span class="keyword">int</span>* fd)</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">	<span class="keyword">int</span> first_fd[<span class="number">2</span>];</span><br><span class="line">	<span class="keyword">int</span> numbers[NUMBERLIMIT];</span><br><span class="line">	</span><br><span class="line">    <span class="comment">/* build first_fd*/</span></span><br><span class="line">	pipe(first_fd);</span><br><span class="line">	</span><br><span class="line">	<span class="comment">/* first child */</span></span><br><span class="line">	<span class="keyword">if</span> (fork() == <span class="number">0</span>)</span><br><span class="line">        print_and_filter_primes(first_fd);</span><br><span class="line">	</span><br><span class="line">	</span><br><span class="line">	<span class="comment">/* first parent */</span></span><br><span class="line">	<span class="keyword">else</span>&#123;</span><br><span class="line">        close(first_fd[READ]);</span><br><span class="line">  		<span class="comment">/* feed numbers */</span></span><br><span class="line">    	<span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">2</span>; i &lt;= LIMIT; ++i)</span><br><span class="line">       		numbers[i - <span class="number">2</span>] = i;	     </span><br><span class="line">        write(first_fd[WRITE], &amp;numbers, (NUMBERLIMIT) * INT_SIZE);</span><br><span class="line">        close(first_fd[WRITE]);</span><br><span class="line"></span><br><span class="line">        wait(<span class="number">0</span>);</span><br><span class="line">        <span class="built_in">exit</span>(<span class="number">0</span>);</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">print_and_filter_primes</span><span class="params">(<span class="keyword">int</span>* fd)</span></span>&#123;</span><br><span class="line">    close(fd[WRITE]);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">int</span> prime = UNPRIME;</span><br><span class="line">    <span class="keyword">int</span> numbers[LIMIT];</span><br><span class="line">    <span class="keyword">int</span> next_fd[<span class="number">2</span>];</span><br><span class="line">    <span class="keyword">int</span> temp;</span><br><span class="line">    <span class="keyword">int</span> count = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">    read(fd[READ], (<span class="keyword">int</span> *)&amp;prime, INT_SIZE);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (prime == UNPRIME)</span><br><span class="line">        <span class="built_in">exit</span>(<span class="number">0</span>);</span><br><span class="line">        </span><br><span class="line">    <span class="comment">/* the first number =&gt; 2 =&gt; is_prime */</span></span><br><span class="line">    <span class="comment">/* each time only print a prime */</span></span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;prime %d\n&quot;</span>, prime);</span><br><span class="line"></span><br><span class="line">    <span class="comment">/* filter numbers as next input */</span></span><br><span class="line">    <span class="comment">/* the next numbers may prime or un_prime */</span></span><br><span class="line">    <span class="comment">/* but the last number is prime */</span></span><br><span class="line">    <span class="keyword">while</span> (read(fd[READ], &amp;temp, INT_SIZE) &gt; <span class="number">0</span>)</span><br><span class="line">        <span class="keyword">if</span> (temp % prime != <span class="number">0</span>) </span><br><span class="line">            numbers[count++] = temp;</span><br><span class="line">  </span><br><span class="line">    <span class="comment">/* aviod fd overflow*/</span></span><br><span class="line">    close(fd[READ]);</span><br><span class="line">	</span><br><span class="line">    <span class="comment">/* build next_fd*/</span></span><br><span class="line">	pipe(next_fd);	</span><br><span class="line">	</span><br><span class="line">    <span class="comment">/* next child */</span></span><br><span class="line">	<span class="keyword">if</span> (fork() == <span class="number">0</span>)&#123;</span><br><span class="line">        print_and_filter_primes(fd);</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/* next parent */</span></span><br><span class="line">    <span class="keyword">else</span>&#123;</span><br><span class="line">        close(next_fd[READ]);</span><br><span class="line">        write(next_fd[WRITE], &amp;numbers, count * INT_SIZE);</span><br><span class="line">        close(next_fd[WRITE]);</span><br><span class="line"></span><br><span class="line">        wait(<span class="number">0</span>);</span><br><span class="line">        <span class="built_in">exit</span>(<span class="number">0</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+</ul>
+<h3 id="find-moderate"><a href="#find-moderate" class="headerlink" title="find (moderate)"></a>find (<a target="_blank" rel="noopener" href="https://pdos.csail.mit.edu/6.S081/2021/labs/guidance.html">moderate</a>)</h3><ul>
+<li><p>功能：从根目录（<code>.</code>）中找出所有目标文件（<code>name</code>）</p>
+</li>
+<li><p>这道题的难度主要在于对<code>ls.c</code>的理解，要比较透彻才行</p>
+</li>
+<li><p>修改的基本都在switch</p>
+<ul>
+<li><p>对于<code>file</code>，我们需要调用函数<code>compare()</code>后将结果路径打印出来</p>
+<ul>
+<li>之所以要额外写个函数，是因为要一次性满足递归（recursion）下降，以便最后时一次性递归上升（可以理解为：在stack中一次性全部pop，之后一次性全部push，而不是一下pop，一下push）</li>
+<li><code>compare()</code>还需要辅助函数<code>get_path_lastname()</code>找出最后的名字来对比，该函数的主要思路是从最后一个char开始找到第一个<em>slash(‘/‘)</em><ul>
+<li>eg <code>./a/c/b</code> 中，<code>b</code>是最后一个char，**从左数第三个<code>/</code>*<em>是对于b的第一个</em>slash(‘/‘)*</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>对于<code>directory</code>，我们需要递归<code>find</code>继续进入，同时解决两个问题</p>
+<ul>
+<li>第一，组装新的路径，主要用到了追加函数<code>memmove()</code>和指针<code>p</code>，注意：路径本身是字符串，c风格的字符串最后一个字符是<code>&#39;\0&#39;</code>；标准库函数<code>strlen(s)</code>可以返回字符串参数<code>s</code>的长度，但长度不包括末尾的<code>&#39;\0&#39;</code>。</li>
+<li>第二，防止死循环，<strong>不进入当前目录<code>.</code>和父目录<code>..</code><strong>；节约时间，</strong>不进入空文件</strong><code>de.inum == 0</code></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>参考代码</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&quot;kernel/types.h&quot;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&quot;kernel/stat.h&quot;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&quot;user/user.h&quot;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&quot;kernel/fs.h&quot;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">find</span><span class="params">(<span class="keyword">char</span> *path, <span class="keyword">char</span> *name)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">char</span>* <span class="title">get_path_lastname</span><span class="params">(<span class="keyword">char</span> *path)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">compare</span><span class="params">(<span class="keyword">char</span> *path_lastname, <span class="keyword">char</span> *name)</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">int</span> argc, <span class="keyword">char</span> *argv[])</span> </span>&#123;</span><br><span class="line"><span class="comment">/*  // Input Error! </span></span><br><span class="line"><span class="comment">    if (argc &lt; 3)&#123;</span></span><br><span class="line"><span class="comment">        printf(&quot;Input Error!&quot;);</span></span><br><span class="line"><span class="comment">        exit(0);</span></span><br><span class="line"><span class="comment">    &#125;</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line">    find(argv[<span class="number">1</span>], argv[<span class="number">2</span>]);</span><br><span class="line">    <span class="built_in">exit</span>(<span class="number">0</span>);    </span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">find</span><span class="params">(<span class="keyword">char</span> *path, <span class="keyword">char</span> *name)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">char</span> buf[<span class="number">512</span>], *p;</span><br><span class="line">    <span class="keyword">int</span> fd;</span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">dirent</span> <span class="title">de</span>;</span></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">stat</span> <span class="title">st</span>;</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> ((fd = open(path, <span class="number">0</span>)) &lt; <span class="number">0</span>) &#123;</span><br><span class="line">        <span class="built_in">fprintf</span>(<span class="number">2</span>, <span class="string">&quot;find: cannot open %s\n&quot;</span>, path);</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;    </span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (fstat(fd, &amp;st) &lt; <span class="number">0</span>) &#123;</span><br><span class="line">        <span class="built_in">fprintf</span>(<span class="number">2</span>, <span class="string">&quot;find: cannot stat %s\n&quot;</span>, path);</span><br><span class="line">        close(fd);</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">switch</span> (st.type)&#123;</span><br><span class="line">        <span class="keyword">case</span> T_FILE:</span><br><span class="line">        	<span class="comment">/* empty dir is file(T_FILE)  */</span></span><br><span class="line">            <span class="comment">/* must use recursion in order to push and pop*/</span></span><br><span class="line">            compare(path, name);</span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line">        <span class="keyword">case</span> T_DIR:</span><br><span class="line">            <span class="keyword">if</span> (<span class="built_in">strlen</span>(path) + <span class="number">1</span> + DIRSIZ + <span class="number">1</span> &gt; <span class="keyword">sizeof</span>(buf))&#123;</span><br><span class="line">                <span class="built_in">printf</span>(<span class="string">&quot;ls: path too long\n&quot;</span>);</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            <span class="built_in">strcpy</span>(buf, path);</span><br><span class="line">            p = buf + <span class="built_in">strlen</span>(buf);</span><br><span class="line">            *p++ = <span class="string">&#x27;/&#x27;</span>;</span><br><span class="line">            <span class="keyword">while</span>(read(fd, &amp;de, <span class="keyword">sizeof</span>(de)) == <span class="keyword">sizeof</span>(de))&#123;</span><br><span class="line">                <span class="keyword">if</span> (de.inum == <span class="number">0</span> || <span class="built_in">strcmp</span>(<span class="string">&quot;.&quot;</span>, de.name) == <span class="number">0</span> || <span class="built_in">strcmp</span>(<span class="string">&quot;..&quot;</span>, de.name) == <span class="number">0</span>)</span><br><span class="line">                    <span class="keyword">continue</span>;</span><br><span class="line">                </span><br><span class="line">                memmove(p, de.name, <span class="built_in">strlen</span>(de.name)); </span><br><span class="line">                p[<span class="built_in">strlen</span>(de.name)] = <span class="string">&#x27;\0&#x27;</span>;</span><br><span class="line">                find(buf, name);</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    close(fd);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">char</span>* <span class="title">get_path_lastname</span><span class="params">(<span class="keyword">char</span> *path)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">static</span> <span class="keyword">char</span> buf[DIRSIZ+<span class="number">1</span>];</span><br><span class="line">    <span class="keyword">char</span> *p;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/* order: from the last char to first slash(&#x27;/&#x27;) */</span></span><br><span class="line">    <span class="keyword">for</span>(p = path + <span class="built_in">strlen</span>(path); p &gt;= path &amp;&amp; *p != <span class="string">&#x27;/&#x27;</span>; p--)</span><br><span class="line">        ;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">/* since p-- point to last slash(&#x27;/&#x27;) */</span></span><br><span class="line">    <span class="comment">/* p++ point to last char */</span></span><br><span class="line">    p++;  </span><br><span class="line"></span><br><span class="line">    <span class="comment">// Return file name to cmp </span></span><br><span class="line">    <span class="keyword">if</span>(<span class="built_in">strlen</span>(p) &gt;= DIRSIZ)</span><br><span class="line">        <span class="keyword">return</span> p;</span><br><span class="line">    memmove(buf, p, <span class="keyword">sizeof</span>(p));</span><br><span class="line">    p[<span class="built_in">strlen</span>(buf)] = <span class="string">&#x27;\0&#x27;</span>;</span><br><span class="line">    <span class="keyword">return</span> buf;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">compare</span><span class="params">(<span class="keyword">char</span> *path, <span class="keyword">char</span> *name)</span></span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(<span class="built_in">strcmp</span>(get_path_lastname(path), name) == <span class="number">0</span>)</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;%s\n&quot;</span>, path);</span><br><span class="line">    <span class="keyword">return</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/* </span></span><br><span class="line"><span class="comment">$ make qemu</span></span><br><span class="line"><span class="comment">...</span></span><br><span class="line"><span class="comment">init: starting sh</span></span><br><span class="line"><span class="comment">$ echo &gt; b      // build a dir called &#x27;b&#x27; that &#x27;b&#x27; is sub-dir of &#x27;.&#x27;</span></span><br><span class="line"><span class="comment">$ mkdir a       // build a dir called &#x27;a&#x27; that &#x27;a&#x27; is sub-dir of &#x27;.&#x27;</span></span><br><span class="line"><span class="comment">$ echo &gt; a/b    // build a dir called &#x27;b&#x27; that &#x27;b&#x27; is sub-dir of &#x27;a&#x27;</span></span><br><span class="line"><span class="comment">$ find . b      // find file that name is &#x27;b&#x27; from system dir(&#x27;.&#x27;) </span></span><br><span class="line"><span class="comment">./a/b</span></span><br><span class="line"><span class="comment">$</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"></span><br><span class="line"><span class="comment">/* </span></span><br><span class="line"><span class="comment">hierarchy of dir </span></span><br><span class="line"><span class="comment">// Directory is a file containing a sequence of dirent structures.</span></span><br><span class="line"><span class="comment">#define DIRSIZ 14</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">struct dirent &#123;</span></span><br><span class="line"><span class="comment">  ushort inum; // the numbers of dir containing</span></span><br><span class="line"><span class="comment">  char name[DIRSIZ];</span></span><br><span class="line"><span class="comment">&#125;;</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"></span><br><span class="line"><span class="comment">/* </span></span><br><span class="line"><span class="comment">status of dir or file or device</span></span><br><span class="line"><span class="comment">#define T_DIR     1   // Directory</span></span><br><span class="line"><span class="comment">#define T_FILE    2   // File</span></span><br><span class="line"><span class="comment">#define T_DEVICE  3   // Device</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">struct stat &#123;</span></span><br><span class="line"><span class="comment">  int dev;     // File system&#x27;s disk device</span></span><br><span class="line"><span class="comment">  uint ino;    // Inode number</span></span><br><span class="line"><span class="comment">  short type;  // Type of file</span></span><br><span class="line"><span class="comment">  short nlink; // Number of links to file</span></span><br><span class="line"><span class="comment">  uint64 size; // Size of file in bytes</span></span><br><span class="line"><span class="comment">&#125;;</span></span><br><span class="line"><span class="comment"> */</span></span><br></pre></td></tr></table></figure></li>
+</ul>
+<h3 id="xargs-moderate"><a href="#xargs-moderate" class="headerlink" title="xargs (moderate)"></a>xargs (<a target="_blank" rel="noopener" href="https://pdos.csail.mit.edu/6.S081/2021/labs/guidance.html">moderate</a>)</h3><ul>
+<li><p>功能：追加将要调用函数的参数，当遇到<code>\n</code>时就立刻执行</p>
+<ul>
+<li><p>参考链接：<a target="_blank" rel="noopener" href="http://c.biancheng.net/linux/xargs.html">xargs()</a></p>
+</li>
+<li><p>eg1. <code>xargs</code>为将要调用的函数<code>echo</code>追加了参数<code>hello too</code></p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">xargs echo bye</span><br><span class="line">hello too</span><br><span class="line">=&gt;</span><br><span class="line">bye hello too</span><br></pre></td></tr></table></figure></li>
+<li><p>eg2. 先调用<code>echo</code>，它的输出结果<code>hello too</code>作为<code>xargs</code>的输入，成为将要调用的函数<code>echo</code>的追加参数</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">echo hello too | xargs echo bye</span><br><span class="line">=&gt;</span><br><span class="line">bye hello too</span><br></pre></td></tr></table></figure></li>
+</ul>
+</li>
+<li><p><code>all_args_buffer</code>存储了<strong>所有参数</strong></p>
+</li>
+<li><p>我们传递给exec运行的是<strong>指针数组的地址</strong><code>args_parray</code>，里面存储了将要执行的参数</p>
+</li>
+<li><p>当遇到<code>\n</code>执行完之后，要回归原来的位置</p>
+<ul>
+<li><p>eg. 当遇到<code>\n</code>执行完之后，要回归原来的位置（<code>echo</code>）</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">echo <span class="string">&quot;1\n2&quot;</span> | xargs -n <span class="number">1</span> echo line</span><br><span class="line">=&gt;</span><br><span class="line">line <span class="number">1</span></span><br><span class="line">line <span class="number">2</span></span><br></pre></td></tr></table></figure></li>
+</ul>
+</li>
+<li><p>参考代码</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&quot;kernel/types.h&quot;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&quot;kernel/stat.h&quot;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&quot;user/user.h&quot;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&quot;kernel/fs.h&quot;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&quot;kernel/param.h&quot;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">int</span> argc, <span class="keyword">char</span> **argv)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">int</span> i, j;</span><br><span class="line">    <span class="keyword">char</span> *args_parray[MAXARG];</span><br><span class="line">    <span class="keyword">char</span> all_args_buffer[<span class="number">256</span>];</span><br><span class="line">    <span class="keyword">char</span> *ptr_buffer = all_args_buffer;</span><br><span class="line">    <span class="keyword">char</span> *ptr_array =  ptr_buffer;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span>(i = <span class="number">1</span>, j = <span class="number">0</span>; i &lt; argc; i++)</span><br><span class="line">        args_parray[j++] = argv[i]; <span class="comment">/* when loop break, j == argv - 1 */</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">int</span> length;</span><br><span class="line">    <span class="keyword">int</span> total_length = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">while</span> (read(<span class="number">0</span>, ptr_buffer, MAXARG) &gt; <span class="number">0</span>)&#123; <span class="comment">/* 0 is pipe of reading */</span></span><br><span class="line">        total_length += length;</span><br><span class="line">        <span class="keyword">if</span>(total_length &gt; <span class="number">256</span>)&#123;</span><br><span class="line">            <span class="built_in">printf</span>(<span class="string">&quot;the args is too long!&quot;</span>);</span><br><span class="line">            <span class="built_in">exit</span>(<span class="number">0</span>);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span>(i = <span class="number">0</span>; i &lt; length; ++i)&#123;</span><br><span class="line">            <span class="keyword">if</span>(ptr_buffer[i] == <span class="string">&#x27; &#x27;</span>)&#123;</span><br><span class="line">                ptr_buffer[i] = <span class="string">&#x27;\0&#x27;</span>; <span class="comment">/* c-style: the last of string has &#x27;\0&#x27; */</span></span><br><span class="line">                args_parray[j++] = ptr_array; <span class="comment">/* add new args to args_parray */</span></span><br><span class="line">                ptr_array = &amp;ptr_buffer[i + <span class="number">1</span>]; <span class="comment">/* ptr_array point to next */</span></span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">else</span> <span class="keyword">if</span>(ptr_buffer[i] == <span class="string">&#x27;\n&#x27;</span>)&#123;</span><br><span class="line">                ptr_buffer[i] = <span class="string">&#x27;\0&#x27;</span>;</span><br><span class="line">                args_parray[j++] = ptr_array;</span><br><span class="line">                args_parray[j] = <span class="string">&#x27;\0&#x27;</span>; <span class="comment">/* as args of exec (c-style: string has &#x27;\0&#x27;) */</span></span><br><span class="line">                ptr_array = &amp;ptr_buffer[i + <span class="number">1</span>];</span><br><span class="line">                </span><br><span class="line">                <span class="keyword">if</span>(fork() == <span class="number">0</span>)&#123;</span><br><span class="line">                    exec(argv[<span class="number">1</span>], args_parray);</span><br><span class="line">                    <span class="built_in">exit</span>(<span class="number">0</span>);</span><br><span class="line">                &#125;</span><br><span class="line"></span><br><span class="line">                j = argc - <span class="number">1</span>; <span class="comment">/* comeback, eg: echo &quot;1\n2&quot; | xargs -n 1 echo line */</span></span><br><span class="line">                wait(<span class="number">0</span>);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        ptr_buffer + length;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">exit</span>(<span class="number">0</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+<li><p>根据提示，我们还需要修改<code>find()</code>，以解决从<code>.sh</code>文件中读出的每条命令都加上<code>$</code>的问题。我们希望只有一个<code>$</code>，笔者目前没有解决这个<code>bug</code>。</p>
+</li>
+</ul>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><ul>
+<li><p>完成日期<em>22.3.8</em></p>
+</li>
+<li><p>刚开学期间有许多杂事，返校需要自费核酸之类的，还有免修。劳累之后就得好好休息，就落下了</p>
+</li>
+<li><p>难度目前没有很大</p>
+</li>
+<li><p>最近在听《想和你漫步在午后》夏小调，《可风》黄建为</p>
+</li>
+<li><p>自测试图（笔者已解决关于<code>time.txt</code>的<code>bug</code>）</p>
+<ul>
+<li><em>2022.03.11</em>解决，在目录<code>xv6-labs-2021</code>中添加文件time.txt并输入一个整数即可</li>
+<li>该文件应该是mit的老师用来了解学生的学习进度的</li>
+</ul>
+<p><img src="https://s2.loli.net/2022/04/22/oQtnyiACRdIsFMx.png"></p>
+</li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/c/" rel="tag"># c</a>
+              <a href="/tags/OS/" rel="tag"># OS</a>
+              <a href="/tags/xv6/" rel="tag"># xv6</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2022/02/28/CSAPP/CSAPP-ProxyLab/" rel="prev" title="ProxyLab">
+      <i class="fa fa-chevron-left"></i> ProxyLab
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2022/03/11/MIT6.S081-Lab/MIT6.S081-Lab%20Syscall/" rel="next" title="Lab Syscall">
+      Lab Syscall <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+    <div class="comments" id="valine-comments"></div>
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Lab-Utilities"><span class="nav-number">1.</span> <span class="nav-text">Lab Utilities</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE"><span class="nav-number">1.1.</span> <span class="nav-text">环境配置</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%9E%E9%AA%8C%E5%86%85%E5%AE%B9"><span class="nav-number">1.2.</span> <span class="nav-text">实验内容</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9C%A8%E5%AE%9E%E9%AA%8C%E4%B9%8B%E5%89%8D"><span class="nav-number">1.2.1.</span> <span class="nav-text">在实验之前</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#lab-Boot-xv6-easy"><span class="nav-number">1.2.2.</span> <span class="nav-text">lab Boot xv6 (easy)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#sleep-easy"><span class="nav-number">1.2.3.</span> <span class="nav-text">sleep (easy)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#pingpong-easy"><span class="nav-number">1.2.4.</span> <span class="nav-text">pingpong (easy)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#primes-moderate-hard"><span class="nav-number">1.2.5.</span> <span class="nav-text">primes (moderate)&#x2F;(hard)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#find-moderate"><span class="nav-number">1.2.6.</span> <span class="nav-text">find (moderate)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#xargs-moderate"><span class="nav-number">1.2.7.</span> <span class="nav-text">xargs (moderate)</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%80%BB%E7%BB%93"><span class="nav-number">1.3.</span> <span class="nav-text">总结</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Huang Jinhong</p>
+  <div class="site-description" itemprop="description">“我们来到这世上是为的是看太阳”</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">21</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">7</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/duilec" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;duilec" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://www.cnblogs.com/duile" title="博客园 → https:&#x2F;&#x2F;www.cnblogs.com&#x2F;duile" rel="noopener" target="_blank"><i class="fab fa-cnblog fa-fw"></i>博客园</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Huang Jinhong</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> 强力驱动
+  </div>
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+<script>
+  (function() {
+    function leancloudSelector(url) {
+      url = encodeURI(url);
+      return document.getElementById(url).querySelector('.leancloud-visitors-count');
+    }
+
+    function addCount(Counter) {
+      var visitors = document.querySelector('.leancloud_visitors');
+      var url = decodeURI(visitors.id);
+      var title = visitors.dataset.flagTitle;
+
+      Counter('get', '/classes/Counter?where=' + encodeURIComponent(JSON.stringify({ url })))
+        .then(response => response.json())
+        .then(({ results }) => {
+          if (results.length > 0) {
+            var counter = results[0];
+            leancloudSelector(url).innerText = counter.time + 1;
+            Counter('put', '/classes/Counter/' + counter.objectId, { time: { '__op': 'Increment', 'amount': 1 } })
+              .catch(error => {
+                console.error('Failed to save visitor count', error);
+              });
+          } else {
+              leancloudSelector(url).innerText = 'Counter not initialized! More info at console err msg.';
+              console.error('ATTENTION! LeanCloud counter has security bug, see how to solve it here: https://github.com/theme-next/hexo-leancloud-counter-security. \n However, you can still use LeanCloud without security, by setting `security` option to `false`.');
+            
+          }
+        })
+        .catch(error => {
+          console.error('LeanCloud Counter Error', error);
+        });
+    }
+
+    function showTime(Counter) {
+      var visitors = document.querySelectorAll('.leancloud_visitors');
+      var entries = [...visitors].map(element => {
+        return decodeURI(element.id);
+      });
+
+      Counter('get', '/classes/Counter?where=' + encodeURIComponent(JSON.stringify({ url: { '$in': entries } })))
+        .then(response => response.json())
+        .then(({ results }) => {
+          for (let url of entries) {
+            let target = results.find(item => item.url === url);
+            leancloudSelector(url).innerText = target ? target.time : 0;
+          }
+        })
+        .catch(error => {
+          console.error('LeanCloud Counter Error', error);
+        });
+    }
+
+    let { app_id, app_key, server_url } = {"enable":true,"app_id":"fflLscOo9DyB8Fx8ubGOzkl5-MdYXbMMI","app_key":"RrGHmVsgcizeqfrfsKcX4Sko","server_url":null,"security":true};
+    function fetchData(api_server) {
+      var Counter = (method, url, data) => {
+        return fetch(`${api_server}/1.1${url}`, {
+          method,
+          headers: {
+            'X-LC-Id'     : app_id,
+            'X-LC-Key'    : app_key,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(data)
+        });
+      };
+      if (CONFIG.page.isPost) {
+        if (CONFIG.hostname !== location.hostname) return;
+        addCount(Counter);
+      } else if (document.querySelectorAll('.post-title-link').length >= 1) {
+        showTime(Counter);
+      }
+    }
+
+    let api_server = app_id.slice(-9) !== '-MdYXbMMI' ? server_url : `https://${app_id.slice(0, 8).toLowerCase()}.api.lncldglobal.com`;
+
+    if (api_server) {
+      fetchData(api_server);
+    } else {
+      fetch('https://app-router.leancloud.cn/2/route?appId=' + app_id)
+        .then(response => response.json())
+        .then(({ api_server }) => {
+          fetchData('https://' + api_server);
+        });
+    }
+  })();
+</script>
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+
+<script>
+NexT.utils.loadComments(document.querySelector('#valine-comments'), () => {
+  NexT.utils.getScript('//unpkg.com/valine/dist/Valine.min.js', () => {
+    var GUEST = ['nick', 'mail', 'link'];
+    var guest = 'nick,mail,link';
+    guest = guest.split(',').filter(item => {
+      return GUEST.includes(item);
+    });
+    new Valine({
+      el         : '#valine-comments',
+      verify     : false,
+      notify     : false,
+      appId      : 'fflLscOo9DyB8Fx8ubGOzkl5-MdYXbMMI',
+      appKey     : 'RrGHmVsgcizeqfrfsKcX4Sko',
+      placeholder: "发表评论",
+      avatar     : 'mm',
+      meta       : guest,
+      pageSize   : '10' || 10,
+      visitor    : false,
+      lang       : '' || 'zh-cn',
+      path       : location.pathname,
+      recordIP   : false,
+      serverURLs : ''
+    });
+  }, window.Valine);
+});
+</script>
+
+</body>
+</html>
